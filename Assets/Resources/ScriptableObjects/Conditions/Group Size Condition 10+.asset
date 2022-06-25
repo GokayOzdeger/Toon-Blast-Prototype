@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02b98e76db0f28047aa5363dd2f267e3, type: 3}
+  m_Name: Group Size Condition 10+
+  m_EditorClassIdentifier: 
+  minNumberOfGroupSize: 10
+  maxNumberOfGroupSize: 1000
