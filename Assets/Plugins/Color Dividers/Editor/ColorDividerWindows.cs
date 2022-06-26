@@ -35,33 +35,40 @@ public class ColorDividerWindows : EditorWindow
 
     void OnGUI()
     {
-        ReColorBackGround();
-        if (!_go)
+        try
         {
-            _go = Selection.activeGameObject;
-            Color hexColor = new Color();
-            if (ColorUtility.TryParseHtmlString("#" + _go.name.Split('#')[1], out hexColor))
+            ReColorBackGround();
+            if (!_go)
             {
-                _color = hexColor;
+                _go = Selection.activeGameObject;
+                Color hexColor = new Color();
+                if (ColorUtility.TryParseHtmlString("#" + _go.name.Split('#')[1], out hexColor))
+                {
+                    _color = hexColor;
+                }
             }
+
+            var e = Event.current;
+
+            if (!_movedToMouse)
+            {
+                _movedToMouse = true;
+                MoveToMouse(e);
+            }
+
+            // Close the window if ESC is pressed
+            CloseWindowOnEscape(e);
+
+            EditorGUILayout.LabelField("Hierarchy Divider", EditorStyles.wordWrappedLabel);
+            _color = EditorGUILayout.ColorField(_color);
+            _go.name = _go.name.Split('#')[0] + "#" + ColorUtility.ToHtmlStringRGB(_color);
+            GUILayout.Space(25);
+            if (GUILayout.Button("Agree!")) this.Close();
         }
-
-        var e = Event.current;
-
-        if (!_movedToMouse)
+        catch 
         {
-            _movedToMouse = true;
-            MoveToMouse(e);
+            //
         }
-
-        // Close the window if ESC is pressed
-        CloseWindowOnEscape(e);
-
-        EditorGUILayout.LabelField("Hierarchy Divider", EditorStyles.wordWrappedLabel);
-        _color = EditorGUILayout.ColorField(_color);
-        _go.name = _go.name.Split('#')[0] + "#" + ColorUtility.ToHtmlStringRGB(_color);
-        GUILayout.Space(25);
-        if (GUILayout.Button("Agree!")) this.Close();
     }
 
     //private void OnLostFocus()

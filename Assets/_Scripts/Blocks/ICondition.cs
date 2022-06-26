@@ -5,5 +5,5 @@ using UnityEngine;
 //[CreateAssetMenu(menuName = "ScriptableObjects/Condition")]
 public interface ICondition
 {
-    public bool IsConditionMet(Block block);
+    public bool IsConditionMet(List<Block> blockGroup);
 }

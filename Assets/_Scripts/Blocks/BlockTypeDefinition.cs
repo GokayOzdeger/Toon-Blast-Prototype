@@ -13,10 +13,24 @@ public class BlockTypeDefinition : ScriptableObject
     public Sprite DefaultBlockIcon { get { return defaultBlockIcon; } }
     public List<ConditionIconPair> ConditionIconPairs { get { return conditionIconPairs; } }
 
+
+    public Sprite GetBlockGroupIcon(List<Block> blockGroup)
+    {
+        foreach(ConditionIconPair conditionIconPair in conditionIconPairs)
+        {
+            if (!conditionIconPair.Condition.IsConditionMet(blockGroup)) continue;
+            return conditionIconPair.Icon;
+        }
+        return defaultBlockIcon;
+    }
+
+
+
+
     [System.Serializable]
     public class ConditionIconPair
     {
-        public GroupSizeCondition Condition;
+        public MinGroupSizeCondition Condition;
         public Sprite Icon;
     }
 }
