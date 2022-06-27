@@ -18,7 +18,7 @@ public class Block : MonoBehaviour
 
     public bool BlockNeedsUpdate { get; set; } = true;
 
-    public bool BlockAllReadyControlled { get; set; } = false;
+    private Tweener _lastTween = null;
 
 
     public void SetupBlock(BlockTypeDefinition blockType)
@@ -38,15 +38,26 @@ public class Block : MonoBehaviour
 
     public void AnimateBlockPunchScale()
     {
-        transform.DOComplete();
-        transform.DOPunchScale(new Vector2(.15f, .15f), .2f);
+        CompleteLastTween();
+        _lastTween = transform.DOPunchScale(new Vector2(.15f, .15f), .2f);
     }
 
     public void AnimateBlockShake()
     {
-        transform.DOComplete();
         int randomDirection = Random.value < .5 ? 1 : -1;
-        transform.DOPunchRotation(new Vector3(0,0, randomDirection * 14),.1f).onComplete+= ()=> transform.DOPunchRotation(new Vector3(0, 0, -randomDirection * 7), .1f);
+        CompleteLastTween();
+        _lastTween = transform.DOPunchRotation(new Vector3(0, 0, randomDirection * 14), .1f);
+        _lastTween.onComplete += () => transform.DOPunchRotation(new Vector3(0, 0, -randomDirection * 7), .1f);
+    }
+
+    public void CompleteLastTween()
+    {
+        if (_lastTween != null) _lastTween.Complete(true);
+    }
+
+    public void CacheTween(Tweener tween)
+    {
+        _lastTween = tween;
     }
 
     public void OnClickBlock()

@@ -19,11 +19,12 @@ public class FallingBlocksController
 
     public void CreateFallingBlockGroup(FallingBlocksGroup fallingBlocksGroup)
     {
-        Debug.Log("Falling group size: " + fallingBlocksGroup.FallingBlocks.Count + "... falling for: " + fallingBlocksGroup.FallDistance);
         foreach(var block in fallingBlocksGroup.FallingBlocks)
         {
-            block.DOComplete();
-            block.transform.DOMove(block.transform.position-new Vector3(0,_rowSpacing*fallingBlocksGroup.FallDistance,0),1);
+            block.CompleteLastTween();
+            Vector3 targetPos = block.transform.position - new Vector3(0, _rowSpacing * fallingBlocksGroup.FallDistance, 0);
+            Tweener moveTween = block.transform.DOMoveY(targetPos.y, .75f / Mathf.Pow(fallingBlocksGroup.FallDistance,1/3f));
+            block.CacheTween(moveTween);
         }
     }
 }

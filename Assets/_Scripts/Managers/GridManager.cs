@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Utilities;
-
+using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -21,11 +21,15 @@ public class GridManager : AutoSingleton<GridManager>
     [SerializeField] private GameObject blockPrefab;
     [SerializeField] private BlockTypeDefinition[] blockTypes;
     [SerializeField] private RectTransform gridParentTransform;
+    [SerializeField] private CanvasScaler canvasScaler;
 
     [SerializeField] private uint gridRowCount;
     [SerializeField] private uint gridCollumnCount;
     [SerializeField] private float collumnSpacing;
     [SerializeField] private float rowSpacing;
+
+    private float CollumnSpacing { get { return collumnSpacing * canvasScaler.transform.localScale.x; } }
+    private float RowSpacing { get { return rowSpacing * canvasScaler.transform.localScale.y; } }
 
     public Vector2[,] GridPositions { get; private set; }
     public Block[,] BlockGrid { get; private set; }
@@ -48,7 +52,7 @@ public class GridManager : AutoSingleton<GridManager>
     private void CreateSystemComponents()
     {
         _blockSpawner = new BlockSpawner(gridCollumnCount);
-        _fallingBlocksController = new FallingBlocksController(rowSpacing);
+        _fallingBlocksController = new FallingBlocksController(RowSpacing);
     }
 
     private void SummonBlocks()
@@ -59,16 +63,12 @@ public class GridManager : AutoSingleton<GridManager>
             {
                 Block newBlock = Instantiate(blockPrefab, GridPositions[i, j], Quaternion.identity, gridParentTransform).GetComponent<Block>();
                 BlockGrid[i, j] = newBlock;
+                newBlock.gameObject.name = $"Block {i}_{j}";
                 newBlock.UpdateBlockCoordinates(new Vector2Int(i,j));
                 BlockTypeDefinition randomBlockType = blockTypes[UnityEngine.Random.Range(0,blockTypes.Length)];
                 newBlock.SetupBlock(randomBlockType);
             }
         }
-    }
-
-    private void Update()
-    {
-        Debug.Log(BlockGrid[0, 0]);
     }
 
     public void TryExplode(Block blockToExplode)
@@ -80,7 +80,6 @@ public class GridManager : AutoSingleton<GridManager>
 
     private void ExplodeSuccess(Block blockToExplode)
     {
-        Debug.Log("EXPLODE BOK");
         GridInAction = true;
         HashSet<int> collumnsEffectedByExplosion = new HashSet<int>();
         
@@ -91,8 +90,7 @@ public class GridManager : AutoSingleton<GridManager>
             _blockSpawner.AddBlockSpawnReqeust(block.GridCoordinates.y);
             RemoveBlockFromGridArray(block);
         }
-        FindFallingBlocksGroups(collumnsEffectedByExplosion);
-        StartCoroutine(WaitExplodeAnimation(blockToExplode.CurrentBlockGroup));
+        StartCoroutine(WaitExplodeAnimation(blockToExplode.CurrentBlockGroup, collumnsEffectedByExplosion));
     }
 
     private void ExplodeFail(Block blockToExplode)
@@ -105,10 +103,13 @@ public class GridManager : AutoSingleton<GridManager>
         BlockGrid[blockToRemove.GridCoordinates.x, blockToRemove.GridCoordinates.y] = null;
     }
 
-    private IEnumerator WaitExplodeAnimation(List<Block> blockGroupExploded)
+    private IEnumerator WaitExplodeAnimation(List<Block> blockGroupExploded, HashSet<int> collumnsEffectedByExplosion)
     {
         yield return new WaitForSeconds(.2f);
         foreach (Block block in blockGroupExploded) Destroy(block.gameObject);
+        yield return new WaitForEndOfFrame();
+        FindFallingBlocksGroups(collumnsEffectedByExplosion);
+        //yield return new WaitForSeconds(.2f);
         GridInAction = false;
     }
 
@@ -118,7 +119,6 @@ public class GridManager : AutoSingleton<GridManager>
 
         foreach(int collumnIndex in collumnIndexes)
         {
-            Debug.Log("Collumn in process bok: " + collumnIndex);
             int fallDistance = 0;
             for (int i = 0; i < gridRowCount; i++) if (BlockGrid[i, collumnIndex] == null) fallDistance++;
 
@@ -131,7 +131,6 @@ public class GridManager : AutoSingleton<GridManager>
                 Block currentBlock = BlockGrid[i, collumnIndex];
                 if (currentBlock == null)
                 {
-                    Debug.Log("Block is null bok: " + i);
                     if (blockGroup.Count == 0) 
                     {
                         fallDistance--;
@@ -150,7 +149,6 @@ public class GridManager : AutoSingleton<GridManager>
                 }
                 else
                 {
-                    Debug.Log("Block is not null bok: " + i);
                     if (blockGroupCompleted)
                     {
                         TagBlocksAsNeedsUpdate(blockGroup);
@@ -162,7 +160,6 @@ public class GridManager : AutoSingleton<GridManager>
                         blockGroup = new List<Block>();
                     }
                     blockGroup.Add(currentBlock);
-                    Debug.Log(currentBlock.name);
                     if (currentBlock.BlockNeedsUpdate == false) TagBlocksAsNeedsUpdate(currentBlock.CurrentBlockGroup);
                 }
             }
@@ -183,13 +180,14 @@ public class GridManager : AutoSingleton<GridManager>
 
     private void WriteFallingBlocksToGrid(List<FallingBlocksGroup> allFallingBlocksGroups)
     {
-        foreach (FallingBlocksGroup fallingBlocksGroup in allFallingBlocksGroups)
+        for (int i = allFallingBlocksGroups.Count-1; i >= 0; i--)
         {
+            FallingBlocksGroup fallingBlocksGroup = allFallingBlocksGroups[i];
+
             int groupCollumn = fallingBlocksGroup.FallingBlocks[0].GridCoordinates.y;
-            for (int i = (int)fallingBlocksGroup.FallingBlocks.Count - 1; i >= 0; i--)
+            for (int j = (int)fallingBlocksGroup.FallingBlocks.Count - 1; j >= 0; j--)
             {
-                Block blockToWrite = fallingBlocksGroup.FallingBlocks[i];
-                Debug.Log($"{blockToWrite.name}, falled from {blockToWrite.GridCoordinates.x} to {blockToWrite.GridCoordinates.x - fallingBlocksGroup.FallDistance}");
+                Block blockToWrite = fallingBlocksGroup.FallingBlocks[j];
                 Vector2Int newBlockCoordinates = new Vector2Int(blockToWrite.GridCoordinates.x - fallingBlocksGroup.FallDistance, groupCollumn);
                 BlockGrid[blockToWrite.GridCoordinates.x, blockToWrite.GridCoordinates.y] = null;
                 BlockGrid[newBlockCoordinates.x, newBlockCoordinates.y] = blockToWrite;
@@ -232,9 +230,9 @@ public class GridManager : AutoSingleton<GridManager>
         GridPositions = new Vector2[gridRowCount, gridCollumnCount];
         
         // calculate bottom left corn9er block position 
-        float bottomLeftCornerX = transform.position.x - ((gridCollumnCount / 2f) - .5f) * collumnSpacing;
-        float bottomLeftCornerY = transform.position.y - ((gridRowCount / 2f) - .5f) * rowSpacing;
-        
+        float bottomLeftCornerX = gridParentTransform.position.x - ((gridCollumnCount / 2f) - .5f) * CollumnSpacing;
+        float bottomLeftCornerY = gridParentTransform.position.y - ((gridRowCount / 2f) - .5f) * RowSpacing;
+
         Vector2 bottomLeftCorner = new Vector2(bottomLeftCornerX, bottomLeftCornerY);
         Vector2 cursorPoint = bottomLeftCorner;
         for (int i = 0; i < GridPositions.GetLength(0); i++)
@@ -242,26 +240,12 @@ public class GridManager : AutoSingleton<GridManager>
             for (int j = 0; j < GridPositions.GetLength(1); j++)
             {
                 GridPositions[i, j] = cursorPoint;
-                cursorPoint.x += collumnSpacing;
+                cursorPoint.x += CollumnSpacing;
             }
-            cursorPoint.y += rowSpacing;
+            cursorPoint.y += RowSpacing;
             cursorPoint.x = bottomLeftCorner.x;
         }
     }
-
-    //private void CollectSurroundingBlocks(Block block, ref List<Block> blockListToCollect)
-    //{
-    //    foreach (Vector2Int surroundingCoordinateAdd in _surroundingCoordinateMatrises)
-    //    {
-    //        Vector2Int surroundingCoordinate = block.GridCoordinates + surroundingCoordinateAdd;
-    //        // Skip Surrounding check position if it is out of range or already controlled
-    //        if (surroundingCoordinate.x < 0 || surroundingCoordinate.x == gridRowCount) continue;
-    //        if (surroundingCoordinate.y < 0 || surroundingCoordinate.y == gridCollumnCount) continue;
-
-    //        Block surroundingMatchingBlock = BlockGrid[surroundingCoordinate.x, surroundingCoordinate.y];
-    //        blockListToCollect.Add(surroundingMatchingBlock);
-    //    }
-    //}
 
     private void CollectMatchingSurroundingBlocks(Block block, ref List<Block> blockListToCollect)
     {
