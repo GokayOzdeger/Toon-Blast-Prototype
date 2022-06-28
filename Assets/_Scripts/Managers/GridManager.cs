@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utilities;
 using UnityEngine.UI;
+using UnityEngine.Events;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -28,25 +29,30 @@ public class GridManager : AutoSingleton<GridManager>
     [SerializeField] private float collumnSpacing;
     [SerializeField] private float rowSpacing;
 
-    private float CollumnSpacing { get { return collumnSpacing * canvasScaler.transform.localScale.x; } }
-    private float RowSpacing { get { return rowSpacing * canvasScaler.transform.localScale.y; } }
+    
+    public float CollumnSpacing { get { return collumnSpacing * canvasScaler.transform.localScale.x; } }
+    public float RowSpacing { get { return rowSpacing * canvasScaler.transform.localScale.y; } }
 
+    public UnityEvent<Vector2Int> OnGridChange = new UnityEvent<Vector2Int>();
     public Vector2[,] GridPositions { get; private set; }
-    public Block[,] BlockGrid { get; private set; }
+    public IGridEntity[,] EntityGrid { get; private set; }
     public bool GridInAction { get; private set; } = false;
 
+    private List<Vector2Int> _cachedGridChanges = new List<Vector2Int>();
     private BlockSpawner _blockSpawner;
     private FallingBlocksController _fallingBlocksController;
 
     private bool[,] controlledGridCoordinates;
 
 
+    private List<Vector3> spherePoses = new List<Vector3>();
+
     private void Start()
     {
         CreateSystemComponents();
         CreateGridAndCalculatePositions();
         SummonBlocks();
-        UpdateAllBlocks();
+        UpdateAllEntities();
     }
 
     private void CreateSystemComponents()
@@ -62,11 +68,12 @@ public class GridManager : AutoSingleton<GridManager>
             for (int j = 0; j < GridPositions.GetLength(1); j++)
             {
                 Block newBlock = Instantiate(blockPrefab, GridPositions[i, j], Quaternion.identity, gridParentTransform).GetComponent<Block>();
-                BlockGrid[i, j] = newBlock;
+                EntityGrid[i, j] = newBlock;
                 newBlock.gameObject.name = $"Block {i}_{j}";
                 newBlock.UpdateBlockCoordinates(new Vector2Int(i,j));
                 BlockTypeDefinition randomBlockType = blockTypes[UnityEngine.Random.Range(0,blockTypes.Length)];
                 newBlock.SetupBlock(randomBlockType);
+                OnGridChange.AddListener(newBlock.OnGridChange);
             }
         }
     }
@@ -81,16 +88,17 @@ public class GridManager : AutoSingleton<GridManager>
     private void ExplodeSuccess(Block blockToExplode)
     {
         GridInAction = true;
-        HashSet<int> collumnsEffectedByExplosion = new HashSet<int>();
+        
+        RemoveEntitiesFromGridArray(blockToExplode.CurrentBlockGroup);
         
         foreach (Block block in blockToExplode.CurrentBlockGroup)
         {
             block.AnimateBlockPunchScale();
-            collumnsEffectedByExplosion.Add(block.GridCoordinates.y);
             _blockSpawner.AddBlockSpawnReqeust(block.GridCoordinates.y);
-            RemoveBlockFromGridArray(block);
         }
-        StartCoroutine(WaitExplodeAnimation(blockToExplode.CurrentBlockGroup, collumnsEffectedByExplosion));
+        CallCachedGridChanges();
+        UpdateAllEntities();
+        StartCoroutine(WaitExplodeAnimation(blockToExplode.CurrentBlockGroup));
     }
 
     private void ExplodeFail(Block blockToExplode)
@@ -98,135 +106,160 @@ public class GridManager : AutoSingleton<GridManager>
         blockToExplode.AnimateBlockShake();
     }
 
-    private void RemoveBlockFromGridArray(Block blockToRemove)
+    private void RemoveEntitiesFromGridArray<T>(List<T> entitiesToRemove) where T: IGridEntity
     {
-        BlockGrid[blockToRemove.GridCoordinates.x, blockToRemove.GridCoordinates.y] = null;
+        foreach (T entityToRemove in entitiesToRemove) OnGridChange.RemoveListener(entityToRemove.OnGridChange);
+        foreach (T entityToRemove in entitiesToRemove)
+        {
+            EntityGrid[entityToRemove.GridCoordinates.x, entityToRemove.GridCoordinates.y] = null;
+            CacheGridChange(entityToRemove.GridCoordinates);
+        }
     }
 
-    private IEnumerator WaitExplodeAnimation(List<Block> blockGroupExploded, HashSet<int> collumnsEffectedByExplosion)
+    public void WriteEntityFall(IGridEntity gridEntity)
+    {
+        gridEntity.EntityNeedsUpdate = true;
+        int collumnIndex = gridEntity.GridCoordinates.y;
+        int coordinateToFallTo = gridEntity.GridCoordinates.x;
+        for (int i = gridEntity.GridCoordinates.x-1; i >= 0; i--)
+        {
+            if (EntityGrid[i, collumnIndex] == null) coordinateToFallTo = i;
+            else break;
+        }
+        WriteEntityMovementToGrid(new Vector2Int(coordinateToFallTo, collumnIndex), gridEntity);
+    }
+
+    private void WriteEntityMovementToGrid(Vector2Int newCoordinates, IGridEntity entity)
+    {
+        Debug.Log($"Moving entity {entity.GridCoordinates} to {newCoordinates}");
+        Vector2Int oldEntityCoordinates = entity.GridCoordinates;
+        EntityGrid[entity.GridCoordinates.x, entity.GridCoordinates.y] = null;
+        EntityGrid[newCoordinates.x, newCoordinates.y] = entity;
+        entity.OnMoveEntity(newCoordinates);
+        CacheGridChange(newCoordinates);
+        CacheGridChange(oldEntityCoordinates);
+    }
+
+    private void CallCachedGridChanges()
+    {
+        while (_cachedGridChanges.Count > 0)
+        {
+            OnGridChange.Invoke(_cachedGridChanges[0]);
+            _cachedGridChanges.RemoveAt(0);
+        }
+    }
+
+    private void CacheGridChange(Vector2Int changeCords)
+    {
+        spherePoses.Add(GridPositions[changeCords.x, changeCords.y]);
+        _cachedGridChanges.Add(changeCords);
+    }
+
+    private IEnumerator WaitExplodeAnimation(List<Block> blockGroupExploded)
     {
         yield return new WaitForSeconds(.2f);
         foreach (Block block in blockGroupExploded) Destroy(block.gameObject);
         yield return new WaitForEndOfFrame();
-        FindFallingBlocksGroups(collumnsEffectedByExplosion);
-        //yield return new WaitForSeconds(.2f);
+        yield return new WaitForSeconds(.2f);
         GridInAction = false;
     }
 
-    private void FindFallingBlocksGroups(HashSet<int> collumnIndexes)
-    {
-        List<FallingBlocksGroup> fallingBlocksGroups = new List<FallingBlocksGroup>();
+    //private void FindFallingBlocksGroups(HashSet<int> collumnIndexes)
+    //{
+    //    List<FallingBlocksGroup> fallingBlocksGroups = new List<FallingBlocksGroup>();
 
-        foreach(int collumnIndex in collumnIndexes)
-        {
-            int fallDistance = 0;
-            for (int i = 0; i < gridRowCount; i++) if (BlockGrid[i, collumnIndex] == null) fallDistance++;
+    //    foreach(int collumnIndex in collumnIndexes)
+    //    {
+    //        int fallDistance = 0;
+    //        for (int i = 0; i < gridRowCount; i++) if (BlockGrid[i, collumnIndex] == null) fallDistance++;
 
-            int fallDistanceToSkip = 0;
-            bool blockGroupCompleted = false;
-            List<Block> blockGroup = new List<Block>();
+    //        int fallDistanceToSkip = 0;
+    //        bool blockGroupCompleted = false;
+    //        List<Block> blockGroup = new List<Block>();
 
-            for (int i = (int)gridRowCount - 1; i >= 0; i--)
-            {
-                Block currentBlock = BlockGrid[i, collumnIndex];
-                if (currentBlock == null)
-                {
-                    if (blockGroup.Count == 0) 
-                    {
-                        fallDistance--;
-                        continue; 
-                    }
-                    fallDistanceToSkip++;
-                    blockGroupCompleted = true;
-                    if(i == 0)
-                    {
-                        FallingBlocksGroup fallingGroup = new FallingBlocksGroup(blockGroup, fallDistance);
-                        fallingBlocksGroups.Add(fallingGroup);
-                        fallDistance = 0;
-                        blockGroupCompleted = false;
-                        blockGroup = new List<Block>();
-                    }
-                }
-                else
-                {
-                    if (blockGroupCompleted)
-                    {
-                        TagBlocksAsNeedsUpdate(blockGroup);
-                        FallingBlocksGroup fallingGroup = new FallingBlocksGroup(blockGroup, fallDistance);
-                        fallingBlocksGroups.Add(fallingGroup);
-                        fallDistance -= fallDistanceToSkip;
-                        fallDistanceToSkip = 0;
-                        blockGroupCompleted = false;
-                        blockGroup = new List<Block>();
-                    }
-                    blockGroup.Add(currentBlock);
-                    if (currentBlock.BlockNeedsUpdate == false) TagBlocksAsNeedsUpdate(currentBlock.CurrentBlockGroup);
-                }
-            }
-        }
+    //        for (int i = (int)gridRowCount - 1; i >= 0; i--)
+    //        {
+    //            Block currentBlock = BlockGrid[i, collumnIndex];
+    //            if (currentBlock == null)
+    //            {
+    //                if (blockGroup.Count == 0) 
+    //                {
+    //                    fallDistance--;
+    //                    continue; 
+    //                }
+    //                fallDistanceToSkip++;
+    //                blockGroupCompleted = true;
+    //                if(i == 0)
+    //                {
+    //                    FallingBlocksGroup fallingGroup = new FallingBlocksGroup(blockGroup, fallDistance);
+    //                    fallingBlocksGroups.Add(fallingGroup);
+    //                    fallDistance = 0;
+    //                    blockGroupCompleted = false;
+    //                    blockGroup = new List<Block>();
+    //                }
+    //            }
+    //            else
+    //            {
+    //                if (blockGroupCompleted)
+    //                {
+    //                    TagBlocksAsNeedsUpdate(blockGroup);
+    //                    FallingBlocksGroup fallingGroup = new FallingBlocksGroup(blockGroup, fallDistance);
+    //                    fallingBlocksGroups.Add(fallingGroup);
+    //                    fallDistance -= fallDistanceToSkip;
+    //                    fallDistanceToSkip = 0;
+    //                    blockGroupCompleted = false;
+    //                    blockGroup = new List<Block>();
+    //                }
+    //                blockGroup.Add(currentBlock);
+    //                if (currentBlock.BlockNeedsUpdate == false) TagBlocksAsNeedsUpdate(currentBlock.CurrentBlockGroup);
+    //            }
+    //        }
+    //    }
 
-        WriteFallingBlocksToGrid(fallingBlocksGroups);
-        _fallingBlocksController.CreateFallingBlockGroup(fallingBlocksGroups);
-        UpdateAllBlocks();
-    }
+    //    WriteFallingBlocksToGrid(fallingBlocksGroups);
+    //    _fallingBlocksController.CreateFallingBlockGroup(fallingBlocksGroups);
+    //    UpdateAllBlocks();
+    //}
 
     private void TagBlocksAsNeedsUpdate(List<Block> blocksToTag)
     {
         foreach (Block block in blocksToTag)
         {
-            block.BlockNeedsUpdate = true;
+            block.EntityNeedsUpdate = true;
         }
     }
 
-    private void WriteFallingBlocksToGrid(List<FallingBlocksGroup> allFallingBlocksGroups)
-    {
-        for (int i = allFallingBlocksGroups.Count-1; i >= 0; i--)
-        {
-            FallingBlocksGroup fallingBlocksGroup = allFallingBlocksGroups[i];
-
-            int groupCollumn = fallingBlocksGroup.FallingBlocks[0].GridCoordinates.y;
-            for (int j = (int)fallingBlocksGroup.FallingBlocks.Count - 1; j >= 0; j--)
-            {
-                Block blockToWrite = fallingBlocksGroup.FallingBlocks[j];
-                Vector2Int newBlockCoordinates = new Vector2Int(blockToWrite.GridCoordinates.x - fallingBlocksGroup.FallDistance, groupCollumn);
-                BlockGrid[blockToWrite.GridCoordinates.x, blockToWrite.GridCoordinates.y] = null;
-                BlockGrid[newBlockCoordinates.x, newBlockCoordinates.y] = blockToWrite;
-                blockToWrite.UpdateBlockCoordinates(newBlockCoordinates);
-            }
-        }
-    }
-
-    private void UpdateAllBlocks()
+    private void UpdateAllEntities()
     {
         controlledGridCoordinates = new bool[gridRowCount, gridCollumnCount];
-        foreach (Block block in BlockGrid)
+        foreach (IGridEntity entity in EntityGrid)
         {
-            if (block == null || !block.BlockNeedsUpdate) continue;
-            UpdateSingleBlock(block);
+            if (entity == null || !entity.EntityNeedsUpdate) continue;
+            entity.OnUpdateEntity();
         }
     }
 
-    private void UpdateSingleBlock(Block singleBlock)
-    {
-        if (!singleBlock.BlockNeedsUpdate) return;
-        List<Block> blockGroup = new List<Block>();
-        CollectMatchingSurroundingBlocks(singleBlock, ref blockGroup);
+    //private void UpdateSingleBlock(Block singleBlock)
+    //{
+    //    if (!singleBlock.BlockNeedsUpdate) return;
+    //    List<Block> blockGroup = new List<Block>();
+    //    CollectMatchingSurroundingBlocks(singleBlock, ref blockGroup);
 
-        int groupSize = blockGroup.Count;
+    //    int groupSize = blockGroup.Count;
 
-        foreach(Block block in blockGroup)
-        {
-            block.CurrentBlockGroup = blockGroup;
-            block.BlockNeedsUpdate = false;
-        }
+    //    foreach(Block block in blockGroup)
+    //    {
+    //        block.CurrentBlockGroup = blockGroup;
+    //        block.BlockNeedsUpdate = false;
+    //    }
 
-        Sprite blockImageForAllGroup = singleBlock.BlockType.GetBlockGroupIcon(blockGroup);
-        foreach (Block block in blockGroup) block.SetBlockImage(blockImageForAllGroup);
-    }
+    //    Sprite blockImageForAllGroup = singleBlock.BlockType.GetBlockGroupIcon(blockGroup);
+    //    foreach (Block block in blockGroup) block.SetBlockImage(blockImageForAllGroup);
+    //}
 
     private void CreateGridAndCalculatePositions()
     {
-        BlockGrid = new Block[gridRowCount, gridCollumnCount];
+        EntityGrid = new Block[gridRowCount, gridCollumnCount];
         GridPositions = new Vector2[gridRowCount, gridCollumnCount];
         
         // calculate bottom left corn9er block position 
@@ -247,32 +280,32 @@ public class GridManager : AutoSingleton<GridManager>
         }
     }
 
-    private void CollectMatchingSurroundingBlocks(Block block, ref List<Block> blockListToCollect)
+    public void CollectMatchingSurroundingEntities<T>(T entity, ref List<T> entityListToCollect) where T : IGridEntity
     {
-        blockListToCollect.Add(block);
-        controlledGridCoordinates[block.GridCoordinates.x, block.GridCoordinates.y] = true;
-        CollectMatchingSurroundingBlocksRecursive(block, ref blockListToCollect);
+        entityListToCollect.Add(entity);
+        controlledGridCoordinates[entity.GridCoordinates.x, entity.GridCoordinates.y] = true;
+        CollectMatchingSurroundingEntitiesRecursive(entity, ref entityListToCollect);
     }
 
-    private void CollectMatchingSurroundingBlocksRecursive(Block block, ref List<Block> blockListToCollect)
+    private void CollectMatchingSurroundingEntitiesRecursive<T>(T entity, ref List<T> entityListToCollect) where T : IGridEntity
     {
         foreach (Vector2Int surroundingCoordinateAdd in _surroundingCoordinateMatrises)
         {
-            Vector2Int surroundingCoordinate = block.GridCoordinates + surroundingCoordinateAdd;
+            Vector2Int surroundingCoordinate = entity.GridCoordinates + surroundingCoordinateAdd;
             // Skip Surrounding check position if it is out of range or already controlled
             if (surroundingCoordinate.x < 0 || surroundingCoordinate.x == gridRowCount) continue;
             if (surroundingCoordinate.y < 0 || surroundingCoordinate.y == gridCollumnCount) continue;
             if (controlledGridCoordinates[surroundingCoordinate.x, surroundingCoordinate.y]) continue;
 
-            Block surroundingMatchingBlock = BlockGrid[surroundingCoordinate.x, surroundingCoordinate.y];
+            IGridEntity surroundingMatchingEntity = EntityGrid[surroundingCoordinate.x, surroundingCoordinate.y];
             // skip block if type doesnt match
-            if (surroundingMatchingBlock == null || surroundingMatchingBlock.BlockType != block.BlockType) continue;
+            if (surroundingMatchingEntity == null || surroundingMatchingEntity.BlockType != entity.BlockType) continue;
 
             // mark position as controlled to prevent controlling same block more than once
             controlledGridCoordinates[surroundingCoordinate.x, surroundingCoordinate.y] = true;
-
-            blockListToCollect.Add(surroundingMatchingBlock);
-            CollectMatchingSurroundingBlocksRecursive(surroundingMatchingBlock, ref blockListToCollect);
+            T castEntity = (T)surroundingMatchingEntity;
+            entityListToCollect.Add(castEntity);
+            CollectMatchingSurroundingEntitiesRecursive(castEntity, ref entityListToCollect);
         }
     }
 
@@ -280,6 +313,11 @@ public class GridManager : AutoSingleton<GridManager>
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
+        foreach(Vector3 pos in spherePoses)
+        {
+            Gizmos.DrawSphere(pos, 50f);
+            
+        }
         ShowGizmoGrid();
         //ShowBlockGroupSizes();
     }
