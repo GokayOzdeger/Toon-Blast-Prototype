@@ -96,8 +96,6 @@ public class GridManager : AutoSingleton<GridManager>
             block.AnimateBlockPunchScale();
             _blockSpawner.AddBlockSpawnReqeust(block.GridCoordinates.y);
         }
-        CallCachedGridChanges();
-        UpdateAllEntities();
         StartCoroutine(WaitExplodeAnimation(blockToExplode.CurrentBlockGroup));
     }
 
@@ -140,10 +138,14 @@ public class GridManager : AutoSingleton<GridManager>
         CacheGridChange(oldEntityCoordinates);
     }
 
-    private void CallCachedGridChanges()
+    private void CallCachedChanges()
     {
         while (_cachedGridChanges.Count > 0)
         {
+            //List<Vector2Int> gridChangesInProcess = new List<Vector2Int>(_cachedGridChanges);
+            //_cachedGridChanges.Clear();
+            //foreach (Vector2Int change in gridChangesInProcess) OnGridChange.Invoke(change);
+            //spherePoses.Clear();
             OnGridChange.Invoke(_cachedGridChanges[0]);
             _cachedGridChanges.RemoveAt(0);
         }
@@ -158,75 +160,11 @@ public class GridManager : AutoSingleton<GridManager>
     private IEnumerator WaitExplodeAnimation(List<Block> blockGroupExploded)
     {
         yield return new WaitForSeconds(.2f);
+        CallCachedChanges();
         foreach (Block block in blockGroupExploded) Destroy(block.gameObject);
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForSeconds(.2f);
+        yield return new WaitForSeconds(.3f);
+        UpdateAllEntities();
         GridInAction = false;
-    }
-
-    //private void FindFallingBlocksGroups(HashSet<int> collumnIndexes)
-    //{
-    //    List<FallingBlocksGroup> fallingBlocksGroups = new List<FallingBlocksGroup>();
-
-    //    foreach(int collumnIndex in collumnIndexes)
-    //    {
-    //        int fallDistance = 0;
-    //        for (int i = 0; i < gridRowCount; i++) if (BlockGrid[i, collumnIndex] == null) fallDistance++;
-
-    //        int fallDistanceToSkip = 0;
-    //        bool blockGroupCompleted = false;
-    //        List<Block> blockGroup = new List<Block>();
-
-    //        for (int i = (int)gridRowCount - 1; i >= 0; i--)
-    //        {
-    //            Block currentBlock = BlockGrid[i, collumnIndex];
-    //            if (currentBlock == null)
-    //            {
-    //                if (blockGroup.Count == 0) 
-    //                {
-    //                    fallDistance--;
-    //                    continue; 
-    //                }
-    //                fallDistanceToSkip++;
-    //                blockGroupCompleted = true;
-    //                if(i == 0)
-    //                {
-    //                    FallingBlocksGroup fallingGroup = new FallingBlocksGroup(blockGroup, fallDistance);
-    //                    fallingBlocksGroups.Add(fallingGroup);
-    //                    fallDistance = 0;
-    //                    blockGroupCompleted = false;
-    //                    blockGroup = new List<Block>();
-    //                }
-    //            }
-    //            else
-    //            {
-    //                if (blockGroupCompleted)
-    //                {
-    //                    TagBlocksAsNeedsUpdate(blockGroup);
-    //                    FallingBlocksGroup fallingGroup = new FallingBlocksGroup(blockGroup, fallDistance);
-    //                    fallingBlocksGroups.Add(fallingGroup);
-    //                    fallDistance -= fallDistanceToSkip;
-    //                    fallDistanceToSkip = 0;
-    //                    blockGroupCompleted = false;
-    //                    blockGroup = new List<Block>();
-    //                }
-    //                blockGroup.Add(currentBlock);
-    //                if (currentBlock.BlockNeedsUpdate == false) TagBlocksAsNeedsUpdate(currentBlock.CurrentBlockGroup);
-    //            }
-    //        }
-    //    }
-
-    //    WriteFallingBlocksToGrid(fallingBlocksGroups);
-    //    _fallingBlocksController.CreateFallingBlockGroup(fallingBlocksGroups);
-    //    UpdateAllBlocks();
-    //}
-
-    private void TagBlocksAsNeedsUpdate(List<Block> blocksToTag)
-    {
-        foreach (Block block in blocksToTag)
-        {
-            block.EntityNeedsUpdate = true;
-        }
     }
 
     private void UpdateAllEntities()
@@ -238,24 +176,6 @@ public class GridManager : AutoSingleton<GridManager>
             entity.OnUpdateEntity();
         }
     }
-
-    //private void UpdateSingleBlock(Block singleBlock)
-    //{
-    //    if (!singleBlock.BlockNeedsUpdate) return;
-    //    List<Block> blockGroup = new List<Block>();
-    //    CollectMatchingSurroundingBlocks(singleBlock, ref blockGroup);
-
-    //    int groupSize = blockGroup.Count;
-
-    //    foreach(Block block in blockGroup)
-    //    {
-    //        block.CurrentBlockGroup = blockGroup;
-    //        block.BlockNeedsUpdate = false;
-    //    }
-
-    //    Sprite blockImageForAllGroup = singleBlock.BlockType.GetBlockGroupIcon(blockGroup);
-    //    foreach (Block block in blockGroup) block.SetBlockImage(blockImageForAllGroup);
-    //}
 
     private void CreateGridAndCalculatePositions()
     {

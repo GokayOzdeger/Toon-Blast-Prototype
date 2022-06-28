@@ -76,6 +76,7 @@ public class Block : MonoBehaviour, IGridEntity
         Debug.Log("Fall Block " + gameObject.name,gameObject);
         GridManager.Instance.WriteEntityFall(this);
     }
+    private bool moved = false;
 
     public void OnUpdateEntity()
     {
@@ -97,12 +98,12 @@ public class Block : MonoBehaviour, IGridEntity
     public void OnMoveEntity(Vector2Int newCoordinates)
     {
         KillLastTween();
-
-        int moveDistance = GridCoordinates.x - newCoordinates.x;
         GridCoordinates = newCoordinates;
-        
-        Vector3 targetPos = transform.position - new Vector3(0, GridManager.Instance.RowSpacing * moveDistance, 0);
-        Tweener moveTween = transform.DOMoveY(targetPos.y, .75f / Mathf.Pow(moveDistance, 1 / 3f));
+        float targetYPos = GridManager.Instance.GridPositions[newCoordinates.x, newCoordinates.y].y;
+        float distanceToTarget = transform.position.y - targetYPos;
+        Debug.Log("Distance:" + distanceToTarget);
+        float moveDuration = .8f / Mathf.Pow(distanceToTarget / GridManager.Instance.RowSpacing, 1 / 3f);
+        Tweener moveTween = transform.DOMoveY(targetYPos, moveDuration);
         CacheTween(moveTween);
     }
 }
