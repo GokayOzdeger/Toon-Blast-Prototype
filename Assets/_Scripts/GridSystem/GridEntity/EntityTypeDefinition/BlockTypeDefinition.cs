@@ -24,7 +24,7 @@ public class BlockTypeDefinition : BasicGridEntityTypeDefinition
     [System.Serializable]
     public class ConditionSpritePair
     {
-        public MinGroupSizeCondition Condition;
+        public ACondition Condition;
         public Sprite Icon;
     }
 }

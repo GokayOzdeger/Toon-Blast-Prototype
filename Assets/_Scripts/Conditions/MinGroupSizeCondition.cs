@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "ScriptableObjects/Min Group Size Condition")]
-public class MinGroupSizeCondition : ScriptableObject, ICondition
+public class MinGroupSizeCondition : ACondition
 {
     [Tooltip("Inclusive")]
     [SerializeField] private int minGroupSize;
 
-    public bool IsConditionMet(List<Block> blockGroup)
+    public override bool IsConditionMet(List<Block> blockGroup)
     {
         return blockGroup.Count >= minGroupSize;
     }

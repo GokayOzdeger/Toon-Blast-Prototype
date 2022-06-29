@@ -2,17 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelController : MonoBehaviour
+public class LevelController
 {
-    // Start is called before the first frame update
-    void Start()
+    private LevelConfig _config;
+
+    private GridController _gridController;
+    
+    public LevelController(LevelConfig config, LevelSceneReferences levelSceneReferences)
     {
-        
+        this._config = config;
+
+        _gridController = new GridController(_config.GridControllerSettings, levelSceneReferences.GridControllerSceneReferences);
     }
 
-    // Update is called once per frame
-    void Update()
+    [System.Serializable]
+    public class LevelSceneReferences
     {
-        
+        [Group]
+        [SerializeField] private GridController.GridControllerSceneReferences gridControllerSceneReferences;
+        public GridController.GridControllerSceneReferences GridControllerSceneReferences => gridControllerSceneReferences;
     }
 }

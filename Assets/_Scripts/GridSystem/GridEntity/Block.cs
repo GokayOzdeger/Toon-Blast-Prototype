@@ -4,12 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using System;
+using Utilities;
 
 public class Block : MonoBehaviour, IGridEntity, IPoolable
 {
+    private readonly float DestroyAnimationDuration = .2f;
+    
     [SerializeField] private Image blockImage;
-
-    public BlockTypeDefinition BlockType { get; private set; }
+    [SerializeField] private PoolObject poolObject;
+    public IGridEntityTypeDefinition EntityType { get; private set; }
 
     public Vector2Int GridCoordinates { get; private set; }
 
@@ -20,12 +23,12 @@ public class Block : MonoBehaviour, IGridEntity, IPoolable
     public bool EntityNeedsUpdate { get; set; } = true;
 
     private Tweener _lastTween = null;
-    protected GridController _gridController;
+    private GridController _gridController;
 
     public void AnimateBlockPunchScale(Action onComplete = null)
     {
         CompleteLastTween();
-        _lastTween = transform.DOPunchScale(new Vector2(.15f, .15f), .2f);
+        _lastTween = transform.DOPunchScale(new Vector2(.15f, .15f), DestroyAnimationDuration);
         if (onComplete != null) _lastTween.onComplete += () => onComplete();
     }
 
@@ -45,7 +48,7 @@ public class Block : MonoBehaviour, IGridEntity, IPoolable
     
     private void KillLastTween()
     {
-        if (_lastTween != null) _lastTween.Kill();
+        if (_lastTween != null) _lastTween.Kill(true);
     }
     
     public void CacheTween(Tweener tween)
@@ -53,9 +56,11 @@ public class Block : MonoBehaviour, IGridEntity, IPoolable
         _lastTween = tween;
     }
 
-    public void SetupEntity(GridController grid, BlockTypeDefinition blockType)
+    public void SetupEntity(GridController grid, IGridEntityTypeDefinition blockType)
     {
-        BlockType = blockType;
+        _gridController = grid;
+        EntityType = blockType;
+        SetBlockImage(blockType.DefaultEntitySprite);
     }
 
     public void UpdateBlockCoordinates(Vector2Int coordinates)
@@ -75,27 +80,14 @@ public class Block : MonoBehaviour, IGridEntity, IPoolable
 
     public void TryExplode()
     {
-        if (_gridController.GridInAction) return;
-        if (CurrentBlockGroup.Count < 2) ExplodeFail();
-        else ExplodeStart();
+        if (!_gridController.GridInterractable) return;
+        if (!CreateExplosionEvent()) ExplodeFail();
     }
 
-    private void ExplodeStart()
+    private bool CreateExplosionEvent()
     {
-        GridInAction = true;
-
-        RemoveEntitiesFromGridArray(blockToExplode.CurrentBlockGroup);
-
-        foreach (Block block in blockToExplode.CurrentBlockGroup)
-        {
-            block.AnimateBlockPunchScale();
-            _blockSpawner.AddBlockSpawnReqeust(block.GridCoordinates.y);
-        }
-    }
-
-    private void ExplosionEnd()
-    {
-        CallCachedChanges();
+        ExplosionGridEvent explosionEvent = new ExplosionGridEvent();
+        return explosionEvent.TryEventStart(_gridController, CurrentBlockGroup);
     }
 
     private void ExplodeFail()
@@ -103,20 +95,11 @@ public class Block : MonoBehaviour, IGridEntity, IPoolable
         AnimateBlockShake();
     }
 
-    protected void StartExplode()
-    {
-        foreach (Block block in CurrentBlockGroup)
-        {
-            block.AnimateBlockPunchScale(()=> Destroy(block.gameObject));
-        }
-        _gridController.ex
-    }
-
     public void OnGridChange(Vector2Int changeCoordinate)
     {
         if (GridCoordinates - changeCoordinate != new Vector2Int(1, 0)) return;
         if(_gridController.EntityGrid[changeCoordinate.x, changeCoordinate.y] != null) return;
-        Debug.Log("Fall Block " + gameObject.name,gameObject);
+        //entity reacting to grid change
         _gridController.WriteEntityFall(this);
     }
 
@@ -126,8 +109,7 @@ public class Block : MonoBehaviour, IGridEntity, IPoolable
         List<Block> blockGroup = new List<Block>();
         _gridController.CollectMatchingSurroundingEntities<Block>(this, ref blockGroup);
 
-        int groupSize = blockGroup.Count;
-        Sprite blockImageForAllGroup = BlockType.GetBlockGroupIcon(blockGroup);
+        Sprite blockImageForAllGroup = ((BlockTypeDefinition)EntityType).GetBlockGroupIcon(blockGroup);
 
         foreach (Block block in blockGroup)
         {
@@ -140,12 +122,14 @@ public class Block : MonoBehaviour, IGridEntity, IPoolable
     public void OnMoveEntity(Vector2Int newCoordinates)
     {
         KillLastTween();
+        _gridController.EntityStartProcess();
         GridCoordinates = newCoordinates;
-        float targetYPos = _gridController.GridPositions[newCoordinates.x, newCoordinates.y].y;
-        float distanceToTarget = transform.position.y - targetYPos;
+        Vector2 targetPos = _gridController.GridPositions[newCoordinates.x, newCoordinates.y];
+        float distanceToTarget = Vector2.Distance((Vector2)transform.position, targetPos);
         Debug.Log("Distance:" + distanceToTarget);
         float moveDuration = .8f / Mathf.Pow(distanceToTarget / _gridController.RowSpacing, 1 / 3f);
-        Tweener moveTween = transform.DOMoveY(targetYPos, moveDuration);
+        Tweener moveTween = transform.DOMove(targetPos, moveDuration);
+        moveTween.onComplete += () => _gridController.EntityEndProcess();
         CacheTween(moveTween);
     }
 
@@ -154,11 +138,17 @@ public class Block : MonoBehaviour, IGridEntity, IPoolable
         KillLastTween();
         EntityNeedsUpdate = true;
         CurrentBlockGroup = null;
-        BlockType = null;
+        EntityType = null;
     }
 
     public void OnPoolSpawn()
     {
         
+    }
+
+    public void DestoryEntityWithCallback(Action onDestroy)
+    {
+        AnimateBlockShake(onDestroy);
+        poolObject.GoToPool(DestroyAnimationDuration);        
     }
 }

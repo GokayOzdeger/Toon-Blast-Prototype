@@ -11,6 +11,9 @@ using UnityEditor;
 
 public class GridController
 {
+    private readonly float collumnSpacing = 79;
+    private readonly float rowSpacing = 70;
+
     private static Vector2Int[] _surroundingCoordinateMatrises = new Vector2Int[]
     {
         new Vector2Int( 0,-1),
@@ -20,79 +23,59 @@ public class GridController
     };
 
     
-    [SerializeField] private CanvasScaler canvasScaler;
-
-    [SerializeField] private uint gridRowCount;
-    [SerializeField] private uint gridCollumnCount;
-    [SerializeField] private float collumnSpacing;
-    [SerializeField] private float rowSpacing;
+    private CanvasScaler _canvasScaler;
+    private RectTransform _gridCenterTransform;
+    
+    private uint gridRowCount;
+    private uint gridCollumnCount;
 
     public int RowCount { get { return (int)gridRowCount; } }
     public int CollumnCount { get { return (int)gridCollumnCount; } }
-    public float CollumnSpacing { get { return collumnSpacing * canvasScaler.transform.localScale.x; } }
-    public float RowSpacing { get { return rowSpacing * canvasScaler.transform.localScale.y; } }
+    public float CollumnSpacing { get { return collumnSpacing * _canvasScaler.transform.localScale.x; } }
+    public float RowSpacing { get { return rowSpacing * _canvasScaler.transform.localScale.y; } }
 
     public UnityEvent<Vector2Int> OnGridChange = new UnityEvent<Vector2Int>();
     public Vector2[,] GridPositions { get; private set; }
     public IGridEntity[,] EntityGrid { get; private set; }
-    public bool GridInAction { get; private set; } = false;
+    public bool GridInterractable { get; private set; } = true;
 
-    private RectTransform gridCenterTransform;
     private List<Vector2Int> _cachedGridChanges = new List<Vector2Int>();
     private bool[,] controlledGridCoordinates;
     protected int _entitiesInProcess = 0; 
 
-    private BlockSpawner _blockSpawner;
+    private GridEntitySpawner _entitySpawner;
 
-    private void Start()
+    public GridController(GridControllerSettings settings , GridControllerSceneReferences references)
     {
-        CreateSystemComponents();
+        this._canvasScaler = references.CanvasScaler;
+        this._gridCenterTransform = references.GridCenterTransform;
+        gridRowCount = settings.RowCount;
+        gridCollumnCount = settings.CollumnCount;
         CreateGridAndCalculatePositions();
+        CreateSystemComponents(settings, references);
         UpdateAllEntities();
     }
 
-    private void CreateSystemComponents()
+    private void CreateSystemComponents(GridControllerSettings settings, GridControllerSceneReferences references)
     {
-        _blockSpawner = new BlockSpawner(this, gridCollumnCount);
+        _entitySpawner = new GridEntitySpawner(this, settings.GridEntitySpawnerSettings, references.GridEntitySpawnerSceneReferences);
     }
 
     public void RegisterGridEntityToPosition(IGridEntity entity, int collumnIndex, int rowIndex)
     {
+        Debug.Log($"Register Entity To: {rowIndex}, {collumnIndex}");
         EntityGrid[collumnIndex, rowIndex] = entity;
         OnGridChange.AddListener(entity.OnGridChange);
     }
 
-    public void TryExplode(Block blockToExplode)
+    public void OnGridEventEnd(IGridEvent gridEvent)
     {
-        if (GridInAction) return;
-        if (blockToExplode.CurrentBlockGroup.Count < 2) ExplodeFail(blockToExplode);
-        else ExplodeSuccess(blockToExplode);
-    }
-
-    private void ExplodeSuccess(Block blockToExplode)
-    {
-        GridInAction = true;
-        
-        RemoveEntitiesFromGridArray(blockToExplode.CurrentBlockGroup);
-        
-        foreach (Block block in blockToExplode.CurrentBlockGroup)
-        {
-            block.AnimateBlockPunchScale();
-            _blockSpawner.AddBlockSpawnReqeust(block.GridCoordinates.y);
-        }
-    }
-
-    public void ExplosionEnd()
-    {
+        if (!gridEvent.ProceedGridAfterEventEnds) return;
         CallCachedChanges();
+        _entitySpawner.SummonRequestedEntities();
     }
 
-    private void ExplodeFail(Block blockToExplode)
-    {
-        blockToExplode.AnimateBlockShake();
-    }
-
-    private void RemoveEntitiesFromGridArray<T>(List<T> entitiesToRemove) where T: IGridEntity
+    public void RemoveEntitiesFromGridArray<T>(List<T> entitiesToRemove) where T: IGridEntity
     {
         foreach (T entityToRemove in entitiesToRemove) OnGridChange.RemoveListener(entityToRemove.OnGridChange);
         foreach (T entityToRemove in entitiesToRemove)
@@ -101,6 +84,8 @@ public class GridController
             CacheGridChange(entityToRemove.GridCoordinates);
         }
     }
+
+    
 
     public void WriteEntityFall(IGridEntity gridEntity)
     {
@@ -126,13 +111,12 @@ public class GridController
         if (_entitiesInProcess == 0)
         {
             UpdateAllEntities();
-            GridInAction = false;
+            GridInterractable = true;
         }
     }
 
     private void WriteEntityMovementToGrid(Vector2Int newCoordinates, IGridEntity entity)
     {
-        Debug.Log($"Moving entity {entity.GridCoordinates} to {newCoordinates}");
         Vector2Int oldEntityCoordinates = entity.GridCoordinates;
         EntityGrid[entity.GridCoordinates.x, entity.GridCoordinates.y] = null;
         EntityGrid[newCoordinates.x, newCoordinates.y] = entity;
@@ -141,32 +125,24 @@ public class GridController
         CacheGridChange(oldEntityCoordinates);
     }
 
-    private void CallCachedChanges()
+    public void CallCachedChanges()
     {
         while (_cachedGridChanges.Count > 0)
         {
-            //List<Vector2Int> gridChangesInProcess = new List<Vector2Int>(_cachedGridChanges);
-            //_cachedGridChanges.Clear();
-            //foreach (Vector2Int change in gridChangesInProcess) OnGridChange.Invoke(change);
-            //spherePoses.Clear();
             OnGridChange.Invoke(_cachedGridChanges[0]);
             _cachedGridChanges.RemoveAt(0);
         }
+    }
+
+    public void CallEntitySpawn(int collumnIndex)
+    {
+        _entitySpawner.AddEntitySpawnReqeust(collumnIndex);
     }
 
     private void CacheGridChange(Vector2Int changeCords)
     {
         _cachedGridChanges.Add(changeCords);
     }
-
-    //private IEnumerator WaitExplodeAnimation(List<Block> blockGroupExploded)
-    //{
-    //    yield return new WaitForSeconds(.2f);
-    //    foreach (Block block in blockGroupExploded) Destroy(block.gameObject);
-    //    yield return new WaitForSeconds(.3f);
-    //    UpdateAllEntities();
-    //    GridInAction = false;
-    //}
 
     private void UpdateAllEntities()
     {
@@ -180,12 +156,12 @@ public class GridController
 
     private void CreateGridAndCalculatePositions()
     {
-        EntityGrid = new Block[gridRowCount, gridCollumnCount];
+        EntityGrid = new IGridEntity[gridRowCount, gridCollumnCount];
         GridPositions = new Vector2[gridRowCount, gridCollumnCount];
         
-        // calculate bottom left corn9er block position 
-        float bottomLeftCornerX = gridCenterTransform.position.x - ((gridCollumnCount / 2f) - .5f) * CollumnSpacing;
-        float bottomLeftCornerY = gridCenterTransform.position.y - ((gridRowCount / 2f) - .5f) * RowSpacing;
+        // calculate bottom left corner entity position 
+        float bottomLeftCornerX = _gridCenterTransform.position.x - ((gridCollumnCount / 2f) - .5f) * CollumnSpacing;
+        float bottomLeftCornerY = _gridCenterTransform.position.y - ((gridRowCount / 2f) - .5f) * RowSpacing;
 
         Vector2 bottomLeftCorner = new Vector2(bottomLeftCornerX, bottomLeftCornerY);
         Vector2 cursorPoint = bottomLeftCorner;
@@ -219,8 +195,8 @@ public class GridController
             if (controlledGridCoordinates[surroundingCoordinate.x, surroundingCoordinate.y]) continue;
 
             IGridEntity surroundingMatchingEntity = EntityGrid[surroundingCoordinate.x, surroundingCoordinate.y];
-            // skip block if type doesnt match
-            if (surroundingMatchingEntity == null || surroundingMatchingEntity.BlockType != entity.BlockType) continue;
+            // skip entity if type doesnt match
+            if (surroundingMatchingEntity == null || surroundingMatchingEntity.EntityType != entity.EntityType) continue;
 
             // mark position as controlled to prevent controlling same block more than once
             controlledGridCoordinates[surroundingCoordinate.x, surroundingCoordinate.y] = true;
@@ -228,6 +204,33 @@ public class GridController
             entityListToCollect.Add(castEntity);
             CollectMatchingSurroundingEntitiesRecursive(castEntity, ref entityListToCollect);
         }
+    }
+
+    [System.Serializable]
+    public class GridControllerSceneReferences
+    {
+        [BHeader("Grid Controller References")] 
+        [SerializeField] private RectTransform gridCenterTransform;
+        [SerializeField] private CanvasScaler canvasScaler;
+        [Group]
+        [SerializeField] private GridEntitySpawner.GridEntitySpawnerSceneReferences gridEntitySpawnerSceneReferences;
+        public RectTransform GridCenterTransform => gridCenterTransform;
+        public CanvasScaler CanvasScaler => canvasScaler;
+        public GridEntitySpawner.GridEntitySpawnerSceneReferences GridEntitySpawnerSceneReferences => gridEntitySpawnerSceneReferences;
+    }
+
+    [System.Serializable]
+    public class GridControllerSettings
+    {
+        [BHeader("Grid Controller Settings")]
+        [SerializeField] private uint rowCount;
+        [SerializeField] private uint collumnCount;
+        [Group]
+        [SerializeField] private GridEntitySpawner.GridEntitySpawnerSettings gridEntitySpawnerSettings;
+
+        public uint RowCount => rowCount;
+        public uint CollumnCount => collumnCount;
+        public GridEntitySpawner.GridEntitySpawnerSettings GridEntitySpawnerSettings => gridEntitySpawnerSettings;
     }
 
 

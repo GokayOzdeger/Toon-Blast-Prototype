@@ -91,6 +91,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockImage: {fileID: 1905907544835078949}
+  poolObject: {fileID: 182879557381164646}
 --- !u!114 &419882157052093805
 MonoBehaviour:
   m_ObjectHideFlags: 0
