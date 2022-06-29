@@ -68,6 +68,12 @@ public class GridController
         OnGridChange.AddListener(entity.OnGridChange);
     }
 
+    public void OnGridEventStart(IGridEvent gridEvent)
+    {
+        if (!gridEvent.MakeGridUninterractableOnStart) return;
+        GridInterractable = false;
+    }
+
     public void OnGridEventEnd(IGridEvent gridEvent)
     {
         if (!gridEvent.ProceedGridAfterEventEnds) return;
@@ -110,7 +116,6 @@ public class GridController
         _entitiesInProcess--;
         if (_entitiesInProcess == 0)
         {
-            UpdateAllEntities();
             GridInterractable = true;
         }
     }
@@ -132,6 +137,7 @@ public class GridController
             OnGridChange.Invoke(_cachedGridChanges[0]);
             _cachedGridChanges.RemoveAt(0);
         }
+        UpdateAllEntities();
     }
 
     public void CallEntitySpawn(int collumnIndex)
@@ -198,7 +204,7 @@ public class GridController
             // skip entity if type doesnt match
             if (surroundingMatchingEntity == null || surroundingMatchingEntity.EntityType != entity.EntityType) continue;
 
-            // mark position as controlled to prevent controlling same block more than once
+            // mark position as controlled to prevent controlling same entity more than once
             controlledGridCoordinates[surroundingCoordinate.x, surroundingCoordinate.y] = true;
             T castEntity = (T)surroundingMatchingEntity;
             entityListToCollect.Add(castEntity);

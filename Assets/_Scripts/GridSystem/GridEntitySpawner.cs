@@ -31,7 +31,7 @@ public class GridEntitySpawner
         _spawnPositionRow = new Vector2[_collumnCount];
         for (int i = 0; i < _collumnCount; i++)
         {
-            _spawnPositionRow[i] = _gridController.GridPositions[_gridController.RowCount - 1, i] + new Vector2(0, 100);
+            _spawnPositionRow[i] = _gridController.GridPositions[_gridController.RowCount - 1, i] + new Vector2(0, 300);
         }
     }
 
@@ -67,7 +67,7 @@ public class GridEntitySpawner
                 Vector2Int gridCoordinates = new Vector2Int(_gridController.RowCount - j - 1, i);
                 IGridEntityTypeDefinition randomBlockType = _gridEntityTypes[Random.Range(0, _gridEntityTypes.Length)];
                 GameObject newEntityGO = ObjectPooler.Instance.Spawn(randomBlockType.GridEntityPrefab.name, 
-                    _spawnPositionRow[i],
+                    _spawnPositionRow[i]-j*new Vector2(0,_gridController.RowSpacing),
                     Quaternion.identity);
                 newEntityGO.transform.SetParent(_gridParentTransform);
                 newEntityGO.gameObject.name = $"Block {i}_{j}";
@@ -77,6 +77,7 @@ public class GridEntitySpawner
                 newEntity.OnMoveEntity(gridCoordinates);
             }
         }
+        _gridController.CallCachedChanges();
         ClearRequests();
     }
 

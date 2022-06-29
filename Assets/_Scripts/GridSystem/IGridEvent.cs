@@ -4,6 +4,7 @@ using UnityEngine;
 
 public interface IGridEvent 
 {
+    public bool MakeGridUninterractableOnStart { get; }
     public bool ProceedGridAfterEventEnds { get; }
     public bool TryEventStart<T>(GridController grid, List<T> effectedEntities) where T : IGridEntity;
 

@@ -127,7 +127,7 @@ public class Block : MonoBehaviour, IGridEntity, IPoolable
         Vector2 targetPos = _gridController.GridPositions[newCoordinates.x, newCoordinates.y];
         float distanceToTarget = Vector2.Distance((Vector2)transform.position, targetPos);
         Debug.Log("Distance:" + distanceToTarget);
-        float moveDuration = .8f / Mathf.Pow(distanceToTarget / _gridController.RowSpacing, 1 / 3f);
+        float moveDuration = 1.2f / (Mathf.Pow(distanceToTarget / _gridController.RowSpacing, 1 / 3f)+.5f);
         Tweener moveTween = transform.DOMove(targetPos, moveDuration);
         moveTween.onComplete += () => _gridController.EntityEndProcess();
         CacheTween(moveTween);
