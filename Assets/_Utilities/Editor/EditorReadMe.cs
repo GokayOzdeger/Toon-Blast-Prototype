@@ -39,7 +39,6 @@ public class EditorReadMeWindow : EditorWindow
 
     private void OnGUI()
     {
-        GUI.Label(new Rect(10, 10, 150, 20), "Read Me", EditorStyles.boldLabel);
         GUI.Label(new Rect(10, 10, 600, 150), 
            "Most Settings Can be configured from the 'Level Config' scriptable object in Resources.\n" +
            "The Level Config SO should be assigned to the GameManager in the scene." +
