@@ -220,11 +220,9 @@ public class GridController
 
     public void EntityEndProcess()
     {
-        Debug.Log("Entities in process: " + _entitiesInProcess+" / "+GridInterractable);
         _entitiesInProcess--;
         if (_entitiesInProcess == 0)
         {
-            Debug.Log("Grid Interractable");
             UpdateAllEntities();
             if(_shuffleController.HasLegalMove()) GridInterractable = true;
             

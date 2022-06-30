@@ -25,8 +25,6 @@ public class ReplaceMeshReferences : EditorWindow
 
     private void OnEnable()
     {
-        Debug.Log("Init serialized properties");
-
         so = new SerializedObject( (ScriptableObject) this);
 
         spMeshesToReplace = so.FindProperty("meshesToReplace");
