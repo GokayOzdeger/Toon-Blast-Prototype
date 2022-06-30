@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce05b047461ff14bb05f69b0d6790d9, type: 3}
   m_Name: FallbackPoolProfile
   m_EditorClassIdentifier: 
-  poolPacks: []
+  poolPacks:
+  - {fileID: 11400000, guid: c36bca0e41f894f42ac96d41c6819900, type: 2}
+  - {fileID: 11400000, guid: 0bc7fa6450569af46a39eb4b16fd65b1, type: 2}

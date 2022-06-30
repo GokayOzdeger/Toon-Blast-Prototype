@@ -14,4 +14,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolPacks:
   - {fileID: 11400000, guid: c36bca0e41f894f42ac96d41c6819900, type: 2}
-  - {fileID: 11400000, guid: 0bc7fa6450569af46a39eb4b16fd65b1, type: 2}

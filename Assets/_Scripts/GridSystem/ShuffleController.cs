@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShuffleController
 {
     private GridController _gridController;
 
-    public ShuffleController(GridController grid)
+    public ShuffleController(GridController grid, ShuffleControllerSceneReferences references)
     {
         this._gridController = grid;
+        if (references.ForceShuffleButton) 
+            references.ForceShuffleButton.onClick.AddListener(OnClickForceShuffleButton);
     }
 
     public bool HasLegalMove()
@@ -30,8 +33,7 @@ public class ShuffleController
 
     private void DoShuffle()
     {
-        Debug.Log("Shuffling");
-        // create shuffle grid for shuffling entities
+        // collect entities to shuffle
         List<IGridEntity> entitiesToShuffle = new List<IGridEntity>();
         
         for (int i = 0; i < _gridController.RowCount; i++)
@@ -60,5 +62,18 @@ public class ShuffleController
         T randomElement = list[randomIndex];
         list.RemoveAt(randomIndex);
         return randomElement;
+    }
+
+    private void OnClickForceShuffleButton()
+    {
+        DoShuffle();
+    }
+
+    [System.Serializable]
+    public class ShuffleControllerSceneReferences
+    {
+        [BHeader("Shuffle Controller References")]
+        [SerializeField] private Button forceShuffleButton;
+        public Button ForceShuffleButton => forceShuffleButton;
     }
 }

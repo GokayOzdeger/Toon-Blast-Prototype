@@ -6,21 +6,13 @@ using DG.Tweening;
 using System;
 using Utilities;
 
-public class Block : MonoBehaviour, IGridEntity, IPoolable
+public class Block : BasicFallingGridEntity
 {
     private readonly float DestroyAnimationDuration = .2f;
-    
-    [SerializeField] private Image blockImage;
-    [SerializeField] private PoolObject poolObject;
-    public IGridEntityTypeDefinition EntityType { get; private set; }
-    public Vector2Int GridCoordinates { get; private set; }
+   
     public List<Block> CurrentBlockGroup { get; set; }
-    public bool EntityNeedsUpdate { get; set; } = true;
     public int GroupSize { get { if (CurrentBlockGroup == null) return 0; return CurrentBlockGroup.Count; } }
-    public Transform EntityTransform => transform;
-
-    private Tweener _lastTween = null;
-    private GridController _gridController;
+    
     private bool _explodesOnClick;
 
     public void AnimateBlockPunchScale(Action onComplete = null)
@@ -39,37 +31,9 @@ public class Block : MonoBehaviour, IGridEntity, IPoolable
         if (onComplete != null) _lastTween.onComplete += () => onComplete();
     }
 
-    private void CompleteLastTween()
+    private void TagUpgradeNeededForAllGroupMembers()
     {
-        if (_lastTween != null) _lastTween.Complete(true);
-    }
-    
-    private void KillLastTween()
-    {
-        if (_lastTween != null) _lastTween.Kill(true);
-    }
-    
-    public void CacheTween(Tweener tween)
-    {
-        _lastTween = tween;
-    }
-
-    public void SetupEntity(GridController grid, IGridEntityTypeDefinition blockType)
-    {
-        _gridController = grid;
-        EntityType = blockType;
-        SetBlockImage(blockType.DefaultEntitySprite);
-        _explodesOnClick = ((BlockTypeDefinition)blockType).ExplodesOnClick;
-    }
-
-    public void UpdateBlockCoordinates(Vector2Int coordinates)
-    {
-        GridCoordinates = coordinates;
-    }
-
-    public void SetBlockImage(Sprite sprite)
-    {
-        blockImage.sprite = sprite;
+        if (CurrentBlockGroup != null) foreach (Block block in CurrentBlockGroup) block.EntityNeedsUpdate = true;
     }
 
     public void OnClickBlock()
@@ -95,17 +59,22 @@ public class Block : MonoBehaviour, IGridEntity, IPoolable
         AnimateBlockShake();
     }
 
-    public void OnGridChange(Vector2Int changeCoordinate)
+    public override void SetupEntity(GridController grid, IGridEntityTypeDefinition blockType)
     {
-        if (GridCoordinates - changeCoordinate != new Vector2Int(1, 0)) return;
-        if(_gridController.EntityGrid[changeCoordinate.x, changeCoordinate.y] != null) return;
-        //entity reacting to grid change
-        _gridController.WriteEntityFall(this);
+        base.SetupEntity(grid, blockType);
+        _explodesOnClick = ((BlockTypeDefinition)blockType).ExplodesOnClick;
     }
 
-    public void OnUpdateEntity()
+    public override void OnPoolSpawn()
     {
-        if (!EntityNeedsUpdate) return;
+        base.OnPoolSpawn();
+        CurrentBlockGroup = null;
+    }
+
+    public override void OnUpdateEntity()
+    {
+        base.OnUpdateEntity();
+        
         TagUpgradeNeededForAllGroupMembers();
         List<Block> blockGroup = new List<Block>();
         _gridController.CollectMatchingSurroundingEntities<Block>(this, ref blockGroup);
@@ -120,40 +89,9 @@ public class Block : MonoBehaviour, IGridEntity, IPoolable
         foreach (Block block in blockGroup) block.SetBlockImage(blockImageForAllGroup);
     }
 
-    private void TagUpgradeNeededForAllGroupMembers()
-    {
-        if (CurrentBlockGroup != null) foreach (Block block in CurrentBlockGroup) block.EntityNeedsUpdate = true;
-    }
-
-    public void OnMoveEntity(Vector2Int newCoordinates)
-    {
-        KillLastTween();
-        _gridController.EntityStartProcess();
-        GridCoordinates = newCoordinates;
-        Vector2 targetPos = _gridController.GridPositions[newCoordinates.x, newCoordinates.y];
-        float distanceToTarget = Vector2.Distance((Vector2)transform.position, targetPos);
-        float moveDuration = .4f;
-        Tweener moveTween = transform.DOMove(targetPos, moveDuration);
-        moveTween.onComplete += () => _gridController.EntityEndProcess();
-        CacheTween(moveTween);
-    }
-
-    public void OnGoToPool()
-    {
-        //
-    }
-
-    public void OnPoolSpawn()
-    {
-        KillLastTween();
-        EntityNeedsUpdate = true;
-        CurrentBlockGroup = null;
-        EntityType = null;
-    }
-
-    public void DestoryEntityWithCallback(Action onDestroy)
+    public override void DestoryEntityWithCallback(Action onDestroy)
     {
         AnimateBlockShake(onDestroy);
-        poolObject.GoToPool(DestroyAnimationDuration);        
+        poolObject.GoToPool(DestroyAnimationDuration);
     }
 }

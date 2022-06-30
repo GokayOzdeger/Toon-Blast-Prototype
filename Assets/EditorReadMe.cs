@@ -17,7 +17,6 @@ public static class EditorReadMe
     public static void OpenEditorReadMeWindowOnEditorLaunch()
     {
         EditorApplication.update -= OpenEditorReadMeWindowOnEditorLaunch;
-        Debug.Log("OpenEditorReadMeWindowOnEditorLaunch");
         if (!SessionState.GetBool("FirstInitDone", false))
         {
             EditorWindow.GetWindow<EditorReadMeWindow>();

@@ -61,7 +61,7 @@ public class GridController
     #region Private Methods
     private void CreateSystemComponents(GridControllerSettings settings, GridControllerSceneReferences references)
     {
-        _shuffleController = new ShuffleController(this);
+        _shuffleController = new ShuffleController(this, references.ShuffleControllerSceneReferences);
         _entitySpawner = new GridEntitySpawner(this, settings.GridEntitySpawnerSettings, references.GridEntitySpawnerSceneReferences);
     }
 
@@ -70,7 +70,7 @@ public class GridController
         Vector2Int oldEntityCoordinates = entity.GridCoordinates;
         EntityGrid[entity.GridCoordinates.x, entity.GridCoordinates.y] = null;
         EntityGrid[newCoordinates.x, newCoordinates.y] = entity;
-        entity.OnMoveEntity(newCoordinates);
+        entity.OnMoveEntity(newCoordinates, IGridEntity.MovementMode.Linear);
         CacheGridChange(newCoordinates);
         CacheGridChange(oldEntityCoordinates);
     }
@@ -151,8 +151,8 @@ public class GridController
         int entityBSiblingIndex = entityB.EntityTransform.GetSiblingIndex();
         entityA.EntityTransform.SetSiblingIndex(entityBSiblingIndex);
         entityB.EntityTransform.SetSiblingIndex(entityASiblingIndex);
-        entityA.OnMoveEntity(entityBCoordinates);
-        entityB.OnMoveEntity(entityACoordinates);
+        entityA.OnMoveEntity(entityBCoordinates, IGridEntity.MovementMode.Curvy);
+        entityB.OnMoveEntity(entityACoordinates, IGridEntity.MovementMode.Curvy);
     }
     
     public void RegisterGridEntityToPosition(IGridEntity entity, int collumnIndex, int rowIndex)
@@ -246,9 +246,12 @@ public class GridController
         [SerializeField] private CanvasScaler canvasScaler;
         [Group]
         [SerializeField] private GridEntitySpawner.GridEntitySpawnerSceneReferences gridEntitySpawnerSceneReferences;
+        [Group]
+        [SerializeField] private ShuffleController.ShuffleControllerSceneReferences shuffleControllerSceneReferences;
         public RectTransform GridCenterTransform => gridCenterTransform;
         public CanvasScaler CanvasScaler => canvasScaler;
         public GridEntitySpawner.GridEntitySpawnerSceneReferences GridEntitySpawnerSceneReferences => gridEntitySpawnerSceneReferences;
+        public ShuffleController.ShuffleControllerSceneReferences ShuffleControllerSceneReferences => shuffleControllerSceneReferences;
     }
 
     [System.Serializable]
