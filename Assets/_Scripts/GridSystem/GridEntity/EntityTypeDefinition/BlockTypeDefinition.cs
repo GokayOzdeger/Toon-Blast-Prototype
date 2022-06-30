@@ -6,8 +6,10 @@ using UnityEngine;
 public class BlockTypeDefinition : BasicGridEntityTypeDefinition
 {
     [BHeader("Block Type Settings")]
+    [SerializeField] private bool explodesOnClick = true;
     [SerializeField] private List<ConditionSpritePair> conditionSpritePairs = new List<ConditionSpritePair>();
 
+    public bool ExplodesOnClick => explodesOnClick;
     public List<ConditionSpritePair> ConditionSpritePairs { get { return conditionSpritePairs; } }
 
     public Sprite GetBlockGroupIcon(List<Block> blockGroup)

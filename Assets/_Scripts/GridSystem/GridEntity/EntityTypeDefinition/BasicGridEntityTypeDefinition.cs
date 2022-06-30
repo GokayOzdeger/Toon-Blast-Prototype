@@ -9,10 +9,13 @@ public class BasicGridEntityTypeDefinition : ScriptableObject, IGridEntityTypeDe
     [SerializeField] protected GameObject gridEntityPrefab;
     [SerializeField] protected string gridEntityTypeName;
     [SerializeField] protected Sprite defaultSprite;
+    [SerializeField] protected bool entityIncludedInShuffle = true;
 
     public string GridEntityTypeName => gridEntityTypeName;
 
     public Sprite DefaultEntitySprite => defaultSprite;
 
     public GameObject GridEntityPrefab => gridEntityPrefab;
+
+    public bool EntityIncludedInShuffle => entityIncludedInShuffle;
 }

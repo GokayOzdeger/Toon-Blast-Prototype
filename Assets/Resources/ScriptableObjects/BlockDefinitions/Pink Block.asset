@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e02a92592a51084981b01e48f0fe347, type: 3}
-  m_Name: GreenBlock
+  m_Name: Pink Block
   m_EditorClassIdentifier: 
   gridEntityPrefab: {fileID: 1905907544835078951, guid: dc5bcb2e100efcc4896a74f905bb6b9d, type: 3}
-  gridEntityTypeName: Green
-  defaultSprite: {fileID: 21300000, guid: af3a8ec24a2ec364f8f96895e2836661, type: 3}
+  gridEntityTypeName: Pink
+  defaultSprite: {fileID: 21300000, guid: 68fb1560742568f43b745ea94b6cd549, type: 3}
+  entityIncludedInShuffle: 1
   conditionSpritePairs:
   - Condition: {fileID: 11400000, guid: 682b702f1a03a624cbf6487b81384f74, type: 2}
-    Icon: {fileID: 21300000, guid: da7942a0021495f49bcae2753ad5c475, type: 3}
+    Icon: {fileID: 21300000, guid: 204d3fcf675a04b439ed12c7ac25f9f4, type: 3}
   - Condition: {fileID: 11400000, guid: 1dcc26a90d916a64f9d12b613a605388, type: 2}
-    Icon: {fileID: 21300000, guid: bcec7658ab663924492fcc85d03352e1, type: 3}
+    Icon: {fileID: 21300000, guid: c17297a2b6ac5c544953986091c8f833, type: 3}
   - Condition: {fileID: 11400000, guid: 4e5e2688aa252f943b09f7e6a360a970, type: 2}
-    Icon: {fileID: 21300000, guid: b997b987b88585340a0705353bbff393, type: 3}
+    Icon: {fileID: 21300000, guid: ce23c5d8db6bb7044a64d5f4bd7ee5b8, type: 3}

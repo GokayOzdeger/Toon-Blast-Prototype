@@ -5,14 +5,14 @@ using Utilities;
 
 public class GridEntitySpawner
 {
+    private int[] BlockSpawnRequests { get; set; }
+
+    private Vector2[] _spawnPositionRow;
     private IGridEntityTypeDefinition[] _gridEntityTypes;
     private RectTransform _gridParentTransform;
-    private int[] BlockSpawnRequests { get; set; }
-    
     private int _collumnCount;
 
     private GridController _gridController;
-    private Vector2[] _spawnPositionRow;
 
     public GridEntitySpawner(GridController gridController, GridEntitySpawnerSettings settings, GridEntitySpawnerSceneReferences references )
     {
@@ -21,17 +21,17 @@ public class GridEntitySpawner
         this._gridController = gridController;
         this._collumnCount = gridController.CollumnCount;
         BlockSpawnRequests = new int[_collumnCount];
-        CalculateSpawnPositionRow();
+        CalculateSpawnPositionRow(settings.SpawnHeight);
         StartFillBoardRequest();
         SummonRequestedEntities();
     }
 
-    private void CalculateSpawnPositionRow()
+    private void CalculateSpawnPositionRow(int spawnHeight)
     {
         _spawnPositionRow = new Vector2[_collumnCount];
         for (int i = 0; i < _collumnCount; i++)
         {
-            _spawnPositionRow[i] = _gridController.GridPositions[_gridController.RowCount - 1, i] + new Vector2(0, 300);
+            _spawnPositionRow[i] = _gridController.GridPositions[_gridController.RowCount - 1, i] + new Vector2(0, spawnHeight);
         }
     }
 
@@ -51,17 +51,14 @@ public class GridEntitySpawner
     // registers a spawn request to collumn index
     public void AddEntitySpawnReqeust(int collumnIndex)
     {
-        Debug.Log("AddBlockSpawnReqeust: " + collumnIndex);
         BlockSpawnRequests[collumnIndex] ++;
     }
 
     // spawns grid entities at the requested collumns
     public void SummonRequestedEntities()
     {
-        Debug.Log("Summoning Blocks");
         for (int i = 0; i < _collumnCount; i++)
         {
-            Debug.Log("Spawning collumn " + i+" " + BlockSpawnRequests[i]+" blocks");
             for (int j = BlockSpawnRequests[i]-1; j >=0 ; j--)
             {
                 Vector2Int gridCoordinates = new Vector2Int(_gridController.RowCount - j - 1, i);
@@ -94,6 +91,8 @@ public class GridEntitySpawner
     {
         [BHeader("Grid Entity Spawner Settings")]
         [SerializeField] private BasicGridEntityTypeDefinition[] entityTypes;
+        [SerializeField] private int spawnHeight;
         public BasicGridEntityTypeDefinition[] EntityTypes => entityTypes;
+        public int SpawnHeight => spawnHeight;
     }
 }

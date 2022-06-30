@@ -40,8 +40,10 @@ public class GridController
     public bool GridInterractable { get; private set; } = true;
 
     private List<Vector2Int> _cachedGridChanges = new List<Vector2Int>();
-    private bool[,] controlledGridCoordinates;
-    protected int _entitiesInProcess = 0; 
+    private bool[,] _controlledGridCoordinates;
+    protected int _entitiesInProcess = 0;
+    
+    private ShuffleController _shuffleController; 
 
     private GridEntitySpawner _entitySpawner;
 
@@ -55,69 +57,12 @@ public class GridController
         CreateSystemComponents(settings, references);
         UpdateAllEntities();
     }
-
+    
+    #region Private Methods
     private void CreateSystemComponents(GridControllerSettings settings, GridControllerSceneReferences references)
     {
+        _shuffleController = new ShuffleController(this);
         _entitySpawner = new GridEntitySpawner(this, settings.GridEntitySpawnerSettings, references.GridEntitySpawnerSceneReferences);
-    }
-
-    public void RegisterGridEntityToPosition(IGridEntity entity, int collumnIndex, int rowIndex)
-    {
-        Debug.Log($"Register Entity To: {rowIndex}, {collumnIndex}");
-        EntityGrid[collumnIndex, rowIndex] = entity;
-        OnGridChange.AddListener(entity.OnGridChange);
-    }
-
-    public void OnGridEventStart(IGridEvent gridEvent)
-    {
-        if (!gridEvent.MakeGridUninterractableOnStart) return;
-        GridInterractable = false;
-    }
-
-    public void OnGridEventEnd(IGridEvent gridEvent)
-    {
-        if (!gridEvent.ProceedGridAfterEventEnds) return;
-        CallCachedChanges();
-        _entitySpawner.SummonRequestedEntities();
-    }
-
-    public void RemoveEntitiesFromGridArray<T>(List<T> entitiesToRemove) where T: IGridEntity
-    {
-        foreach (T entityToRemove in entitiesToRemove) OnGridChange.RemoveListener(entityToRemove.OnGridChange);
-        foreach (T entityToRemove in entitiesToRemove)
-        {
-            EntityGrid[entityToRemove.GridCoordinates.x, entityToRemove.GridCoordinates.y] = null;
-            CacheGridChange(entityToRemove.GridCoordinates);
-        }
-    }
-
-    
-
-    public void WriteEntityFall(IGridEntity gridEntity)
-    {
-        gridEntity.EntityNeedsUpdate = true;
-        int collumnIndex = gridEntity.GridCoordinates.y;
-        int coordinateToFallTo = gridEntity.GridCoordinates.x;
-        for (int i = gridEntity.GridCoordinates.x-1; i >= 0; i--)
-        {
-            if (EntityGrid[i, collumnIndex] == null) coordinateToFallTo = i;
-            else break;
-        }
-        WriteEntityMovementToGrid(new Vector2Int(coordinateToFallTo, collumnIndex), gridEntity);
-    }
-
-    public void EntityStartProcess()
-    {
-        _entitiesInProcess++;
-    }
-
-    public void EntityEndProcess()
-    {
-        _entitiesInProcess--;
-        if (_entitiesInProcess == 0)
-        {
-            GridInterractable = true;
-        }
     }
 
     private void WriteEntityMovementToGrid(Vector2Int newCoordinates, IGridEntity entity)
@@ -130,29 +75,14 @@ public class GridController
         CacheGridChange(oldEntityCoordinates);
     }
 
-    public void CallCachedChanges()
-    {
-        while (_cachedGridChanges.Count > 0)
-        {
-            OnGridChange.Invoke(_cachedGridChanges[0]);
-            _cachedGridChanges.RemoveAt(0);
-        }
-        UpdateAllEntities();
-    }
-
-    public void CallEntitySpawn(int collumnIndex)
-    {
-        _entitySpawner.AddEntitySpawnReqeust(collumnIndex);
-    }
-
     private void CacheGridChange(Vector2Int changeCords)
     {
         _cachedGridChanges.Add(changeCords);
     }
 
-    private void UpdateAllEntities()
+    public void UpdateAllEntities()
     {
-        controlledGridCoordinates = new bool[gridRowCount, gridCollumnCount];
+        Array.Clear(_controlledGridCoordinates, 0, _controlledGridCoordinates.Length);
         foreach (IGridEntity entity in EntityGrid)
         {
             if (entity == null || !entity.EntityNeedsUpdate) continue;
@@ -164,7 +94,8 @@ public class GridController
     {
         EntityGrid = new IGridEntity[gridRowCount, gridCollumnCount];
         GridPositions = new Vector2[gridRowCount, gridCollumnCount];
-        
+        _controlledGridCoordinates = new bool[gridRowCount, gridCollumnCount];
+
         // calculate bottom left corner entity position 
         float bottomLeftCornerX = _gridCenterTransform.position.x - ((gridCollumnCount / 2f) - .5f) * CollumnSpacing;
         float bottomLeftCornerY = _gridCenterTransform.position.y - ((gridRowCount / 2f) - .5f) * RowSpacing;
@@ -183,13 +114,6 @@ public class GridController
         }
     }
 
-    public void CollectMatchingSurroundingEntities<T>(T entity, ref List<T> entityListToCollect) where T : IGridEntity
-    {
-        entityListToCollect.Add(entity);
-        controlledGridCoordinates[entity.GridCoordinates.x, entity.GridCoordinates.y] = true;
-        CollectMatchingSurroundingEntitiesRecursive(entity, ref entityListToCollect);
-    }
-
     private void CollectMatchingSurroundingEntitiesRecursive<T>(T entity, ref List<T> entityListToCollect) where T : IGridEntity
     {
         foreach (Vector2Int surroundingCoordinateAdd in _surroundingCoordinateMatrises)
@@ -198,19 +122,123 @@ public class GridController
             // Skip Surrounding check position if it is out of range or already controlled
             if (surroundingCoordinate.x < 0 || surroundingCoordinate.x == gridRowCount) continue;
             if (surroundingCoordinate.y < 0 || surroundingCoordinate.y == gridCollumnCount) continue;
-            if (controlledGridCoordinates[surroundingCoordinate.x, surroundingCoordinate.y]) continue;
+            if (_controlledGridCoordinates[surroundingCoordinate.x, surroundingCoordinate.y]) continue;
 
             IGridEntity surroundingMatchingEntity = EntityGrid[surroundingCoordinate.x, surroundingCoordinate.y];
             // skip entity if type doesnt match
             if (surroundingMatchingEntity == null || surroundingMatchingEntity.EntityType != entity.EntityType) continue;
 
             // mark position as controlled to prevent controlling same entity more than once
-            controlledGridCoordinates[surroundingCoordinate.x, surroundingCoordinate.y] = true;
+            _controlledGridCoordinates[surroundingCoordinate.x, surroundingCoordinate.y] = true;
             T castEntity = (T)surroundingMatchingEntity;
             entityListToCollect.Add(castEntity);
             CollectMatchingSurroundingEntitiesRecursive(castEntity, ref entityListToCollect);
         }
     }
+    #endregion
+
+    #region Public Methods
+    
+    public void SwapEntities(Vector2Int entityACoordinates, Vector2Int entityBCoordinates)
+    {
+        IGridEntity entityA = EntityGrid[entityACoordinates.x, entityACoordinates.y];
+        IGridEntity entityB = EntityGrid[entityBCoordinates.x, entityBCoordinates.y];
+        EntityGrid[entityACoordinates.x, entityACoordinates.y] = EntityGrid[entityBCoordinates.x, entityBCoordinates.y];
+        EntityGrid[entityBCoordinates.x, entityBCoordinates.y] = entityA;
+        entityA.EntityNeedsUpdate = true;
+        entityB.EntityNeedsUpdate = true;
+        int entityASiblingIndex = entityA.EntityTransform.GetSiblingIndex();
+        int entityBSiblingIndex = entityB.EntityTransform.GetSiblingIndex();
+        entityA.EntityTransform.SetSiblingIndex(entityBSiblingIndex);
+        entityB.EntityTransform.SetSiblingIndex(entityASiblingIndex);
+        entityA.OnMoveEntity(entityBCoordinates);
+        entityB.OnMoveEntity(entityACoordinates);
+    }
+    
+    public void RegisterGridEntityToPosition(IGridEntity entity, int collumnIndex, int rowIndex)
+    {
+        EntityGrid[collumnIndex, rowIndex] = entity;
+        CacheGridChange(new Vector2Int(collumnIndex, rowIndex));
+        OnGridChange.AddListener(entity.OnGridChange);
+    }
+
+    public void OnGridEventStart(IGridEvent gridEvent)
+    {
+        if (!gridEvent.MakeGridUninterractableOnStart) return;
+        GridInterractable = false;
+    }
+
+    public void OnGridEventEnd(IGridEvent gridEvent)
+    {
+        if (!gridEvent.ProceedGridAfterEventEnds) return;
+        CallCachedChanges();
+        _entitySpawner.SummonRequestedEntities();
+    }
+
+    public void RemoveEntitiesFromGridArray<T>(List<T> entitiesToRemove) where T : IGridEntity
+    {
+        foreach (T entityToRemove in entitiesToRemove) OnGridChange.RemoveListener(entityToRemove.OnGridChange);
+        foreach (T entityToRemove in entitiesToRemove)
+        {
+            EntityGrid[entityToRemove.GridCoordinates.x, entityToRemove.GridCoordinates.y] = null;
+            CacheGridChange(entityToRemove.GridCoordinates);
+        }
+    }
+
+    public void WriteEntityFall(IGridEntity gridEntity)
+    {
+        gridEntity.EntityNeedsUpdate = true;
+        int collumnIndex = gridEntity.GridCoordinates.y;
+        int coordinateToFallTo = gridEntity.GridCoordinates.x;
+        for (int i = gridEntity.GridCoordinates.x - 1; i >= 0; i--)
+        {
+            if (EntityGrid[i, collumnIndex] == null) coordinateToFallTo = i;
+            else break;
+        }
+        WriteEntityMovementToGrid(new Vector2Int(coordinateToFallTo, collumnIndex), gridEntity);
+    }
+    
+    public void CallCachedChanges()
+    {
+        while (_cachedGridChanges.Count > 0)
+        {
+            OnGridChange.Invoke(_cachedGridChanges[0]);
+            _cachedGridChanges.RemoveAt(0);
+        }
+        UpdateAllEntities();
+    }
+
+    public void CallEntitySpawn(int collumnIndex)
+    {
+        _entitySpawner.AddEntitySpawnReqeust(collumnIndex);
+    }
+    
+    public void EntityStartProcess()
+    {
+        _entitiesInProcess++;
+    }
+
+    public void EntityEndProcess()
+    {
+        Debug.Log("Entities in process: " + _entitiesInProcess+" / "+GridInterractable);
+        _entitiesInProcess--;
+        if (_entitiesInProcess == 0)
+        {
+            Debug.Log("Grid Interractable");
+            UpdateAllEntities();
+            if(_shuffleController.HasLegalMove()) GridInterractable = true;
+            
+        }
+    }
+
+    public void CollectMatchingSurroundingEntities<T>(T entity, ref List<T> entityListToCollect) where T : IGridEntity
+    {
+        entityListToCollect.Add(entity);
+        _controlledGridCoordinates[entity.GridCoordinates.x, entity.GridCoordinates.y] = true;
+        CollectMatchingSurroundingEntitiesRecursive(entity, ref entityListToCollect);
+    }
+    
+    #endregion
 
     [System.Serializable]
     public class GridControllerSceneReferences
@@ -238,25 +266,4 @@ public class GridController
         public uint CollumnCount => collumnCount;
         public GridEntitySpawner.GridEntitySpawnerSettings GridEntitySpawnerSettings => gridEntitySpawnerSettings;
     }
-
-
-#if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
-    {
-        ShowGizmoGrid();
-    }
-
-    private void ShowGizmoGrid()
-    {
-        if (Application.isPlaying) return;
-        
-        Gizmos.color = Color.blue;
-
-        CreateGridAndCalculatePositions();
-        foreach (Vector2 gridPoint in GridPositions)
-        {
-            Gizmos.DrawSphere(gridPoint, 5);
-        }
-    }
-#endif
 }
