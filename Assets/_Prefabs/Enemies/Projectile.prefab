@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9111399196793087054}
   - component: {fileID: 3526802799514845286}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c49958556b59554bb1b5843c391e27a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementBehaviour: {fileID: 11400000, guid: 91f7b3e95a5028d49b7e81649fdcaaad, type: 2}
+  movementBehaviour: {fileID: 11400000, guid: a4ba8cd6c346d3447bf00841a51e0273, type: 2}
   rotationBehaviour: {fileID: 11400000, guid: b4051cf0aeebb104bb8a48b6f3076586, type: 2}
-  healthBehaviour: {fileID: 11400000, guid: 83d770437335d2f458ec8b130790c7cd, type: 2}
+  healthBehaviour: {fileID: 0}
   attackBehaviour: {fileID: 0}
 --- !u!114 &3526802799514845286
 MonoBehaviour:
@@ -87,13 +87,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6834782137534626866}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6003408910031637759}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!212 &8313628133273951432
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -134,7 +134,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1785240737630438142, guid: 443347357245a0744a2993248adba496, type: 3}
+  m_Sprite: {fileID: 867425887575845242, guid: 443347357245a0744a2993248adba496, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

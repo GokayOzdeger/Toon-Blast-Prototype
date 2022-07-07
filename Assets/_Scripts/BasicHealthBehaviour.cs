@@ -12,11 +12,11 @@ public class BasicHealthBehaviour : AHealthBehaviourSO
 
     public override bool IsDead { get; protected set; }
 
-    public override void Setup(BehaviourController controller)
+    public override void OnSetup(BehaviourController controller)
     {
         ResetHealth();
     }
-
+    
     private void ResetHealth()
     {
         CurrentHealth = maxHealth;
@@ -33,5 +33,6 @@ public class BasicHealthBehaviour : AHealthBehaviourSO
     {
         IsDead = true;
         CurrentHealth = 0;
+        Controller.PoolObject.GoToPool();
     }
 }

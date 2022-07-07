@@ -9,6 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 724d4530ed7aa774ebdaa63367197e6e, type: 3}
-  m_Name: Look At Target Rotation Module
+  m_Script: {fileID: 11500000, guid: 7bb011f85f2a52a478dc412396016f33, type: 3}
+  m_Name: Simple Attack Behaviour
   m_EditorClassIdentifier: 
+  attackRange: 300
+  attackDamage: 80
+  delayBetweenAttacks:
+    cooldown: 0.5
+  projectilePrefab: Projectile

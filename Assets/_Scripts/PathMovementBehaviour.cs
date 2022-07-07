@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "ScriptableObjects/ProgramableBehaviours/PathMovementBehaviour")]
 public class PathMovementBehaviour : AMovementBehaviourSO
 {
-    private static readonly float TargetReachThreshold = .001f;
+    private static readonly float TargetReachThreshold = 1f;
     
     [SerializeField] private float moveSpeed;
     public Transform ControlledTransform { get; private set; }
@@ -27,12 +27,6 @@ public class PathMovementBehaviour : AMovementBehaviourSO
 
     private PathNode _targetNode;
     private Vector2 _targetPoint;
-    
-    public override void Setup(BehaviourController controller)
-    {
-        ControlledTransform = controller.transform;
-        TargetPathNode = Path.Instance.GetRandomStartNode();
-    }
 
     public override void TickMove(float deltaTime)
     {
@@ -41,7 +35,7 @@ public class PathMovementBehaviour : AMovementBehaviourSO
 
         Vector2 moveDirection = (TargetPoint - (Vector2) ControlledTransform.position).normalized;
         ControlledTransform.position = (Vector2) ControlledTransform.position + (moveDirection * MoveSpeed * deltaTime);
-        if (Vector2.Distance(ControlledTransform.position, TargetPoint) < TargetReachThreshold / deltaTime) TargetPathNodeReached();
+        if (Vector2.Distance(ControlledTransform.position, TargetPoint) < TargetReachThreshold) TargetPathNodeReached();
     }
 
     public override void SetMoveSpeed(float moveSpeed)
@@ -57,5 +51,11 @@ public class PathMovementBehaviour : AMovementBehaviourSO
     private void TargetPathNodeReached()
     {
         TargetPathNode = TargetPathNode.GetRandomNextNode();
+    }
+
+    public override void OnSetup(BehaviourController controller)
+    {
+        ControlledTransform = controller.transform;
+        TargetPathNode = Path.Instance.GetRandomStartNode();
     }
 }

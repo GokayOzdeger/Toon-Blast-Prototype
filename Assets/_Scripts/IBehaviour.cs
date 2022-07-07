@@ -5,6 +5,7 @@ using UnityEngine;
 //[CreateAssetMenu(menuName = "ScriptableObjects/ProgramableBehaviours/")]
 public interface IBehaviour
 {
+    public BehaviourController Controller { get; }
     public bool IsActive { get; }
     
     public void Setup(BehaviourController controller);

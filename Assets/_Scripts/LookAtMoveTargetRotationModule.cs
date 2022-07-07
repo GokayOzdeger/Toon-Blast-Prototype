@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "ScriptableObjects/ProgramableBehaviours/LookAtTargetRotationBehaviour")]
-public class LookAtTargetRotationModule : ARotationBehaviourSO
+[CreateAssetMenu(menuName = "ScriptableObjects/ProgramableBehaviours/LookAtMoveTargetRotationBehaviour")]
+public class LookAtMoveTargetRotationModule : ARotationBehaviourSO
 {
     private IMovementBehaviour _movementBehaviour;
     private Transform _controlledTransform;
     private Vector2 _lastFramesTarget;
-    public override void Setup(BehaviourController controller)
+
+    public override void OnSetup(BehaviourController controller)
     {
         _movementBehaviour = controller.MovementBehaviour;
         _controlledTransform = controller.transform;
