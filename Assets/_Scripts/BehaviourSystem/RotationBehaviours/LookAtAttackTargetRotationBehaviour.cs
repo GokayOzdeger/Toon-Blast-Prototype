@@ -16,7 +16,8 @@ public class LookAtAttackTargetRotationBehaviour : ARotationBehaviourSO
 
     public override void TickRotation(float deltaTime)
     {
-        if (_attackBehaviour.CurrentTargets[0] == null) return;
+        if (_attackBehaviour.CurrentTargets.Count == 0 || _attackBehaviour.CurrentTargets[0] == null) return;
+        
         _controlledTransform.right = (Vector2)_attackBehaviour.CurrentTargets[0].Controller.transform.position - (Vector2)_controlledTransform.position;
     }
 }

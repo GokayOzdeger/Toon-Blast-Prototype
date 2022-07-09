@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56931079d0bc888499bedc4fe66e7bef, type: 3}
-  m_Name: Level Config Assignment
+  m_Name: Level Config
   m_EditorClassIdentifier: 
-  gridControllerSettings:
-    rowCount: 20
-    collumnCount: 20
-    gridEntitySpawnerSettings:
-      entityTypes:
-      - {fileID: 11400000, guid: 13aaf49889056f84e8ff0fa91ba3f284, type: 2}
-      - {fileID: 11400000, guid: 319c644cdc1abc34db28782897426d92, type: 2}
-      spawnHeight: 500
+  LevelBehaviours:
+  - {fileID: 11400000, guid: 3a75316b1b8c6d047a19e5335ffacb9b, type: 2}
+  EnemySpawnControllerSettings:
+    enemies:
+    - enemyPrefab: {fileID: 2891723353106125210, guid: e6c8602972740dc479f17dde4c4c4c99, type: 3}
+      spawnChance: 1
+    enemySpawnPerSecondsMin: 2
+    enemySpawnPerSecondsMax: 20
+    spawnRateMaxOutDuration: 200

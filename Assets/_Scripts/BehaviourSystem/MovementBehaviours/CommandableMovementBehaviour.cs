@@ -34,7 +34,6 @@ public class CommandableMovementBehaviour : AMovementBehaviourSO
 
     public override void TickMove(float deltaTime)
     {
-        Debug.Log("TickMove: "+CommandedMoveTarget);
         if (!IsActive) return;
         if (!CommandedMoveTarget) return;
 
@@ -48,14 +47,4 @@ public class CommandableMovementBehaviour : AMovementBehaviourSO
         OnTargetReached.Invoke(CommandedMoveTarget);
         OnTargetReached.RemoveAllListeners();
     }
-
-#if UNITY_EDITOR
-    private void OnDrawGismoz()
-    {
-        if (CommandedMoveTarget)
-        {
-            UnityEditor.Handles.DrawLine(Controller.transform.position, CommandedMoveTarget.transform.position);
-        }
-    }
-#endif
 }

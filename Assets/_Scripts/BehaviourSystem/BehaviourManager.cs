@@ -26,15 +26,21 @@ public class BehaviourManager : AutoSingleton<BehaviourManager>
         if (controller.RotationBehaviour != null) RotationBehaviours.Remove(controller.RotationBehaviour);
     }
 
-    public List<AHealthBehaviourSO> AliveHealthBehavioursInRange(Vector2 requestedPosition, float radius, int countRequested)
+    public AHealthBehaviourSO ClosestAliveHealthBehaviourInRange(Vector2 requestedPosition, float radius)
     {
-        List<AHealthBehaviourSO> result = new List<AHealthBehaviourSO>();
+        AHealthBehaviourSO result = null;
+        float closestDistance = Mathf.Infinity;
         foreach (var healthBehaviour in HealthBehaviours)
         {
             if (healthBehaviour.IsDead) continue;
             if (!healthBehaviour.IsActive) continue;
-            if (Vector2.Distance(healthBehaviour.Controller.transform.position, requestedPosition) > radius) continue;
-            result.Add(healthBehaviour);
+            
+            float distance = Vector2.Distance(healthBehaviour.Controller.transform.position, requestedPosition);
+            
+            if (distance > closestDistance) continue;
+            if (distance > radius ) continue;
+            closestDistance = distance;
+            result = healthBehaviour;
         }
         return result;
     }

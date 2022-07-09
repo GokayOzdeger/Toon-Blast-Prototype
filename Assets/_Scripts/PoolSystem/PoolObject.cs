@@ -5,8 +5,10 @@ namespace Utilities
     public class PoolObject : MonoBehaviour
     {
         #region Variables
+        [SerializeField] private bool includedInScenePool;
         [SerializeField] private bool poolAfterDelay;
         [SerializeField] private float delay = 0;
+        public bool IncludedInScenePool => includedInScenePool;
 
         protected Transform parent;
 

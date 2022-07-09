@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Utilities;
-public class GameManager : MonoBehaviour
+public class GameManager : AutoSingleton<GameManager>
 {
     [SerializeField] LevelConfig[] levelConfigurations;
     [SerializeField] LevelController.LevelSceneReferences levelSceneReferences;
@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
         } 
     }
 
+    public LevelController CurrentLevel { get; private set; }
+
     private LevelConfig chosenLevelConfig;
 
     private void Start()
@@ -22,8 +24,13 @@ public class GameManager : MonoBehaviour
         CreateNewLevel();   
     }
 
+    private void Update()
+    {
+        CurrentLevel.TickLevel(Time.deltaTime);
+    }
+
     private void CreateNewLevel()
     {
-        LevelController controller = new LevelController(ChosenLevelConfig, levelSceneReferences);
+        CurrentLevel = new LevelController(ChosenLevelConfig, levelSceneReferences);
     }
 }

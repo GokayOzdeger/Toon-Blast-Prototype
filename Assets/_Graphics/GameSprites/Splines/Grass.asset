@@ -22,7 +22,7 @@ MonoBehaviour:
   m_CornerSprites:
   - m_CornerType: 0
     m_Sprites:
-    - {fileID: -7198970343687333889, guid: 443347357245a0744a2993248adba496, type: 3}
+    - {fileID: 0}
   - m_CornerType: 1
     m_Sprites:
     - {fileID: 0}

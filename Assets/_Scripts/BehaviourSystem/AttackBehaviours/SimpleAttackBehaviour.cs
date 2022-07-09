@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Utilities;
 
@@ -14,9 +15,7 @@ public class SimpleAttackBehaviour : AAttackBehaviourSO
     [BHeader("Projectile")]
     [SerializeField] private string projectilePrefab;
     
-    public override List<AHealthBehaviourSO> CurrentTargets => new List<AHealthBehaviourSO> { _currentTarget };
-
-    private AHealthBehaviourSO _currentTarget;
+    public override List<AHealthBehaviourSO> CurrentTargets { get; protected set; } = new List<AHealthBehaviourSO>();
 
     public override void TickAttack(float deltaTime)
     {
@@ -29,35 +28,42 @@ public class SimpleAttackBehaviour : AAttackBehaviourSO
     {
         delayBetweenAttacks.Step(deltaTime);
         
-        if (_currentTarget == null) return;
+        if (CurrentTargets.Count == 0) return;
         
         if (delayBetweenAttacks.IsReady)
         {
             delayBetweenAttacks.EnterCooldown();
-            Attack(_currentTarget);
+            foreach(AHealthBehaviourSO target in CurrentTargets) SetupProjectile(target);
         }
     }
 
+    
+
     private void UpdateTargets()
     {
-        _currentTarget = null;
-        List<AHealthBehaviourSO> foundTargets = BehaviourManager.Instance.AliveHealthBehavioursInRange(Controller.transform.position, attackRange, 1);
-        
-        if (foundTargets.Count == 0) return;
-        _currentTarget = foundTargets[0];
+        CurrentTargets.Clear();
+        AHealthBehaviourSO foundTarget = BehaviourManager.Instance.ClosestAliveHealthBehaviourInRange(Controller.transform.position, attackRange);
+        if (foundTarget) CurrentTargets.Add(foundTarget);
     }
 
-    private void Attack(AHealthBehaviourSO target)
+    private void SetupProjectile(AHealthBehaviourSO target)
     {
         GameObject spawnedProjectile = ObjectPooler.Instance.Spawn(projectilePrefab, Controller.transform.position, Quaternion.identity);
         BehaviourController controller = spawnedProjectile.GetComponent<BehaviourController>();
         CommandableMovementBehaviour projectileMoveBehaviour = (CommandableMovementBehaviour) controller.MovementBehaviour;
         projectileMoveBehaviour.CommandedMoveTarget = target.Controller;
+        
         projectileMoveBehaviour.OnTargetReached.AddListener((target) =>
         {
             target.HealthBehaviour.TakeDamage(attackDamage);
             controller.PoolObject.GoToPool();
         });
+
+        target.OnDeath.AddListener((target) =>
+        {
+            controller.PoolObject.GoToPool();
+        });
+        
         Debug.Log($"{Controller.name} attacked {target.Controller.name}");
     }
 

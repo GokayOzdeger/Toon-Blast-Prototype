@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c49958556b59554bb1b5843c391e27a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _startsInScene: 0
   movementBehaviour: {fileID: 0}
   rotationBehaviour: {fileID: 11400000, guid: 4a7818cea596c344e8985938afe4355f, type: 2}
   healthBehaviour: {fileID: 0}
@@ -61,6 +62,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ca3dbec91bd2864bb5a857684b60158, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  includedInScenePool: 1
   poolAfterDelay: 0
   delay: 0
 --- !u!1 &6892671809683733105

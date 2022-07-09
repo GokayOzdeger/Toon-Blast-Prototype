@@ -31,6 +31,8 @@ public class BasicHealthBehaviour : AHealthBehaviourSO
 
     private void Die()
     {
+        OnDeath.Invoke(this);
+        OnDeath.RemoveAllListeners();
         IsDead = true;
         CurrentHealth = 0;
         Controller.PoolObject.GoToPool();

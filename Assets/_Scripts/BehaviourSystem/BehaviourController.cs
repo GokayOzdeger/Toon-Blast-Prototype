@@ -5,6 +5,8 @@ using Utilities;
 
 public class BehaviourController : MonoBehaviour, IPoolable
 {
+    [SerializeField] private bool _startsInScene = false;
+    
     [SerializeField] private AMovementBehaviourSO movementBehaviour;
     [SerializeField] private ARotationBehaviourSO rotationBehaviour;
     [SerializeField] private AHealthBehaviourSO healthBehaviour;
@@ -20,26 +22,29 @@ public class BehaviourController : MonoBehaviour, IPoolable
 
     private void Awake()
     {
-        CreateBehaviourClones();
-
         _poolObject = GetComponent<PoolObject>();
-        movementBehaviour?.Setup(this);
-        rotationBehaviour?.Setup(this);
-        healthBehaviour?.Setup(this);
-        attackBehaviour?.Setup(this);
     }
 
     private void Start()
     {
-        BehaviourManager.Instance.RegisterBehaviourController(this);
+        if (_startsInScene)
+        {
+            CreateBehaviourInstances();
+            BehaviourManager.Instance.RegisterBehaviourController(this);
+        }
     }
 
-    private void CreateBehaviourClones()
+    private void CreateBehaviourInstances()
     {
         if (movementBehaviour) movementBehaviour = Instantiate(movementBehaviour);
         if (rotationBehaviour) rotationBehaviour = Instantiate(rotationBehaviour);
         if (healthBehaviour) healthBehaviour = Instantiate(healthBehaviour);
         if (attackBehaviour) attackBehaviour = Instantiate(attackBehaviour);
+
+        movementBehaviour?.Setup(this);
+        rotationBehaviour?.Setup(this);
+        healthBehaviour?.Setup(this);
+        attackBehaviour?.Setup(this);
     }
 
     private void Update()
@@ -51,11 +56,12 @@ public class BehaviourController : MonoBehaviour, IPoolable
 
     public void OnGoToPool()
     {
-
+        BehaviourManager.Instance.UnregisterBehaviourController(this);
     }
 
     public void OnPoolSpawn()
     {
-
+        CreateBehaviourInstances();
+        BehaviourManager.Instance.RegisterBehaviourController(this);
     }
 }

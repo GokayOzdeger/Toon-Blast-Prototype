@@ -8,6 +8,8 @@ public class PathMovementBehaviour : AMovementBehaviourSO
     private static readonly float TargetReachThreshold = 1f;
     
     [SerializeField] private float moveSpeed;
+
+    public float DistanceTravelled { get; private set; } = 0;
     public Transform ControlledTransform { get; private set; }
     public float MoveSpeed { get => moveSpeed; private set => moveSpeed = value; }
     public PathNode TargetPathNode 
@@ -34,7 +36,9 @@ public class PathMovementBehaviour : AMovementBehaviourSO
         if (TargetPathNode == null) return;
 
         Vector2 moveDirection = (TargetPoint - (Vector2) ControlledTransform.position).normalized;
-        ControlledTransform.position = (Vector2) ControlledTransform.position + (moveDirection * MoveSpeed * deltaTime);
+        Vector2 distanceToMove = moveDirection * MoveSpeed * deltaTime;
+        ControlledTransform.position = (Vector2) ControlledTransform.position + distanceToMove;
+        DistanceTravelled += distanceToMove.magnitude;
         if (Vector2.Distance(ControlledTransform.position, TargetPoint) < TargetReachThreshold) TargetPathNodeReached();
     }
 
@@ -56,6 +60,5 @@ public class PathMovementBehaviour : AMovementBehaviourSO
     public override void OnSetup(BehaviourController controller)
     {
         ControlledTransform = controller.transform;
-        TargetPathNode = Path.Instance.GetRandomStartNode();
     }
 }

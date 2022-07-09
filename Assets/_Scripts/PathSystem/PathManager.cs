@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utilities;
 
-public class Path : AutoSingleton<Path>
+public class PathManager : AutoSingleton<PathManager>
 {
     private List<PathNode> EntranceNodes { get; set; } = new List<PathNode>();
     private List<PathNode> AllNodes { get; set; } = new List<PathNode>();

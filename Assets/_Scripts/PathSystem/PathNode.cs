@@ -17,7 +17,7 @@ public class PathNode : MonoBehaviour
 
     private void Awake()
     {
-        Path.Instance.RegisterNode(this);
+        PathManager.Instance.RegisterNode(this);
     }
 
     public PathNode GetRandomNextNode()
