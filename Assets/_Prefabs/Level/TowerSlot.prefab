@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4293170767316458467}
   - component: {fileID: 5793364418709150601}
+  - component: {fileID: 453760843942012930}
   - component: {fileID: 2756768466851323672}
   m_Layer: 0
   m_Name: TowerSlot
@@ -83,6 +84,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &453760843942012930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6076113509684416890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a459c28a36d1c342aadb923a06bc98b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2756768466851323672
 MonoBehaviour:
   m_ObjectHideFlags: 0

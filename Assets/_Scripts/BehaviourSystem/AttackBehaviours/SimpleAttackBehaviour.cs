@@ -13,7 +13,7 @@ public class SimpleAttackBehaviour : AAttackBehaviourSO
     [SerializeField] private Cooldown delayBetweenAttacks = new Cooldown(2);
 
     [BHeader("Projectile")]
-    [SerializeField] private string projectilePrefab;
+    [SerializeField] private GameObject projectilePrefab;
     
     public override List<AHealthBehaviourSO> CurrentTargets { get; protected set; } = new List<AHealthBehaviourSO>();
 
@@ -48,12 +48,17 @@ public class SimpleAttackBehaviour : AAttackBehaviourSO
 
     private void SetupProjectile(AHealthBehaviourSO target)
     {
-        GameObject spawnedProjectile = ObjectPooler.Instance.Spawn(projectilePrefab, Controller.transform.position, Quaternion.identity);
+        GameObject spawnedProjectile = ObjectPooler.Instance.Spawn(projectilePrefab.name, Controller.transform.position, Controller.transform.rotation);
         BehaviourController controller = spawnedProjectile.GetComponent<BehaviourController>();
-        CommandableMovementBehaviour projectileMoveBehaviour = (CommandableMovementBehaviour) controller.MovementBehaviour;
-        projectileMoveBehaviour.CommandedMoveTarget = target.Controller;
         
-        projectileMoveBehaviour.OnTargetReached.AddListener((target) =>
+        if (!controller.TryGetBehaviour<CommandableMovementBehaviour>(out var commandableMovementBehaviour))
+        {
+            Debug.LogError("No CommandableMovementBehaviour found on projectile");
+            return;
+        }
+     
+        commandableMovementBehaviour.CommandedMoveTarget = target.Controller;
+        commandableMovementBehaviour.OnTargetReached.AddListener((target) =>
         {
             target.HealthBehaviour.TakeDamage(attackDamage);
             controller.PoolObject.GoToPool();
@@ -64,7 +69,7 @@ public class SimpleAttackBehaviour : AAttackBehaviourSO
             controller.PoolObject.GoToPool();
         });
         
-        Debug.Log($"{Controller.name} attacked {target.Controller.name}");
+        Debug.Log($"{Controller.name} attacked -> {target.Controller.name}");
     }
 
     private void OnHitTarget(BehaviourController target)

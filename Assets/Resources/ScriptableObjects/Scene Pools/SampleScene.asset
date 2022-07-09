@@ -12,13 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2365ee68060b01949a68d348e66b8bca, type: 3}
   m_Name: SampleScene
   m_EditorClassIdentifier: 
-  PrefabTypesToCollect:
-  - {fileID: 6076113509684416890, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
   ScenePoolObjects:
   - Prefab: {fileID: 6076113509684416890, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
     Rotations:
     - {x: 0, y: 0, z: 0, w: 1}
+    - {x: 0, y: 0, z: 0, w: 1}
+    - {x: 0, y: 0, z: 0, w: 1}
+    - {x: 0, y: 0, z: 0, w: 1}
+    - {x: 0, y: 0, z: 0, w: 1}
+    - {x: 0, y: 0, z: 0, w: 1}
     Positions:
     - {x: 212, y: 1081, z: 0}
+    - {x: 394, y: 1017, z: 0}
+    - {x: 459, y: 1306, z: 0}
+    - {x: 269, y: 531, z: 0}
+    - {x: 507, y: 682, z: 0}
+    - {x: 15, y: 573, z: 0}
     Scales:
     - {x: 80, y: 80, z: 1}
+    - {x: 80, y: 80, z: 1}
+    - {x: 80, y: 80, z: 1}
+    - {x: 80, y: 80, z: 1}
+    - {x: 80, y: 80, z: 1}
+    - {x: 80, y: 80, z: 1}
+  - Prefab: {fileID: 2891723353106125210, guid: 31e0f0733357a474b9ba5937ff10115c, type: 3}
+    Rotations:
+    - {x: 0, y: 0, z: 0, w: 1}
+    - {x: 0, y: 0, z: 0, w: 1}
+    Positions:
+    - {x: 574, y: 535, z: 0}
+    - {x: 353, y: 657, z: 0}
+    Scales:
+    - {x: 100, y: 100, z: 1}
+    - {x: 100, y: 100, z: 1}

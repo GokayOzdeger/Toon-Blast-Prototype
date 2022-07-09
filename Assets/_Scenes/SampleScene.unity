@@ -262,7 +262,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &277029338
 PrefabInstance:
@@ -318,6 +318,10 @@ PrefabInstance:
     - target: {fileID: 6076113509684416890, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
       propertyPath: m_Name
       value: TowerSlot_03
+      objectReference: {fileID: 0}
+    - target: {fileID: 6076113509684416890, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
@@ -455,11 +459,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4293170767316458467, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 541
+      value: 507
       objectReference: {fileID: 0}
     - target: {fileID: 4293170767316458467, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 788
+      value: 682
       objectReference: {fileID: 0}
     - target: {fileID: 4293170767316458467, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
       propertyPath: m_LocalPosition.z
@@ -496,6 +500,10 @@ PrefabInstance:
     - target: {fileID: 6076113509684416890, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
       propertyPath: m_Name
       value: TowerSlot_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 6076113509684416890, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
@@ -555,6 +563,10 @@ PrefabInstance:
     - target: {fileID: 2891723353106125210, guid: 31e0f0733357a474b9ba5937ff10115c, type: 3}
       propertyPath: m_Name
       value: Tower_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 2891723353106125210, guid: 31e0f0733357a474b9ba5937ff10115c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6003408910031637759, guid: 31e0f0733357a474b9ba5937ff10115c, type: 3}
       propertyPath: m_RootOrder
@@ -661,6 +673,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TowerSlot_05
       objectReference: {fileID: 0}
+    - target: {fileID: 6076113509684416890, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
 --- !u!1 &705507993
@@ -754,7 +770,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1001 &731736105
 PrefabInstance:
@@ -810,6 +826,10 @@ PrefabInstance:
     - target: {fileID: 6076113509684416890, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
       propertyPath: m_Name
       value: TowerSlot_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 6076113509684416890, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
@@ -1154,7 +1174,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1220429154
 MonoBehaviour:
@@ -1330,7 +1350,7 @@ Transform:
   - {fileID: 1210165803}
   - {fileID: 824157024}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1375085345
 GameObject:
@@ -1375,9 +1395,9 @@ MonoBehaviour:
       spriteIndex: 0
       corner: 1
       m_CornerMode: 1
-    - position: {x: 15.637043, y: 4.6915555, z: 0}
-      leftTangent: {x: -0.65977764, y: 1.6329002, z: 0}
-      rightTangent: {x: 0.6256218, y: -1.5483642, z: 0}
+    - position: {x: 15.559411, y: 4.6449757, z: 0}
+      leftTangent: {x: -0.6597767, y: 1.6329007, z: 0}
+      rightTangent: {x: 0.6256151, y: -1.5483639, z: 0}
       mode: 1
       height: 1
       bevelCutoff: 0
@@ -1522,7 +1542,7 @@ Transform:
   m_LocalScale: {x: 50, y: 50, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1647400596
 GameObject:
@@ -1693,7 +1713,7 @@ RectTransform:
   - {fileID: 486455214}
   - {fileID: 1861035879}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1711,9 +1731,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tower
       objectReference: {fileID: 0}
+    - target: {fileID: 2891723353106125210, guid: 31e0f0733357a474b9ba5937ff10115c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6003408910031637759, guid: 31e0f0733357a474b9ba5937ff10115c, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6003408910031637759, guid: 31e0f0733357a474b9ba5937ff10115c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2004,6 +2028,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TowerSlot_04
       objectReference: {fileID: 0}
+    - target: {fileID: 6076113509684416890, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
 --- !u!1 &2012839171
@@ -2135,6 +2163,10 @@ PrefabInstance:
     - target: {fileID: 6076113509684416890, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
       propertyPath: m_Name
       value: TowerSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 6076113509684416890, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 463beeb59720c8540a3c1d152e83a412, type: 3}

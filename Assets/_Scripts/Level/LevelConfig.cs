@@ -13,4 +13,7 @@ public class LevelConfig : ScriptableObject
 
     [Space(50)]
     [Group] public TowerSpawnController.TowerSpawnControllerSettings TowerSpawnerSettings;
+
+    [Space(50)]
+    [Group] public ScenePoolLevelBehaviour.ScenePoolLevelBehaviourSettings ScenePoolSettings;
 }

@@ -8,10 +8,12 @@ public abstract class ALevelBehaviourSO : ScriptableObject, ILevelBehaviour
     public virtual bool IsActive { get; protected set; } = true;
 
     protected LevelConfig Config { get; set; }
+    protected LevelController.LevelSceneReferences SceneReferences {get; set;}
 
-    public virtual void Setup(LevelConfig config)
+    public virtual void Setup(LevelConfig config, LevelController.LevelSceneReferences sceneReferences)
     {
         Config = config;
+        SceneReferences = sceneReferences;
         OnSetup();
     }
     

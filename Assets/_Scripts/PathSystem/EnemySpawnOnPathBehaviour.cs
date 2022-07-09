@@ -34,8 +34,11 @@ public class EnemySpawnOnPathBehaviour : ALevelBehaviourSO
     {
         PathNode chosenStartNode = PathManager.Instance.GetRandomStartNode();
         GameObject enemy = ObjectPooler.Instance.Spawn(GetRandomEnemy().name, chosenStartNode.transform.position);
-        PathMovementBehaviour pathMovementBehaviour = (PathMovementBehaviour) enemy.GetComponent<BehaviourController>().MovementBehaviour;
-        pathMovementBehaviour.SetNode(chosenStartNode);
+        BehaviourController controller = enemy.GetComponent<BehaviourController>();
+        if (controller.TryGetBehaviour<PathMovementBehaviour>(out var pathMovementBehaviour))
+        {
+            pathMovementBehaviour.SetNode(chosenStartNode);
+        }
     }
 
     private void CalculateSpawnChance()

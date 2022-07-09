@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 681e11d2367534845bb6421efd2ca6a5, type: 3}
-  m_Name: Commandable Movement Behaviour
+  m_Script: {fileID: 11500000, guid: 724d4530ed7aa774ebdaa63367197e6e, type: 3}
+  m_Name: 1000 Look At Move Target Rotation Behaviour
   m_EditorClassIdentifier: 
-  moveSpeed: 350
+  rotationSpeed: 1000

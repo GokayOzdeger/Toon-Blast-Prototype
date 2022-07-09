@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "ScriptableObjects/ProgramableBehaviours/LookAtAttackTargetRotationBehaviour")]
 public class LookAtAttackTargetRotationBehaviour : ARotationBehaviourSO
 {
+    [SerializeField] float rotationSpeed;
+
     private IAttackBehaviour _attackBehaviour;
     private Transform _controlledTransform;
 
@@ -17,7 +19,10 @@ public class LookAtAttackTargetRotationBehaviour : ARotationBehaviourSO
     public override void TickRotation(float deltaTime)
     {
         if (_attackBehaviour.CurrentTargets.Count == 0 || _attackBehaviour.CurrentTargets[0] == null) return;
-        
-        _controlledTransform.right = (Vector2)_attackBehaviour.CurrentTargets[0].Controller.transform.position - (Vector2)_controlledTransform.position;
+
+        Vector3 vectorToTarget = _attackBehaviour.CurrentTargets[0].Controller.transform.position - _controlledTransform.position;
+        float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+        Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+        _controlledTransform.rotation = Quaternion.Slerp(_controlledTransform.rotation, q, deltaTime * rotationSpeed);
     }
 }

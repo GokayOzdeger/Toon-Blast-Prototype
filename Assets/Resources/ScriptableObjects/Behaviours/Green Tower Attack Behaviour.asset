@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bb011f85f2a52a478dc412396016f33, type: 3}
+  m_Name: Green Tower Attack Behaviour
+  m_EditorClassIdentifier: 
+  attackRange: 300
+  attackDamage: 75
+  delayBetweenAttacks:
+    cooldown: 2
+  projectilePrefab: {fileID: 2891723353106125210, guid: 3738b9eba9ef7a44da9aa6cf92fb9d6f, type: 3}

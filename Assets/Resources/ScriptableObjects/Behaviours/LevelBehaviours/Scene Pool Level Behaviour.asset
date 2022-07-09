@@ -9,11 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bb011f85f2a52a478dc412396016f33, type: 3}
-  m_Name: Simple Attack Behaviour
+  m_Script: {fileID: 11500000, guid: f40359bc11040e645b23b4e3a62bce39, type: 3}
+  m_Name: Scene Pool Level Behaviour
   m_EditorClassIdentifier: 
-  attackRange: 300
-  attackDamage: 80
-  delayBetweenAttacks:
-    cooldown: 0.5
-  projectilePrefab: Projectile

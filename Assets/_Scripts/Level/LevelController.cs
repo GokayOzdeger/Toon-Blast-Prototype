@@ -7,11 +7,16 @@ public class LevelController
     private List<ALevelBehaviourSO> LevelBehaviours { get; set; } = new List<ALevelBehaviourSO>();
 
     private LevelConfig _config;
-
+    private LevelController.LevelSceneReferences _sceneReferences;
 
     public LevelController(LevelConfig config, LevelSceneReferences levelSceneReferences)
     {
         this._config = config;
+        this._sceneReferences = levelSceneReferences;
+    }
+
+    public void SetupLevel()
+    {
         CreateLevelBehaviourInstances();
     }
 
@@ -20,7 +25,7 @@ public class LevelController
         foreach (ALevelBehaviourSO behaviour in _config.LevelBehaviours)
         {
             ALevelBehaviourSO behaviourInstance = MonoBehaviour.Instantiate(behaviour);
-            behaviourInstance.Setup(_config);
+            behaviourInstance.Setup(_config, _sceneReferences);
             LevelBehaviours.Add(behaviourInstance);
         }
     }

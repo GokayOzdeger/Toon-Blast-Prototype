@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "ScriptableObjects/ProgramableBehaviours/LookAtMoveTargetRotationBehaviour")]
-public class LookAtMoveTargetRotationModule : ARotationBehaviourSO
+public class LookAtMoveTargetRotationBehaviour : ARotationBehaviourSO
 {
+    [SerializeField] float rotationSpeed;
+    
     private IMovementBehaviour _movementBehaviour;
     private Transform _controlledTransform;
-    private Vector2 _lastFramesTarget;
 
     public override void OnSetup(BehaviourController controller)
     {
@@ -17,9 +18,9 @@ public class LookAtMoveTargetRotationModule : ARotationBehaviourSO
 
     public override void TickRotation(float deltaTime)
     {
-        if (_lastFramesTarget == _movementBehaviour.TargetPoint) return;
-        _lastFramesTarget = _movementBehaviour.TargetPoint;
-        
-        _controlledTransform.right = _movementBehaviour.TargetPoint - (Vector2) _controlledTransform.position;
+        Vector3 vectorToTarget = _movementBehaviour.TargetPoint - (Vector2) _controlledTransform.position;
+        float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+        Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+        _controlledTransform.rotation = Quaternion.Slerp(_controlledTransform.rotation, q, deltaTime * rotationSpeed);
     }
 }

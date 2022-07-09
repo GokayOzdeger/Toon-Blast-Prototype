@@ -13,7 +13,7 @@ public class TowerSpawnController : ALevelBehaviourSO
 
     public override void OnSetup()
     {
-        //
+        SceneReferences.TowerSpawnControllerReferences.CreateTowerButton.onClick.AddListener(SpawnTurretAtRandomSlot);    
     }
 
     public override void OnTick(float deltaTime)
@@ -42,12 +42,12 @@ public class TowerSpawnController : ALevelBehaviourSO
 
     public void SpawnTurretAtRandomSlot()
     {
+        if (AllTowerSlots.Count == 0) return;
         int randomTowerSlotIndex = Random.Range(0, AllTowerSlots.Count);
         TowerSlot randomSlot = AllTowerSlots[randomTowerSlotIndex];
         GameObject randomTower = Config.TowerSpawnerSettings.Towers[Random.Range(0, Config.TowerSpawnerSettings.Towers.Length)];
         ObjectPooler.Instance.Spawn(randomTower.name, randomSlot.transform.position);
-
-        // 
+        AllTowerSlots.RemoveAt(randomTowerSlotIndex);
     }
 
     [System.Serializable]
