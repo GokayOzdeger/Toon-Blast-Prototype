@@ -20,6 +20,12 @@ public class LevelController
         CreateLevelBehaviourInstances();
     }
 
+    public void LostLevel()
+    {
+        BehaviourManager.Instance.RemoveEntitiesAndReset();
+        GameManager.Instance.CreateNewLevel();
+    }
+
     private void CreateLevelBehaviourInstances()
     {
         foreach (ALevelBehaviourSO behaviour in _config.LevelBehaviours)
@@ -35,13 +41,18 @@ public class LevelController
         foreach (ALevelBehaviourSO behaviour in LevelBehaviours) behaviour.Tick(deltaTime);
     }
 
-    public T GetBehaviour<T>() where T : ALevelBehaviourSO
+    public bool TryGetBehaviour<T>(out T levelBehaviour) where T : ALevelBehaviourSO
     {
         foreach (ALevelBehaviourSO behaviour in LevelBehaviours)
         {
-            if (behaviour is T) return (T)behaviour;
+            if (behaviour is T) 
+            {
+                levelBehaviour = (T)behaviour;
+                return true;
+            }
         }
-        return null;
+        levelBehaviour = null;
+        return false;
     }
 
 
@@ -49,5 +60,6 @@ public class LevelController
     public class LevelSceneReferences
     {
         [Group] public TowerSpawnController.TowerSpawnControllerSceneReferences TowerSpawnControllerReferences;
+        [Group] public ScoreCounter.ScoreCounterSceneReferences ScoreCounterSceneReferences;
     }
 }

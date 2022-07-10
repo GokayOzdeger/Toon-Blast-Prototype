@@ -16,6 +16,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4c9b332550a74f644bf55e0050aea209, type: 2}
   - {fileID: 11400000, guid: dd8d371a75278bc439732f89731e3f0a, type: 2}
   - {fileID: 11400000, guid: 3a75316b1b8c6d047a19e5335ffacb9b, type: 2}
+  - {fileID: 11400000, guid: 1112496e6d8ee0a45bf9b37f898f8615, type: 2}
+  - {fileID: 11400000, guid: 0ed473692e9c34e42b8243da0d67797e, type: 2}
   EnemySpawnControllerSettings:
     enemies:
     - enemyPrefab: {fileID: 2891723353106125210, guid: e6c8602972740dc479f17dde4c4c4c99, type: 3}

@@ -13,7 +13,9 @@ public class TowerSpawnController : ALevelBehaviourSO
 
     public override void OnSetup()
     {
-        SceneReferences.TowerSpawnControllerReferences.CreateTowerButton.onClick.AddListener(SpawnTurretAtRandomSlot);    
+        Button spawnTowerButton = SceneReferences.TowerSpawnControllerReferences.CreateTowerButton;
+        spawnTowerButton.onClick.RemoveAllListeners();
+        spawnTowerButton.onClick.AddListener(SpawnTurretAtRandomSlot);    
     }
 
     public override void OnTick(float deltaTime)

@@ -6,6 +6,7 @@ using UnityEditor;
 #endif
 
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PathNode : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class PathNode : MonoBehaviour
     [SerializeField] private float nodeRadius = 30;
     [SerializeField] private bool isEntranceNode;
 
+    public UnityEvent<PathMovementBehaviour> OnPathReached { get; set; } = new UnityEvent<PathMovementBehaviour>();
     public bool IsEntranceNode => isEntranceNode;
 
     private void Awake()
@@ -29,6 +31,11 @@ public class PathNode : MonoBehaviour
     public Vector2 GetRandomPoint()
     {
         return (Vector2) transform.position + Random.insideUnitCircle * Random.Range(0, nodeRadius);
+    }
+
+    public void PathReachedBy(PathMovementBehaviour movementBehaviour)
+    {
+        OnPathReached.Invoke(movementBehaviour);
     }
 
 #if UNITY_EDITOR

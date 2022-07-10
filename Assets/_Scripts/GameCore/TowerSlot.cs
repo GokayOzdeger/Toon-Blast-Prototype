@@ -18,7 +18,11 @@ public class TowerSlot : MonoBehaviour, IPoolable
     {
         get
         {
-            if (!_towerSpawnController) _towerSpawnController = GameManager.Instance.CurrentLevel.GetBehaviour<TowerSpawnController>();
+            if (!_towerSpawnController)
+            {
+                GameManager.Instance.CurrentLevel.TryGetBehaviour<TowerSpawnController>(out var towerSpawnController);
+                _towerSpawnController = towerSpawnController;
+            }
             return _towerSpawnController;
         }
     }

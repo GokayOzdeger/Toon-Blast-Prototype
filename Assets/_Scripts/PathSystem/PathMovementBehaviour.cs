@@ -5,7 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "ScriptableObjects/ProgramableBehaviours/PathMovementBehaviour")]
 public class PathMovementBehaviour : AMovementBehaviourSO
 {
-    private static readonly float TargetReachThreshold = 1f;
     
     [SerializeField] private float moveSpeed;
 
@@ -39,7 +38,7 @@ public class PathMovementBehaviour : AMovementBehaviourSO
         Vector2 distanceToMove = moveDirection * MoveSpeed * deltaTime;
         ControlledTransform.position = (Vector2) ControlledTransform.position + distanceToMove;
         DistanceTravelled += distanceToMove.magnitude;
-        if (Vector2.Distance(ControlledTransform.position, TargetPoint) < TargetReachThreshold) TargetPathNodeReached();
+        if (Vector2.Distance(ControlledTransform.position, TargetPoint) < MoveSpeed * deltaTime) TargetPathNodeReached();
     }
 
     public override void SetMoveSpeed(float moveSpeed)
@@ -54,6 +53,7 @@ public class PathMovementBehaviour : AMovementBehaviourSO
 
     private void TargetPathNodeReached()
     {
+        TargetPathNode.PathReachedBy(this);
         TargetPathNode = TargetPathNode.GetRandomNextNode();
     }
 

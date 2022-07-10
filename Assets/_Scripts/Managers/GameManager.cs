@@ -29,7 +29,7 @@ public class GameManager : AutoSingleton<GameManager>
         CurrentLevel.TickLevel(Time.deltaTime);
     }
 
-    private void CreateNewLevel()
+    public void CreateNewLevel()
     {
         CurrentLevel = new LevelController(ChosenLevelConfig, levelSceneReferences);
         CurrentLevel.SetupLevel();

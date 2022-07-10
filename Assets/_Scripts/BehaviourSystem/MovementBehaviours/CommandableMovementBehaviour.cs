@@ -6,8 +6,6 @@ using UnityEngine.Events;
 [CreateAssetMenu(menuName = "ScriptableObjects/ProgramableBehaviours/CommandableMovementBehaviour")]
 public class CommandableMovementBehaviour : AMovementBehaviourSO
 {
-    private static readonly float TargetReachThreshold = 1f;
-
     [SerializeField] private float moveSpeed;
     
     public UnityEvent<BehaviourController> OnTargetReached { get; private set; } = new UnityEvent<BehaviourController>();
@@ -39,7 +37,7 @@ public class CommandableMovementBehaviour : AMovementBehaviourSO
 
         Vector2 moveDirection = (TargetPoint - (Vector2)Controller.transform.position).normalized;
         Controller.transform.position = (Vector2)Controller.transform.position + (moveDirection * MoveSpeed * deltaTime);
-        if (Vector2.Distance(Controller.transform.position, CommandedMoveTarget.transform.position) < TargetReachThreshold) TargetReached();
+        if (Vector2.Distance(Controller.transform.position, CommandedMoveTarget.transform.position) < MoveSpeed * deltaTime) TargetReached();
     }
 
     private void TargetReached()

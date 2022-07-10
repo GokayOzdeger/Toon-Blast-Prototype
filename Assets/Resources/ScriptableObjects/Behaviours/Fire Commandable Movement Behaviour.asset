@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 681e11d2367534845bb6421efd2ca6a5, type: 3}
   m_Name: Fire Commandable Movement Behaviour
   m_EditorClassIdentifier: 
-  moveSpeed: 500
+  moveSpeed: 600

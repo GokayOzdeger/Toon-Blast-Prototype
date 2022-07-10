@@ -6,6 +6,8 @@ using UnityEngine;
 public class BasicHealthBehaviour : AHealthBehaviourSO
 {
     [SerializeField] private float maxHealth;
+    [SerializeField] private int scoreGainOnDeath;
+    
     public override float CurrentHealth { get; protected set; }
 
     public override float MaxHealth => maxHealth;
@@ -31,6 +33,8 @@ public class BasicHealthBehaviour : AHealthBehaviourSO
 
     private void Die()
     {
+        if(GameManager.Instance.CurrentLevel.TryGetBehaviour<ScoreCounter>(out var scoreCounter)) 
+            scoreCounter.ScoreGained(scoreGainOnDeath);
         OnDeath.Invoke(this);
         OnDeath.RemoveAllListeners();
         IsDead = true;

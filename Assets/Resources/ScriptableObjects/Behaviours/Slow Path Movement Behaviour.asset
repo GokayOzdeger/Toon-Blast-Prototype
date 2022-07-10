@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9eccf454a33a2864d9e226144f05cff0, type: 3}
   m_Name: Slow Path Movement Behaviour
   m_EditorClassIdentifier: 
-  moveSpeed: 100
+  moveSpeed: 150
