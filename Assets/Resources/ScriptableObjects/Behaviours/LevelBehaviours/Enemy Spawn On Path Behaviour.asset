@@ -12,3 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9fad7e68e1827a4ba3062e362decd42, type: 3}
   m_Name: Enemy Spawn On Path Behaviour
   m_EditorClassIdentifier: 
+  _enemySpawnControllerSettings:
+    enemies:
+    - enemyPrefab: {fileID: 2891723353106125210, guid: e6c8602972740dc479f17dde4c4c4c99, type: 3}
+      spawnChance: 1
+    enemySpawnPerSecondsMin: 0.5
+    enemySpawnPerSecondsMax: 50
+    spawnRateMaxOutDuration: 100

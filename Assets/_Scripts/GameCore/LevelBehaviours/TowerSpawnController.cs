@@ -7,6 +7,7 @@ using Utilities;
 [CreateAssetMenu(menuName = "ScriptableObjects/ProgramableLevelBehaviours/TowerSpawnController")]
 public class TowerSpawnController : ALevelBehaviourSO
 {
+    [SerializeField] private GameObject[] TowerPrefabs;
     public List<BehaviourController> AllTowers { get; private set; } = new List<BehaviourController>();
     
     public List<TowerSlot> AllTowerSlots { get; private set; } = new List<TowerSlot>();
@@ -47,15 +48,9 @@ public class TowerSpawnController : ALevelBehaviourSO
         if (AllTowerSlots.Count == 0) return;
         int randomTowerSlotIndex = Random.Range(0, AllTowerSlots.Count);
         TowerSlot randomSlot = AllTowerSlots[randomTowerSlotIndex];
-        GameObject randomTower = Config.TowerSpawnerSettings.Towers[Random.Range(0, Config.TowerSpawnerSettings.Towers.Length)];
+        GameObject randomTower = TowerPrefabs[Random.Range(0, TowerPrefabs.Length)];
         ObjectPooler.Instance.Spawn(randomTower.name, randomSlot.transform.position);
         AllTowerSlots.RemoveAt(randomTowerSlotIndex);
-    }
-
-    [System.Serializable]
-    public class TowerSpawnControllerSettings
-    {
-        public GameObject[] Towers;
     }
 
     [System.Serializable]

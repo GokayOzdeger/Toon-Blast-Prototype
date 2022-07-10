@@ -18,16 +18,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3a75316b1b8c6d047a19e5335ffacb9b, type: 2}
   - {fileID: 11400000, guid: 1112496e6d8ee0a45bf9b37f898f8615, type: 2}
   - {fileID: 11400000, guid: 0ed473692e9c34e42b8243da0d67797e, type: 2}
-  EnemySpawnControllerSettings:
-    enemies:
-    - enemyPrefab: {fileID: 2891723353106125210, guid: e6c8602972740dc479f17dde4c4c4c99, type: 3}
-      spawnChance: 1
-    enemySpawnPerSecondsMin: 2
-    enemySpawnPerSecondsMax: 20
-    spawnRateMaxOutDuration: 200
-  TowerSpawnerSettings:
-    Towers:
-    - {fileID: 2891723353106125210, guid: 31e0f0733357a474b9ba5937ff10115c, type: 3}
-    - {fileID: 2891723353106125210, guid: 4ebab486a57888a4c91032285762c8cb, type: 3}
   ScenePoolSettings:
-    ScenePoolData: {fileID: 11400000, guid: b863032183c046f41bfa4a7d4e85c0f7, type: 2}
+    ScenePoolData: {fileID: 11400000, guid: 6ab02b486d9318241888322e1991e423, type: 2}

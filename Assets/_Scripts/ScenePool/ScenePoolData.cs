@@ -50,7 +50,7 @@ public partial class ScenePoolData : ScriptableObject
         ScenePoolData newSceneData = CreateInstance<ScenePoolData>();
         CollectScenePools(newSceneData);
         
-        string path = $"Assets/Resources/ScriptableObjects/Scene Pools/{EditorSceneManager.GetActiveScene().name}.asset";
+        string path = $"Assets/Resources/ScriptableObjects/Scene Pools/New ScenePool.asset";
         AssetDatabase.CreateAsset(newSceneData, path);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();

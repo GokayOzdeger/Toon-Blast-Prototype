@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6003408910031637759}
   - component: {fileID: 9111399196793087054}
+  - component: {fileID: 7413301233238528868}
   - component: {fileID: 3526802799514845286}
   m_Layer: 0
   m_Name: Enemy
@@ -50,6 +51,20 @@ MonoBehaviour:
   rotationBehaviour: {fileID: 11400000, guid: b9fe355fc6bc9a246979fa7fbad40562, type: 2}
   healthBehaviour: {fileID: 11400000, guid: 83d770437335d2f458ec8b130790c7cd, type: 2}
   attackBehaviour: {fileID: 0}
+--- !u!114 &7413301233238528868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2891723353106125210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f65de1341a1f8eb428881683cba6caa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: 8313628133273951432}
 --- !u!114 &3526802799514845286
 MonoBehaviour:
   m_ObjectHideFlags: 0

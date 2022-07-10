@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6003408910031637759}
   - component: {fileID: 9111399196793087054}
+  - component: {fileID: 8659770425313698985}
   - component: {fileID: 3526802799514845286}
   m_Layer: 0
   m_Name: FireProjectile
@@ -50,6 +51,20 @@ MonoBehaviour:
   rotationBehaviour: {fileID: 11400000, guid: 45f854469fd96a946872ca5e3ae8e7b8, type: 2}
   healthBehaviour: {fileID: 0}
   attackBehaviour: {fileID: 0}
+--- !u!114 &8659770425313698985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2891723353106125210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f65de1341a1f8eb428881683cba6caa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: 8313628133273951432}
 --- !u!114 &3526802799514845286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,7 +150,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 15
   m_Sprite: {fileID: -2656773486782764181, guid: 443347357245a0744a2993248adba496, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

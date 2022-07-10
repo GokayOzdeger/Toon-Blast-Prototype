@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98f2c39977441cd4986e050f92126290, type: 3}
   m_Name: Tower Spawn Controller
   m_EditorClassIdentifier: 
+  TowerPrefabs:
+  - {fileID: 2891723353106125210, guid: 31e0f0733357a474b9ba5937ff10115c, type: 3}
+  - {fileID: 2891723353106125210, guid: 4ebab486a57888a4c91032285762c8cb, type: 3}

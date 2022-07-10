@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: 100 Basic Health Behaviour
   m_EditorClassIdentifier: 
   maxHealth: 100
+  scoreGainOnDeath: 100
+  onDamageTakenColor: {r: 1, g: 0.43867922, b: 0.43867922, a: 1}
+  onDamageTakenColorDuration: 0.15

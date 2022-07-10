@@ -17,3 +17,6 @@ MonoBehaviour:
   delayBetweenAttacks:
     cooldown: 2
   projectilePrefab: {fileID: 2891723353106125210, guid: 3738b9eba9ef7a44da9aa6cf92fb9d6f, type: 3}
+  projectileSummonPositionOffset: {x: 55, y: 0}
+  punchScaleDuration: 0.3
+  punchScaleAmount: 0.4

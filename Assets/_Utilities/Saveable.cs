@@ -15,6 +15,11 @@ public abstract class Saveable<T> where T : new()
         } 
     }
 
+    public static bool SaveExists()
+    {
+        return SaveGame.Exists(typeof(T).FullName);
+    }
+
     public virtual void Save()
     {
         SaveGame.Save<T>(typeof(T).FullName, _data, false);

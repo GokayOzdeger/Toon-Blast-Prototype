@@ -6,6 +6,7 @@ using Utilities;
 [CreateAssetMenu(menuName = "ScriptableObjects/ProgramableLevelBehaviours/ EnemySpawnOnPathBehaviour")]
 public class EnemySpawnOnPathBehaviour : ALevelBehaviourSO
 {
+    [SerializeField] private EnemySpawnControllerSettings _enemySpawnControllerSettings;
     private EnemySpawnControllerSettings Settings { get; set; }
 
     private float _nextSpawnSeconds;
@@ -14,7 +15,8 @@ public class EnemySpawnOnPathBehaviour : ALevelBehaviourSO
 
     public override void OnSetup()
     {
-        Settings = Config.EnemySpawnControllerSettings;
+        Settings = _enemySpawnControllerSettings;
+        Debug.Log("EnemySpawnOnPathBehaviour OnSetup: "+Settings.enemySpawnPerSecondsMax);
         CalculateSpawnChance();
     }
 
@@ -60,7 +62,6 @@ public class EnemySpawnOnPathBehaviour : ALevelBehaviourSO
         Debug.LogError("Spawn Chance Error");
         return null;
     }
-
 
     [System.Serializable]
     public class EnemySpawnControllerSettings

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Utilities;
+using DG.Tweening;
 
 [CreateAssetMenu(menuName = "ScriptableObjects/ProgramableBehaviours/SimpleAttackBehaviour")]
 public class SimpleAttackBehaviour : AAttackBehaviourSO
@@ -14,7 +15,12 @@ public class SimpleAttackBehaviour : AAttackBehaviourSO
 
     [BHeader("Projectile")]
     [SerializeField] private GameObject projectilePrefab;
-    
+    [SerializeField] private Vector2 projectileSummonPositionOffset;
+
+    [BHeader("Animation Options")]
+    [SerializeField] private float punchScaleDuration = 0.5f;
+    [SerializeField] private float punchScaleAmount = 0.1f;
+
     public override List<AHealthBehaviourSO> CurrentTargets { get; protected set; } = new List<AHealthBehaviourSO>();
 
     public override void TickAttack(float deltaTime)
@@ -33,11 +39,15 @@ public class SimpleAttackBehaviour : AAttackBehaviourSO
         if (delayBetweenAttacks.IsReady)
         {
             delayBetweenAttacks.EnterCooldown();
-            foreach(AHealthBehaviourSO target in CurrentTargets) SetupProjectile(target);
+            AnimateAttack();
+            foreach (AHealthBehaviourSO target in CurrentTargets) SetupProjectile(target);
         }
     }
 
-    
+    private void AnimateAttack()
+    {
+        Controller.AnimationController.PunchScale(punchScaleAmount, punchScaleDuration);
+    }
 
     private void UpdateTargets()
     {
@@ -48,7 +58,9 @@ public class SimpleAttackBehaviour : AAttackBehaviourSO
 
     private void SetupProjectile(AHealthBehaviourSO target)
     {
-        GameObject spawnedProjectile = ObjectPooler.Instance.Spawn(projectilePrefab.name, Controller.transform.position, Controller.transform.rotation);
+        Vector2 offsetPositionAdd = (Controller.transform.right * projectileSummonPositionOffset.x) + (Controller.transform.up * projectileSummonPositionOffset.y);
+        Vector2 summonPosition = (Vector2) Controller.transform.position + offsetPositionAdd;
+        GameObject spawnedProjectile = ObjectPooler.Instance.Spawn(projectilePrefab.name, summonPosition, Controller.transform.rotation);
         BehaviourController controller = spawnedProjectile.GetComponent<BehaviourController>();
         
         if (!controller.TryGetBehaviour<CommandableMovementBehaviour>(out var commandableMovementBehaviour))
@@ -70,11 +82,6 @@ public class SimpleAttackBehaviour : AAttackBehaviourSO
         });
         
         Debug.Log($"{Controller.name} attacked -> {target.Controller.name}");
-    }
-
-    private void OnHitTarget(BehaviourController target)
-    {
-        
     }
 
     public override void OnSetup(BehaviourController controller)

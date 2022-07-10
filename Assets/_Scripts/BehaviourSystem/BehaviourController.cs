@@ -17,22 +17,23 @@ public class BehaviourController : MonoBehaviour, IPoolable
     public AHealthBehaviourSO HealthBehaviour => healthBehaviour;
     public AAttackBehaviourSO AttackBehaviour => attackBehaviour;
     public PoolObject PoolObject => _poolObject;
+    public AnimationController AnimationController => _animationController;
 
+    
     private List<IBehaviour> allBehaviours = new List<IBehaviour>();
     private PoolObject _poolObject;
+    private AnimationController _animationController;
 
+    
     private void Awake()
     {
         _poolObject = GetComponent<PoolObject>();
+        _animationController = GetComponent<AnimationController>();
     }
 
     private void Start()
     {
-        if (_startsInScene)
-        {
-            CreateBehaviourInstances();
-            BehaviourManager.Instance.RegisterBehaviourController(this);
-        }
+        if (_startsInScene) OnPoolSpawn();
     }
 
     private void CreateBehaviourInstances()

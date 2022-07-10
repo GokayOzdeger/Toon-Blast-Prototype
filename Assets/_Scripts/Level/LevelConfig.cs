@@ -9,11 +9,5 @@ public class LevelConfig : ScriptableObject
     public List<ALevelBehaviourSO> LevelBehaviours = new List<ALevelBehaviourSO>();
 
     [Space(50)]
-    [Group] public EnemySpawnOnPathBehaviour.EnemySpawnControllerSettings EnemySpawnControllerSettings;
-
-    [Space(50)]
-    [Group] public TowerSpawnController.TowerSpawnControllerSettings TowerSpawnerSettings;
-
-    [Space(50)]
     [Group] public ScenePoolLevelBehaviour.ScenePoolLevelBehaviourSettings ScenePoolSettings;
 }

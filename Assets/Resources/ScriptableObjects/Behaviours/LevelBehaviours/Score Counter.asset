@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6408b20233104940b13640e0fa52546, type: 3}
   m_Name: Score Counter
   m_EditorClassIdentifier: 
-  textStartAdd: 'Score: '
+  scoreTextStartAdd: 'Score:
+
+'
+  highScoreTextStartAdd: 'High Score:
+
+'
