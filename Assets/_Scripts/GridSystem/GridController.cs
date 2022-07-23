@@ -9,11 +9,8 @@ using UnityEngine.Events;
 using UnityEditor;
 #endif
 
-public class GridController
+public partial class GridController
 {
-    private readonly float collumnSpacing = 79;
-    private readonly float rowSpacing = 70;
-
     private static Vector2Int[] _surroundingCoordinateMatrises = new Vector2Int[]
     {
         new Vector2Int( 0,-1),
@@ -29,10 +26,11 @@ public class GridController
     private uint gridRowCount;
     private uint gridCollumnCount;
 
+    private float gridCellSpacing;
+
     public int RowCount { get { return (int)gridRowCount; } }
     public int CollumnCount { get { return (int)gridCollumnCount; } }
-    public float CollumnSpacing { get { return collumnSpacing * _canvasScaler.transform.localScale.x; } }
-    public float RowSpacing { get { return rowSpacing * _canvasScaler.transform.localScale.y; } }
+    public float GridCellSpacing { get { return gridCellSpacing * _canvasScaler.transform.localScale.x; } }
 
     public UnityEvent<Vector2Int> OnGridChange = new UnityEvent<Vector2Int>();
     public Vector2[,] GridPositions { get; private set; }
@@ -49,16 +47,28 @@ public class GridController
 
     public GridController(GridControllerSettings settings , GridControllerSceneReferences references)
     {
+        // cache settings and references
         this._canvasScaler = references.CanvasScaler;
-        this._gridCenterTransform = references.GridCenterTransform;
+        this._gridCenterTransform = references.GridRect;
+        
         gridRowCount = settings.RowCount;
         gridCollumnCount = settings.CollumnCount;
+
+        CalculateCellSpacing(settings, references);
         CreateGridAndCalculatePositions();
+        ResizeGridFrame(references.GridFrame, settings);
         CreateSystemComponents(settings, references);
         UpdateAllEntities();
     }
-    
+
     #region Private Methods
+    private void CalculateCellSpacing(GridControllerSettings settings, GridControllerSceneReferences references)
+    {
+        float rowCellSpacing = references.GridRect.rect.width / (settings.MaxEntitiesPerSide - 1);
+        float collumnCellSpacing = references.GridRect.rect.height / (settings.MaxEntitiesPerSide - 1);
+        gridCellSpacing = Mathf.Min(rowCellSpacing, collumnCellSpacing);
+    }
+    
     private void CreateSystemComponents(GridControllerSettings settings, GridControllerSceneReferences references)
     {
         _shuffleController = new ShuffleController(this, references.ShuffleControllerSceneReferences);
@@ -80,12 +90,13 @@ public class GridController
         _cachedGridChanges.Add(changeCords);
     }
 
+    // called on all grid entities after all grid changes are calculated
     public void UpdateAllEntities()
     {
         Array.Clear(_controlledGridCoordinates, 0, _controlledGridCoordinates.Length);
         foreach (IGridEntity entity in EntityGrid)
         {
-            if (entity == null || !entity.EntityNeedsUpdate) continue;
+            if (entity == null) continue;
             entity.OnUpdateEntity();
         }
     }
@@ -97,8 +108,8 @@ public class GridController
         _controlledGridCoordinates = new bool[gridRowCount, gridCollumnCount];
 
         // calculate bottom left corner entity position 
-        float bottomLeftCornerX = _gridCenterTransform.position.x - ((gridCollumnCount / 2f) - .5f) * CollumnSpacing;
-        float bottomLeftCornerY = _gridCenterTransform.position.y - ((gridRowCount / 2f) - .5f) * RowSpacing;
+        float bottomLeftCornerX = _gridCenterTransform.position.x - ((gridCollumnCount / 2f) - .5f) * GridCellSpacing;
+        float bottomLeftCornerY = _gridCenterTransform.position.y - ((gridRowCount / 2f) - .5f) * GridCellSpacing;
 
         Vector2 bottomLeftCorner = new Vector2(bottomLeftCornerX, bottomLeftCornerY);
         Vector2 cursorPoint = bottomLeftCorner;
@@ -107,11 +118,16 @@ public class GridController
             for (int j = 0; j < GridPositions.GetLength(1); j++)
             {
                 GridPositions[i, j] = cursorPoint;
-                cursorPoint.x += CollumnSpacing;
+                cursorPoint.x += GridCellSpacing;
             }
-            cursorPoint.y += RowSpacing;
+            cursorPoint.y += GridCellSpacing;
             cursorPoint.x = bottomLeftCorner.x;
         }
+    }
+
+    private void ResizeGridFrame(RectTransform frame, GridControllerSettings settings)
+    {
+        frame.sizeDelta = new Vector2(RowCount * gridCellSpacing + settings.GridFrameWidthAdd, CollumnCount * gridCellSpacing + settings.GridFrameHeightAdd);
     }
 
     private void CollectMatchingSurroundingEntitiesRecursive<T>(T entity, ref List<T> entityListToCollect) where T : IGridEntity
@@ -145,8 +161,6 @@ public class GridController
         IGridEntity entityB = EntityGrid[entityBCoordinates.x, entityBCoordinates.y];
         EntityGrid[entityACoordinates.x, entityACoordinates.y] = EntityGrid[entityBCoordinates.x, entityBCoordinates.y];
         EntityGrid[entityBCoordinates.x, entityBCoordinates.y] = entityA;
-        entityA.EntityNeedsUpdate = true;
-        entityB.EntityNeedsUpdate = true;
         int entityASiblingIndex = entityA.EntityTransform.GetSiblingIndex();
         int entityBSiblingIndex = entityB.EntityTransform.GetSiblingIndex();
         entityA.EntityTransform.SetSiblingIndex(entityBSiblingIndex);
@@ -186,8 +200,7 @@ public class GridController
     }
 
     public void WriteEntityFall(IGridEntity gridEntity)
-    {
-        gridEntity.EntityNeedsUpdate = true;
+    { 
         int collumnIndex = gridEntity.GridCoordinates.y;
         int coordinateToFallTo = gridEntity.GridCoordinates.x;
         for (int i = gridEntity.GridCoordinates.x - 1; i >= 0; i--)
@@ -223,7 +236,6 @@ public class GridController
         _entitiesInProcess--;
         if (_entitiesInProcess == 0)
         {
-            UpdateAllEntities();
             if(_shuffleController.HasLegalMove()) GridInterractable = true;
             
         }
@@ -235,36 +247,5 @@ public class GridController
         _controlledGridCoordinates[entity.GridCoordinates.x, entity.GridCoordinates.y] = true;
         CollectMatchingSurroundingEntitiesRecursive(entity, ref entityListToCollect);
     }
-    
     #endregion
-
-    [System.Serializable]
-    public class GridControllerSceneReferences
-    {
-        [BHeader("Grid Controller References")] 
-        [SerializeField] private RectTransform gridCenterTransform;
-        [SerializeField] private CanvasScaler canvasScaler;
-        [Group]
-        [SerializeField] private GridEntitySpawner.GridEntitySpawnerSceneReferences gridEntitySpawnerSceneReferences;
-        [Group]
-        [SerializeField] private ShuffleController.ShuffleControllerSceneReferences shuffleControllerSceneReferences;
-        public RectTransform GridCenterTransform => gridCenterTransform;
-        public CanvasScaler CanvasScaler => canvasScaler;
-        public GridEntitySpawner.GridEntitySpawnerSceneReferences GridEntitySpawnerSceneReferences => gridEntitySpawnerSceneReferences;
-        public ShuffleController.ShuffleControllerSceneReferences ShuffleControllerSceneReferences => shuffleControllerSceneReferences;
-    }
-
-    [System.Serializable]
-    public class GridControllerSettings
-    {
-        [BHeader("Grid Controller Settings")]
-        [SerializeField] private uint rowCount;
-        [SerializeField] private uint collumnCount;
-        [Group]
-        [SerializeField] private GridEntitySpawner.GridEntitySpawnerSettings gridEntitySpawnerSettings;
-
-        public uint RowCount => rowCount;
-        public uint CollumnCount => collumnCount;
-        public GridEntitySpawner.GridEntitySpawnerSettings GridEntitySpawnerSettings => gridEntitySpawnerSettings;
-    }
 }

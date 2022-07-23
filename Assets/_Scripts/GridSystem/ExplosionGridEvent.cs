@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExplosionGridEvent : IGridEvent
+public class MatchGridEvent : IGridEvent
 {
     public static readonly int MinGroupSizeForExplosion = 2;
     

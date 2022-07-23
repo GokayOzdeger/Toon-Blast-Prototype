@@ -7,26 +7,7 @@ public class BlockTypeDefinition : BasicGridEntityTypeDefinition
 {
     [BHeader("Block Type Settings")]
     [SerializeField] private bool explodesOnClick = true;
-    [SerializeField] private List<ConditionSpritePair> conditionSpritePairs = new List<ConditionSpritePair>();
 
-    public bool ExplodesOnClick => explodesOnClick;
-    public List<ConditionSpritePair> ConditionSpritePairs { get { return conditionSpritePairs; } }
+    public bool MatchesOnClick => explodesOnClick;
 
-    public Sprite GetBlockGroupIcon(List<Block> blockGroup)
-    {
-        foreach(ConditionSpritePair conditionSpritePair in conditionSpritePairs)
-        {
-            if (!conditionSpritePair.Condition.IsConditionMet(blockGroup)) continue;
-            return conditionSpritePair.Icon;
-        }
-        return defaultSprite;
-    }
-
-
-    [System.Serializable]
-    public class ConditionSpritePair
-    {
-        public ACondition Condition;
-        public Sprite Icon;
-    }
 }

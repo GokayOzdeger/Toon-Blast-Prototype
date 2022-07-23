@@ -14,11 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridEntityPrefab: {fileID: 1905907544835078951, guid: dc5bcb2e100efcc4896a74f905bb6b9d, type: 3}
   gridEntityTypeName: Green
-  defaultSprite: {fileID: 21300000, guid: af3a8ec24a2ec364f8f96895e2836661, type: 3}
-  conditionSpritePairs:
-  - Condition: {fileID: 11400000, guid: 682b702f1a03a624cbf6487b81384f74, type: 2}
-    Icon: {fileID: 21300000, guid: da7942a0021495f49bcae2753ad5c475, type: 3}
-  - Condition: {fileID: 11400000, guid: 1dcc26a90d916a64f9d12b613a605388, type: 2}
-    Icon: {fileID: 21300000, guid: bcec7658ab663924492fcc85d03352e1, type: 3}
-  - Condition: {fileID: 11400000, guid: 4e5e2688aa252f943b09f7e6a360a970, type: 2}
-    Icon: {fileID: 21300000, guid: b997b987b88585340a0705353bbff393, type: 3}
+  defaultSprite: {fileID: 21300000, guid: e1ada36e74f3ec946a435d0ee6920f6c, type: 3}
+  entityIncludedInShuffle: 1
+  explodesOnClick: 1

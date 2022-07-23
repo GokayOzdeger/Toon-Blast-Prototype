@@ -13,12 +13,9 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
     
     public IGridEntityTypeDefinition EntityType { get; protected set; }
     public Vector2Int GridCoordinates { get; protected set; }
-    public bool EntityNeedsUpdate { get; set; } = true;
-
     public Transform EntityTransform => transform;
-
+    
     protected GridController _gridController;
-
     protected Tween _lastTween = null;
     
     public virtual void SetupEntity(GridController grid, IGridEntityTypeDefinition blockType)
@@ -38,7 +35,7 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
         entityImage.sprite = sprite;
     }
 
-    public void OnGridChange(Vector2Int changeCoordinate)
+    public virtual void OnGridChange(Vector2Int changeCoordinate)
     {
         if (GridCoordinates - changeCoordinate != new Vector2Int(1, 0)) return;
         if (_gridController.EntityGrid[changeCoordinate.x, changeCoordinate.y] != null) return;
@@ -48,7 +45,7 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
 
     public virtual void OnUpdateEntity()
     {
-        if (!EntityNeedsUpdate) return;
+        //
     }
 
     public virtual void OnMoveEntity(Vector2Int newCoordinates, IGridEntity.MovementMode movementMode)
@@ -115,7 +112,6 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
     public virtual void OnPoolSpawn()
     {
         KillLastTween();
-        EntityNeedsUpdate = true;
         EntityType = null;
     }
 }

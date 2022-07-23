@@ -64,10 +64,12 @@ public class GridEntitySpawner
                 Vector2Int gridCoordinates = new Vector2Int(_gridController.RowCount - j - 1, i);
                 IGridEntityTypeDefinition randomBlockType = _gridEntityTypes[Random.Range(0, _gridEntityTypes.Length)];
                 GameObject newEntityGO = ObjectPooler.Instance.Spawn(randomBlockType.GridEntityPrefab.name, 
-                    _spawnPositionRow[i]-j*new Vector2(0,_gridController.RowSpacing),
+                    _spawnPositionRow[i]-j*new Vector2(0,_gridController.GridCellSpacing),
                     Quaternion.identity);
                 newEntityGO.transform.SetParent(_gridParentTransform);
                 newEntityGO.gameObject.name = $"Block {i}_{j}";
+
+                newEntityGO.GetComponent<RectTransform>().sizeDelta = new Vector2(_gridController.GridCellSpacing, _gridController.GridCellSpacing);
                 IGridEntity newEntity = newEntityGO.GetComponent<IGridEntity>();
                 newEntity.SetupEntity(_gridController, randomBlockType);
                 _gridController.RegisterGridEntityToPosition(newEntity, gridCoordinates.x, gridCoordinates.y);

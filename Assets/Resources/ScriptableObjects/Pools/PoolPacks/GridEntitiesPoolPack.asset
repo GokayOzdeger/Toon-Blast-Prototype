@@ -16,8 +16,12 @@ MonoBehaviour:
   - pooledObjects: []
     prefab: {fileID: 1905907544835078951, guid: dc5bcb2e100efcc4896a74f905bb6b9d, type: 3}
     startingParent: {fileID: 0}
-    startingQuantity: 81
+    startingQuantity: 0
   - pooledObjects: []
     prefab: {fileID: 1905907544835078951, guid: 68a7d66979197ce468819273c18ca419, type: 3}
+    startingParent: {fileID: 0}
+    startingQuantity: 0
+  - pooledObjects: []
+    prefab: {fileID: 1905907544835078951, guid: 0e3a313c1a83a6a408452eb608e7f680, type: 3}
     startingParent: {fileID: 0}
     startingQuantity: 0

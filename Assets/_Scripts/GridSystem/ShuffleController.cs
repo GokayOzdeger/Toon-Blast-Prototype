@@ -21,7 +21,7 @@ public class ShuffleController
             if(entity is Block)
             {
                 Block block = (Block)entity;
-                if (block.CurrentBlockGroup.Count >= ExplosionGridEvent.MinGroupSizeForExplosion)
+                if (block.CurrentMatchGroup.Count >= MatchGridEvent.MinGroupSizeForExplosion)
                 {
                     return true;
                 }
@@ -53,6 +53,7 @@ public class ShuffleController
             Vector2Int entityBCoordinates = PopRandomFromList(ref entitiesToShuffle).GridCoordinates;
             _gridController.SwapEntities(entityACoordinates, entityBCoordinates);
         }
+        _gridController.UpdateAllEntities();
     }
 
     private T PopRandomFromList<T>(ref List<T> list)
