@@ -22,6 +22,10 @@ public class GridEntitySpawner
         this._collumnCount = gridController.CollumnCount;
         BlockSpawnRequests = new int[_collumnCount];
         CalculateSpawnPositionRow(settings.SpawnHeight);
+    }
+
+    public void FillAllGrid()
+    {
         StartFillBoardRequest();
         SummonRequestedEntities();
     }
@@ -57,27 +61,29 @@ public class GridEntitySpawner
     // spawns grid entities at the requested collumns
     public void SummonRequestedEntities()
     {
+        int[] summonRequestsCopy = (int[]) BlockSpawnRequests.Clone();
+        ClearRequests();
+
         for (int i = 0; i < _collumnCount; i++)
         {
-            for (int j = BlockSpawnRequests[i]-1; j >=0 ; j--)
+            for (int j = summonRequestsCopy[i]-1; j >=0 ; j--)
             {
                 Vector2Int gridCoordinates = new Vector2Int(_gridController.RowCount - j - 1, i);
-                IGridEntityTypeDefinition randomBlockType = _gridEntityTypes[Random.Range(0, _gridEntityTypes.Length)];
-                GameObject newEntityGO = ObjectPooler.Instance.Spawn(randomBlockType.GridEntityPrefab.name, 
+                IGridEntityTypeDefinition randomEntityType = _gridEntityTypes[Random.Range(0, _gridEntityTypes.Length)];
+                GameObject newEntityGO = ObjectPooler.Instance.Spawn(randomEntityType.GridEntityPrefab.name, 
                     _spawnPositionRow[i]-j*new Vector2(0,_gridController.GridCellSpacing),
                     Quaternion.identity);
                 newEntityGO.transform.SetParent(_gridParentTransform);
-                newEntityGO.gameObject.name = $"Block {i}_{j}";
+                newEntityGO.gameObject.name = $"{randomEntityType.GridEntityTypeName} {i}_{j}";
 
                 newEntityGO.GetComponent<RectTransform>().sizeDelta = new Vector2(_gridController.GridCellSpacing, _gridController.GridCellSpacing);
                 IGridEntity newEntity = newEntityGO.GetComponent<IGridEntity>();
-                newEntity.SetupEntity(_gridController, randomBlockType);
+                newEntity.SetupEntity(_gridController, randomEntityType);
                 _gridController.RegisterGridEntityToPosition(newEntity, gridCoordinates.x, gridCoordinates.y);
                 newEntity.OnMoveEntity(gridCoordinates, IGridEntity.MovementMode.Linear);
             }
         }
         _gridController.CallCachedChanges();
-        ClearRequests();
     }
 
     [System.Serializable]

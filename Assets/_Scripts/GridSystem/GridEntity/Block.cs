@@ -23,13 +23,20 @@ public class Block : BasicFallingGridEntity
         if (onComplete != null) _lastTween.onComplete += () => onComplete();
     }
 
-    public void AnimateBlockShake(Action onComplete = null)
+    public void AnimateShake()
     {
         int randomDirection = UnityEngine.Random.value < .5 ? 1 : -1;
         CompleteLastTween();
         _lastTween = transform.DOPunchRotation(new Vector3(0, 0, randomDirection * 14), .1f);
         _lastTween.onComplete += () => transform.DOPunchRotation(new Vector3(0, 0, -randomDirection * 7), .1f);
-        if (onComplete != null) _lastTween.onComplete += () => onComplete();
+    }
+
+    public void AnimateDestroy()
+    {
+        int randomDirection = UnityEngine.Random.value < .5 ? 1 : -1;
+        CompleteLastTween();
+        _lastTween = transform.DOPunchScale(new Vector3(.3f, .3f, .3f), DestroyAnimationDuration);
+        _lastTween.onComplete += OnEntityDestroy;
     }
 
     public void OnClickBlock()
@@ -41,7 +48,9 @@ public class Block : BasicFallingGridEntity
     {
         if (!_gridController.GridInterractable) return;
         if (!_matchOnClick) return;
-        if (!CreateMatchEvent()) MatchFail();
+        bool matchSuccess = CreateMatchEvent();
+        Debug.Log("TryMatch: " + matchSuccess);
+        if (!matchSuccess) MatchFail();
     }
 
     private bool CreateMatchEvent()
@@ -52,7 +61,7 @@ public class Block : BasicFallingGridEntity
 
     private void MatchFail()
     {
-        AnimateBlockShake();
+        AnimateShake();
     }
 
     public override void SetupEntity(GridController grid, IGridEntityTypeDefinition blockType)
@@ -83,7 +92,7 @@ public class Block : BasicFallingGridEntity
     }
 
     public override void OnUpdateEntity()
-    {
+    { 
         base.OnUpdateEntity();
         CheckMatchGroup();
     }
@@ -100,10 +109,16 @@ public class Block : BasicFallingGridEntity
         }
     }
 
-    public override void DestoryEntityWithCallback(Action onDestroy)
+    public override void DestoryEntity()
     {
-        AnimateBlockShake(onDestroy);
-        poolObject.GoToPool(DestroyAnimationDuration);
+        AnimateDestroy();
+    }
+
+    private void OnEntityDestroy()
+    {
+        Debug.Log("OnEntityDestroy: " + StackTraceUtility.ExtractStackTrace());
+        OnEntityDestroyed.Invoke();
+        poolObject.GoToPool();
     }
 
     public void AssignMatchGroup(List<Block> group)

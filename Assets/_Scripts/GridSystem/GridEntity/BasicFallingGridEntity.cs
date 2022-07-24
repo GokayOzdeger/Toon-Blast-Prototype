@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using Utilities;
 
@@ -10,7 +11,8 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
 {
     [SerializeField] protected Image entityImage;
     [SerializeField] protected PoolObject poolObject;
-    
+
+    public UnityEvent OnEntityDestroyed { get; private set; } = new UnityEvent();
     public IGridEntityTypeDefinition EntityType { get; protected set; }
     public Vector2Int GridCoordinates { get; protected set; }
     public Transform EntityTransform => transform;
@@ -48,6 +50,11 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
         //
     }
 
+    public virtual void OnMoveEnded()
+    {
+        //
+    }
+
     public virtual void OnMoveEntity(Vector2Int newCoordinates, IGridEntity.MovementMode movementMode)
     {
         MoveToCoordinate(newCoordinates, movementMode);
@@ -80,7 +87,7 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
             default:
                 break;
         }
-        moveTween.onComplete += () => _gridController.EntityEndProcess();
+        moveTween.onComplete += () => { _gridController.EntityEndProcess(); OnMoveEnded(); };
         CacheTween(moveTween);
     }
 
@@ -96,22 +103,25 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
 
     protected void KillLastTween()
     {
-        if (_lastTween != null) _lastTween.Kill(true);
+        if (_lastTween == null) return; 
+        _lastTween.Kill(true);
     }
 
-    public virtual void DestoryEntityWithCallback(Action onDestroy)
+    public virtual void DestoryEntity()
     {
         poolObject.GoToPool();
+        OnEntityDestroyed.Invoke();
     }    
 
     public virtual void OnGoToPool()
     {
-        //
+        KillLastTween();
+        EntityType = null;
+        OnEntityDestroyed.RemoveAllListeners();
     }
 
     public virtual void OnPoolSpawn()
     {
-        KillLastTween();
-        EntityType = null;
+        //
     }
 }

@@ -5,10 +5,6 @@ using UnityEngine;
 public class MatchGridEvent : IGridEvent
 {
     public static readonly int MinGroupSizeForExplosion = 2;
-    
-    public bool ProceedGridAfterEventEnds => true;
-    public bool MakeGridUninterractableOnStart => true;
-    
 
     private GridController _gridController;
 
@@ -20,11 +16,16 @@ public class MatchGridEvent : IGridEvent
         _gridController.OnGridEventEnd(this);
     }
 
-    public bool TryEventStart<T>(GridController grid, List<T> effectedEntities) where T : IGridEntity
+    public bool TryEventStart<T>(GridController grid, List<T> effectedEntities) where T : IGridEntity // make static for unnessesary garbages
     {
         if (!grid.GridInterractable) return false;
         if (effectedEntities.Count < MinGroupSizeForExplosion) return false;
-        
+        Debug.Log("Match!");
+        foreach (var entity in effectedEntities)
+        {
+            Debug.Log($"{entity.EntityTransform.name} is matched");
+        }
+
         _gridController = grid;
         _entitiesToDestory = effectedEntities.Count;
 
@@ -34,7 +35,8 @@ public class MatchGridEvent : IGridEvent
         foreach (IGridEntity entityObject in effectedEntities)
         {
             _gridController.CallEntitySpawn(entityObject.GridCoordinates.y);
-            entityObject.DestoryEntityWithCallback(() => OnEntityDestroyed()); 
+            entityObject.OnEntityDestroyed.AddListener(OnEntityDestroyed);
+            entityObject.DestoryEntity();
         }
         return true;
     }

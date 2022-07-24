@@ -14,7 +14,7 @@ public class ShuffleController
             references.ForceShuffleButton.onClick.AddListener(OnClickForceShuffleButton);
     }
 
-    public bool HasLegalMove()
+    public bool CheckShuffleRequired()
     {
         foreach(IGridEntity entity in _gridController.EntityGrid)
         {
@@ -41,6 +41,7 @@ public class ShuffleController
             for (int j = 0; j < _gridController.CollumnCount; j++)
             {
                 IGridEntity entity = _gridController.EntityGrid[i, j];
+                if (entity == null) continue;
                 if (entity.EntityType.EntityIncludedInShuffle) entitiesToShuffle.Add(entity);
             }
         }

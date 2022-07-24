@@ -6,6 +6,9 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] LevelConfig[] levelConfigurations;
     [SerializeField] LevelController.LevelSceneReferences levelSceneReferences;
+
+    public LevelController CurrentLevel { get; private set; }
+    
     public LevelConfig ChosenLevelConfig 
     { 
         get 
@@ -24,6 +27,17 @@ public class GameManager : MonoBehaviour
 
     private void CreateNewLevel()
     {
-        LevelController controller = new LevelController(ChosenLevelConfig, levelSceneReferences);
+        CurrentLevel = new LevelController(ChosenLevelConfig, levelSceneReferences);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (CurrentLevel == null) return;
+        foreach (IGridEntity entity in CurrentLevel.GridController.EntityGrid)
+        {
+            if (entity == null) continue;
+            Gizmos.color = Color.red;
+            Extensions.drawString(entity.EntityType.GridEntityTypeName, entity.EntityTransform.position, Color.black);
+        }
     }
 }

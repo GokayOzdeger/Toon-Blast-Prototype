@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class LevelController
 {
-    private LevelConfig _config;
+    public LevelConfig Config { get; private set; }
 
-    private GridController _gridController;
+    public GridController GridController { get; private set; }
     
     public LevelController(LevelConfig config, LevelSceneReferences levelSceneReferences)
     {
-        this._config = config;
+        this.Config = config;
 
-        _gridController = new GridController(_config.GridControllerSettings, levelSceneReferences.GridControllerSceneReferences);
+        GridController = new GridController(Config.GridControllerSettings, levelSceneReferences.GridControllerSceneReferences);
     }
 
     [System.Serializable]

@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e02a92592a51084981b01e48f0fe347, type: 3}
+  m_Script: {fileID: 11500000, guid: 98268d3255dd7f84eae0d77096025a8c, type: 3}
   m_Name: Duck
   m_EditorClassIdentifier: 
-  gridEntityPrefab: {fileID: 1905907544835078951, guid: dc5bcb2e100efcc4896a74f905bb6b9d, type: 3}
+  gridEntityPrefab: {fileID: 1905907544835078951, guid: 0e3a313c1a83a6a408452eb608e7f680, type: 3}
   gridEntityTypeName: Duck
   defaultSprite: {fileID: 21300000, guid: 49c10b10e26eb7543b660ba4ed53df32, type: 3}
   entityIncludedInShuffle: 0
-  explodesOnClick: 0

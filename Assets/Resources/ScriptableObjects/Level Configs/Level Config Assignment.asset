@@ -13,17 +13,14 @@ MonoBehaviour:
   m_Name: Level Config Assignment
   m_EditorClassIdentifier: 
   gridControllerSettings:
-    rowCount: 9
-    collumnCount: 9
-    maxEntitiesPerRow: 9
-    maxEnttiesPerCollumn: 9
+    rowCount: 2
+    collumnCount: 2
+    maxEntitiesPerRow: 2
+    maxEnttiesPerCollumn: 2
     gridFrameWidthAdd: 21
     gridFrameHeightAdd: 40
     gridEntitySpawnerSettings:
       entityTypes:
       - {fileID: 11400000, guid: 13aaf49889056f84e8ff0fa91ba3f284, type: 2}
       - {fileID: 11400000, guid: 319c644cdc1abc34db28782897426d92, type: 2}
-      - {fileID: 11400000, guid: 841d8ed8f448fbb43b9fef754a714d48, type: 2}
-      - {fileID: 11400000, guid: bdc70d9deda57ba4db97895bc119d53c, type: 2}
-      - {fileID: 11400000, guid: 46b091dbc55ad4143a4022cbf6e8b5fe, type: 2}
       spawnHeight: 500

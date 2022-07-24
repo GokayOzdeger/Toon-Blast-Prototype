@@ -14,15 +14,17 @@ public partial class GridController
         [SerializeField] private int maxEnttiesPerCollumn;
         [BHeader("Grid Frame Settings")]
         [SerializeField] private float gridFrameWidthAdd;
-        [SerializeField] private float gridFrameHeightAdd;
+        [SerializeField] private float gridFrameBottomAdd;
+        [SerializeField] private float gridFrameTopAdd;
         [Group]
         [SerializeField] private GridEntitySpawner.GridEntitySpawnerSettings gridEntitySpawnerSettings;
 
         public uint RowCount => rowCount;
         public uint CollumnCount => collumnCount;
         public int MaxEntitiesPerSide => maxEntitiesPerRow;
-        public float GridFrameWidthAdd => gridFrameWidthAdd;
-        public float GridFrameHeightAdd => gridFrameHeightAdd;
+        public float GridFrameWidthAdd => gridFrameWidthAdd/100;
+        public float GridFrameBottomAdd => gridFrameBottomAdd/100;
+        public float GridFrameTopAdd => gridFrameTopAdd/100;
 
         public GridEntitySpawner.GridEntitySpawnerSettings GridEntitySpawnerSettings => gridEntitySpawnerSettings;
     }

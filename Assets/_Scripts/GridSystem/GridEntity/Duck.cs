@@ -6,24 +6,35 @@ using UnityEngine;
 
 public class Duck : BasicFallingGridEntity
 {
-    public override void OnUpdateEntity()
+    private readonly float DestroyAnimationDuration = .5f;
+    
+    public override void OnMoveEnded()
     {
-        base.OnUpdateEntity();
-        if (GridCoordinates.y == 0) DestoryEntityWithCallback(null);
+        base.OnMoveEnded();
+        if (GridCoordinates.x == 0)
+        {
+            Debug.Log("Duck destroy start");
+            DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent();
+            destroyEvent.TryEventStart(_gridController, new List<Duck>() { this });
+        }
     }
 
-    public override void DestoryEntityWithCallback(Action onDestroy)
+    public override void DestoryEntity()
     {
-        base.DestoryEntityWithCallback(onDestroy);
-        AnimateBlockShake(onDestroy);
+        AnimateDestroy();
     }
 
-    public void AnimateBlockShake(Action onComplete = null)
+    public void AnimateDestroy()
     {
         int randomDirection = UnityEngine.Random.value < .5 ? 1 : -1;
         CompleteLastTween();
-        _lastTween = transform.DOPunchRotation(new Vector3(0, 0, randomDirection * 14), .1f);
-        _lastTween.onComplete += () => transform.DOPunchRotation(new Vector3(0, 0, -randomDirection * 7), .1f);
-        if (onComplete != null) _lastTween.onComplete += () => onComplete();
+        _lastTween = transform.DOPunchScale(new Vector3(.3f, .3f, .3f), DestroyAnimationDuration);
+        _lastTween.onComplete += OnEntityDestroy;
+    }
+
+    private void OnEntityDestroy()
+    {
+        OnEntityDestroyed.Invoke();
+        poolObject.GoToPool();
     }
 }

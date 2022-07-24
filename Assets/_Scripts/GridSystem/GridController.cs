@@ -32,14 +32,15 @@ public partial class GridController
     public int CollumnCount { get { return (int)gridCollumnCount; } }
     public float GridCellSpacing { get { return gridCellSpacing * _canvasScaler.transform.localScale.x; } }
 
-    public UnityEvent<Vector2Int> OnGridChange = new UnityEvent<Vector2Int>();
+    private UnityEvent<Vector2Int> OnGridChange = new UnityEvent<Vector2Int>();
     public Vector2[,] GridPositions { get; private set; }
     public IGridEntity[,] EntityGrid { get; private set; }
-    public bool GridInterractable { get; private set; } = true;
+    public bool GridInterractable { get { return _gridEventsInProgress == 0 && _entitiesInProcess == 0; } } 
 
     private List<Vector2Int> _cachedGridChanges = new List<Vector2Int>();
     private bool[,] _controlledGridCoordinates;
-    protected int _entitiesInProcess = 0;
+    private int _entitiesInProcess = 0;
+    private int _gridEventsInProgress = 0;
     
     private ShuffleController _shuffleController; 
 
@@ -64,8 +65,8 @@ public partial class GridController
     #region Private Methods
     private void CalculateCellSpacing(GridControllerSettings settings, GridControllerSceneReferences references)
     {
-        float rowCellSpacing = references.GridRect.rect.width / (settings.MaxEntitiesPerSide - 1);
-        float collumnCellSpacing = references.GridRect.rect.height / (settings.MaxEntitiesPerSide - 1);
+        float rowCellSpacing = references.GridRect.rect.width / (settings.MaxEntitiesPerSide);
+        float collumnCellSpacing = references.GridRect.rect.height / (settings.MaxEntitiesPerSide);
         gridCellSpacing = Mathf.Min(rowCellSpacing, collumnCellSpacing);
     }
     
@@ -73,6 +74,8 @@ public partial class GridController
     {
         _shuffleController = new ShuffleController(this, references.ShuffleControllerSceneReferences);
         _entitySpawner = new GridEntitySpawner(this, settings.GridEntitySpawnerSettings, references.GridEntitySpawnerSceneReferences);
+        _entitySpawner.FillAllGrid();
+        _shuffleController.CheckShuffleRequired();
     }
 
     private void WriteEntityMovementToGrid(Vector2Int newCoordinates, IGridEntity entity)
@@ -127,7 +130,9 @@ public partial class GridController
 
     private void ResizeGridFrame(RectTransform frame, GridControllerSettings settings)
     {
-        frame.sizeDelta = new Vector2(RowCount * gridCellSpacing + settings.GridFrameWidthAdd, CollumnCount * gridCellSpacing + settings.GridFrameHeightAdd);
+        Vector2 frameSizeAdd = new Vector2(settings.GridFrameWidthAdd, settings.GridFrameBottomAdd + settings.GridFrameTopAdd);
+        frame.sizeDelta = new Vector2(RowCount * gridCellSpacing, CollumnCount * gridCellSpacing) + frameSizeAdd * GridCellSpacing;
+        frame.transform.position += new Vector3(0, settings.GridFrameTopAdd - settings.GridFrameBottomAdd, 0) * GridCellSpacing;
     }
 
     private void CollectMatchingSurroundingEntitiesRecursive<T>(T entity, ref List<T> entityListToCollect) where T : IGridEntity
@@ -178,13 +183,12 @@ public partial class GridController
 
     public void OnGridEventStart(IGridEvent gridEvent)
     {
-        if (!gridEvent.MakeGridUninterractableOnStart) return;
-        GridInterractable = false;
+        _gridEventsInProgress++;
     }
 
     public void OnGridEventEnd(IGridEvent gridEvent)
     {
-        if (!gridEvent.ProceedGridAfterEventEnds) return;
+        _gridEventsInProgress--;
         CallCachedChanges();
         _entitySpawner.SummonRequestedEntities();
     }
@@ -234,10 +238,9 @@ public partial class GridController
     public void EntityEndProcess()
     {
         _entitiesInProcess--;
-        if (_entitiesInProcess == 0)
+        if (GridInterractable)
         {
-            if(_shuffleController.HasLegalMove()) GridInterractable = true;
-            
+            _shuffleController.CheckShuffleRequired();
         }
     }
 
