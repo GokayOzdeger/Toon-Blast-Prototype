@@ -74,7 +74,7 @@ public partial class GridController
     {
         _shuffleController = new ShuffleController(this, references.ShuffleControllerSceneReferences);
         _entitySpawner = new GridEntitySpawner(this, settings.GridEntitySpawnerSettings, references.GridEntitySpawnerSceneReferences);
-        _entitySpawner.FillAllGrid();
+        _entitySpawner.FillAllGridWithStartLayout();
         _shuffleController.CheckShuffleRequired();
     }
 
@@ -131,7 +131,7 @@ public partial class GridController
     private void ResizeGridFrame(RectTransform frame, GridControllerSettings settings)
     {
         Vector2 frameSizeAdd = new Vector2(settings.GridFrameWidthAdd, settings.GridFrameBottomAdd + settings.GridFrameTopAdd);
-        frame.sizeDelta = new Vector2(RowCount * gridCellSpacing, CollumnCount * gridCellSpacing) + frameSizeAdd * GridCellSpacing;
+        frame.sizeDelta = new Vector2(CollumnCount * gridCellSpacing, RowCount * gridCellSpacing) + frameSizeAdd * GridCellSpacing;
         frame.transform.position += new Vector3(0, settings.GridFrameTopAdd - settings.GridFrameBottomAdd, 0) * GridCellSpacing;
     }
 

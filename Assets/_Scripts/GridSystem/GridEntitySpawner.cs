@@ -13,6 +13,7 @@ public class GridEntitySpawner
     private int _collumnCount;
 
     private GridController _gridController;
+    private ArrayLayout _startLayout;
 
     public GridEntitySpawner(GridController gridController, GridEntitySpawnerSettings settings, GridEntitySpawnerSceneReferences references )
     {
@@ -20,14 +21,15 @@ public class GridEntitySpawner
         this._gridParentTransform = references.GridParentTransform;
         this._gridController = gridController;
         this._collumnCount = gridController.CollumnCount;
+        this._startLayout = settings.gridStartLayout;
         BlockSpawnRequests = new int[_collumnCount];
         CalculateSpawnPositionRow(settings.SpawnHeight);
     }
 
-    public void FillAllGrid()
+    public void FillAllGridWithStartLayout()
     {
         StartFillBoardRequest();
-        SummonRequestedEntities();
+        SummonRequestedEntities(_startLayout);
     }
 
     private void CalculateSpawnPositionRow(int spawnHeight)
@@ -59,7 +61,7 @@ public class GridEntitySpawner
     }
 
     // spawns grid entities at the requested collumns
-    public void SummonRequestedEntities()
+    public void SummonRequestedEntities(ArrayLayout layout = null)
     {
         int[] summonRequestsCopy = (int[]) BlockSpawnRequests.Clone();
         ClearRequests();
@@ -69,7 +71,12 @@ public class GridEntitySpawner
             for (int j = summonRequestsCopy[i]-1; j >=0 ; j--)
             {
                 Vector2Int gridCoordinates = new Vector2Int(_gridController.RowCount - j - 1, i);
-                IGridEntityTypeDefinition randomEntityType = _gridEntityTypes[Random.Range(0, _gridEntityTypes.Length)];
+
+                // choose random entity type if startLayout is missing a configuration for it
+                IGridEntityTypeDefinition randomEntityType = null;
+                if (layout == null || layout.rows[j].row[i] == null) randomEntityType = _gridEntityTypes[Random.Range(0, _gridEntityTypes.Length)];
+                else randomEntityType = layout.rows[j].row[i];
+                
                 GameObject newEntityGO = ObjectPooler.Instance.Spawn(randomEntityType.GridEntityPrefab.name, 
                     _spawnPositionRow[i]-j*new Vector2(0,_gridController.GridCellSpacing),
                     Quaternion.identity);
@@ -97,9 +104,13 @@ public class GridEntitySpawner
     [System.Serializable]
     public class GridEntitySpawnerSettings
     {
+        [BHeader("Grid Start Layout")]
+        public ArrayLayout gridStartLayout = new ArrayLayout(9, 9);
+
         [BHeader("Grid Entity Spawner Settings")]
         [SerializeField] private BasicGridEntityTypeDefinition[] entityTypes;
         [SerializeField] private int spawnHeight;
+
         public BasicGridEntityTypeDefinition[] EntityTypes => entityTypes;
         public int SpawnHeight => spawnHeight;
     }

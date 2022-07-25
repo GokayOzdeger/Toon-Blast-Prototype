@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 #if UNITY_EDITOR
 #endif
 
@@ -11,11 +12,13 @@ public partial class GridController
         [SerializeField] private uint rowCount;
         [SerializeField] private uint collumnCount;
         [SerializeField] private int maxEntitiesPerRow;
-        [SerializeField] private int maxEnttiesPerCollumn;
+        [SerializeField] /*[SO2DArray]*/private int maxEntitiesPerCollumn;
+        
         [BHeader("Grid Frame Settings")]
         [SerializeField] private float gridFrameWidthAdd;
         [SerializeField] private float gridFrameBottomAdd;
         [SerializeField] private float gridFrameTopAdd;
+
         [Group]
         [SerializeField] private GridEntitySpawner.GridEntitySpawnerSettings gridEntitySpawnerSettings;
 
