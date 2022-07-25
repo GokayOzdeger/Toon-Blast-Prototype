@@ -13,7 +13,7 @@ public class GridEntitySpawner
     private int _collumnCount;
 
     private GridController _gridController;
-    private ArrayLayout _startLayout;
+    private GridStartLayout _startLayout;
 
     public GridEntitySpawner(GridController gridController, GridEntitySpawnerSettings settings, GridEntitySpawnerSceneReferences references )
     {
@@ -61,7 +61,7 @@ public class GridEntitySpawner
     }
 
     // spawns grid entities at the requested collumns
-    public void SummonRequestedEntities(ArrayLayout layout = null)
+    public void SummonRequestedEntities(GridStartLayout layout = null)
     {
         int[] summonRequestsCopy = (int[]) BlockSpawnRequests.Clone();
         ClearRequests();
@@ -105,7 +105,7 @@ public class GridEntitySpawner
     public class GridEntitySpawnerSettings
     {
         [BHeader("Grid Start Layout")]
-        public ArrayLayout gridStartLayout = new ArrayLayout(9, 9);
+        public GridStartLayout gridStartLayout = new GridStartLayout(9, 9);
 
         [BHeader("Grid Entity Spawner Settings")]
         [SerializeField] private BasicGridEntityTypeDefinition[] entityTypes;

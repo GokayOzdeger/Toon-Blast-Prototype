@@ -2,7 +2,7 @@
 using UnityEditor;
 using System.Collections;
 
-[CustomPropertyDrawer(typeof(ArrayLayout))]
+[CustomPropertyDrawer(typeof(GridStartLayout))]
 public class ArrayPropertyDrawer : PropertyDrawer {
 
 	private readonly float cellSize = 40;
