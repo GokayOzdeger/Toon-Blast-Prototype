@@ -37,7 +37,7 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
         entityImage.sprite = sprite;
     }
 
-    public virtual void OnGridChange(Vector2Int changeCoordinate)
+    public virtual void OnGridChange(Vector2Int changeCoordinate, GridChangeEventType gridChangeEventType)
     {
         if (GridCoordinates - changeCoordinate != new Vector2Int(1, 0)) return;
         if (_gridController.EntityGrid[changeCoordinate.x, changeCoordinate.y] != null) return;
@@ -55,12 +55,12 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
         //
     }
 
-    public virtual void OnMoveEntity(Vector2Int newCoordinates, IGridEntity.MovementMode movementMode)
+    public virtual void OnMoveEntity(Vector2Int newCoordinates, MovementMode movementMode)
     {
         MoveToCoordinate(newCoordinates, movementMode);
     }
 
-    protected void MoveToCoordinate(Vector2Int newCoordinates, IGridEntity.MovementMode movementMode)
+    protected void MoveToCoordinate(Vector2Int newCoordinates, MovementMode movementMode)
     {
         KillLastTween();
         _gridController.EntityStartProcess();
@@ -70,10 +70,10 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
         Tween moveTween = null;
         switch (movementMode)
         {
-            case IGridEntity.MovementMode.Linear:
+            case MovementMode.Linear:
                 moveTween = transform.DOMove(targetPos, moveDuration).SetEase(Ease.OutBounce);
                 break;
-            case IGridEntity.MovementMode.Curvy:
+            case MovementMode.Curvy:
                 float curveAmountMultiplier = .2f;
                 float distanceToTarget = Vector2.Distance((Vector2)transform.position, targetPos);
                 Vector2 moveDir = (targetPos - (Vector2)transform.position).normalized;

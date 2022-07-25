@@ -76,15 +76,15 @@ public class Block : BasicFallingGridEntity
         CurrentMatchGroup = null;
     }
 
-    public override void OnMoveEntity(Vector2Int newCoordinates, IGridEntity.MovementMode movementMode)
+    public override void OnMoveEntity(Vector2Int newCoordinates, MovementMode movementMode)
     {
         // if this block moved, we need to recalculate the match group
         MatchGroupCalculated = false;
         base.OnMoveEntity(newCoordinates, movementMode);
     }
-    public override void OnGridChange(Vector2Int changeCoordinate)
+    public override void OnGridChange(Vector2Int changeCoordinate, GridChangeEventType gridChangeEventType)
     {
-        base.OnGridChange(changeCoordinate);
+        base.OnGridChange(changeCoordinate, gridChangeEventType);
         
         // if a surrounding block is changed, we need to recalculate the match group
         if ((GridCoordinates - changeCoordinate).magnitude == 1)

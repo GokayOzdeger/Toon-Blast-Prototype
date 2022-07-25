@@ -87,7 +87,7 @@ public class GridEntitySpawner
                 IGridEntity newEntity = newEntityGO.GetComponent<IGridEntity>();
                 newEntity.SetupEntity(_gridController, randomEntityType);
                 _gridController.RegisterGridEntityToPosition(newEntity, gridCoordinates.x, gridCoordinates.y);
-                newEntity.OnMoveEntity(gridCoordinates, IGridEntity.MovementMode.Linear);
+                newEntity.OnMoveEntity(gridCoordinates, MovementMode.Linear);
             }
         }
         _gridController.CallCachedChanges();
