@@ -37,7 +37,7 @@ public class Balloon : BasicFallingGridEntity
 
     private void OnEntityDestroy()
     {
-        OnEntityDestroyed.Invoke();
+        OnEntityDestroyed.Invoke(this);
         poolObject.GoToPool();
     }
 }

@@ -70,12 +70,4 @@ public class ShuffleController
     {
         DoShuffle();
     }
-
-    [System.Serializable]
-    public class ShuffleControllerSceneReferences
-    {
-        [BHeader("Shuffle Controller References")]
-        [SerializeField] private Button forceShuffleButton;
-        public Button ForceShuffleButton => forceShuffleButton;
-    }
 }

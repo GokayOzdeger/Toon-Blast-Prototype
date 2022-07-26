@@ -36,7 +36,7 @@ public class MatchGridEvent : IGridEvent
         return true;
     }
 
-    private void OnEntityDestroyed()
+    private void OnEntityDestroyed(IGridEntity entityDestroyed)
     {
         _entitiesDestroyed++;
         if (_entitiesDestroyed == _entitiesToDestory) OnEventEnd();

@@ -5,7 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "ScriptableObjects/Level Config")]
 public class LevelConfig : ScriptableObject
 {
-    [SerializeField] private GridController.GridControllerSettings gridControllerSettings;
+    [Group][SerializeField] private GridControllerSettings gridControllerSettings;
+    [Group][SerializeField] private GridEntitySpawnerSettings gridEntitySpawnerSettings;
+    [Group][SerializeField] private GridGoalsControllerSettings goalsControllerSettings;
 
-    public GridController.GridControllerSettings GridControllerSettings => gridControllerSettings;
+    public GridControllerSettings GridControllerSettings => gridControllerSettings;
+    public GridEntitySpawnerSettings GridEntitySpawnerSettings => gridEntitySpawnerSettings;
+    public GridGoalsControllerSettings GridGoalsControllerSettings => goalsControllerSettings;
 }

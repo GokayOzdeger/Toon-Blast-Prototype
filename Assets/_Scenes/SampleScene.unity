@@ -595,6 +595,7 @@ RectTransform:
   m_Children:
   - {fileID: 178196571}
   - {fileID: 2012839172}
+  - {fileID: 894057199}
   m_Father: {fileID: 292213349}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -704,6 +705,77 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &894057198
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 894057199}
+  - component: {fileID: 894057201}
+  - component: {fileID: 894057200}
+  m_Layer: 5
+  m_Name: GridGoalsParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &894057199
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894057198}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 486455214}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 42, y: 32}
+  m_SizeDelta: {x: 284.0314, y: 125.658}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &894057200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894057198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
+--- !u!222 &894057201
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894057198}
+  m_CullTransparentMesh: 1
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -967,17 +1039,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelConfigurations:
-  - {fileID: 11400000, guid: 3ce3f498590490745b8ba256306bafc2, type: 2}
+  - {fileID: 11400000, guid: 773845dfa745c944d8052605a80b3152, type: 2}
   levelSceneReferences:
     gridControllerSceneReferences:
       gridRect: {fileID: 1298546746}
       gridOverlay: {fileID: 435024593}
       gridFrame: {fileID: 2092846610}
       canvasScaler: {fileID: 1666083823}
-      gridEntitySpawnerSceneReferences:
-        gridParentTransform: {fileID: 1298546746}
-      shuffleControllerSceneReferences:
-        forceShuffleButton: {fileID: 290711978}
+    gridEntitySpawnerSceneReferences:
+      gridParentTransform: {fileID: 1298546746}
+    shuffleControllerSceneReferences:
+      forceShuffleButton: {fileID: 290711978}
+    goalsControllerReferences:
+      goalObjectsParent: {fileID: 894057199}
 --- !u!1 &1298546745
 GameObject:
   m_ObjectHideFlags: 0

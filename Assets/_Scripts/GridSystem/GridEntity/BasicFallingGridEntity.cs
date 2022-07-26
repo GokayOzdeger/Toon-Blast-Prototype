@@ -12,7 +12,7 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
     [SerializeField] protected Image entityImage;
     [SerializeField] protected PoolObject poolObject;
 
-    public UnityEvent OnEntityDestroyed { get; private set; } = new UnityEvent();
+    public UnityEvent<IGridEntity> OnEntityDestroyed { get; private set; } = new UnityEvent<IGridEntity>();
     public IGridEntityTypeDefinition EntityType { get; protected set; }
     public Vector2Int GridCoordinates { get; protected set; }
     public Transform EntityTransform => transform;
@@ -123,7 +123,7 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
     public virtual void DestoryEntity()
     {
         poolObject.GoToPool();
-        OnEntityDestroyed.Invoke();
+        OnEntityDestroyed.Invoke(this);
     }    
 
     public virtual void OnGoToPool()

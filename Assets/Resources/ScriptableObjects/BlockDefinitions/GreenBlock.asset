@@ -15,6 +15,6 @@ MonoBehaviour:
   gridEntityPrefab: {fileID: 1905907544835078951, guid: dc5bcb2e100efcc4896a74f905bb6b9d, type: 3}
   gridEntityTypeName: Green
   defaultSprite: {fileID: 21300000, guid: e1ada36e74f3ec946a435d0ee6920f6c, type: 3}
-  onDestroyParticle: {fileID: 9049895042151772740, guid: 2eda2f5f067a395449d24e16753be244, type: 3}
+  onDestroyParticle: {fileID: 7218581546105527683, guid: 2f27c087957ed804ab709482003f8c3a, type: 3}
   entityIncludedInShuffle: 1
   explodesOnClick: 1

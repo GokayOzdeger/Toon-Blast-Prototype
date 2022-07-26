@@ -20,6 +20,7 @@ public class ColorDividerWindows : EditorWindow
     {
          if(Selection.count == 1)
          {
+            if (!Selection.activeGameObject) return false;
             if (Selection.activeGameObject.name.StartsWith(ColorDividerSettings.Instance.NameStartsWith))
             {
                 return true;
@@ -31,7 +32,6 @@ public class ColorDividerWindows : EditorWindow
     private GameObject _go;
     private bool _movedToMouse = false;
     private Color32 _color = new Color32();
-    private Vector2 _offset = new Vector2(0,0);
 
     void OnGUI()
     {
@@ -70,11 +70,6 @@ public class ColorDividerWindows : EditorWindow
             //
         }
     }
-
-    //private void OnLostFocus()
-    //{
-    //    Close();
-    //}
 
     private void CloseWindowOnEscape(Event e)
     {

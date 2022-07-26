@@ -117,7 +117,7 @@ public class Block : BasicFallingGridEntity
     private void OnEntityDestroy()
     {
         Debug.Log("OnEntityDestroy: " + StackTraceUtility.ExtractStackTrace());
-        OnEntityDestroyed.Invoke();
+        OnEntityDestroyed.Invoke(this);
         poolObject.GoToPool();
     }
 

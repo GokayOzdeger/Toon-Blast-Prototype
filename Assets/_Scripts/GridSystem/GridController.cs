@@ -9,7 +9,7 @@ using UnityEngine.Events;
 using UnityEditor;
 #endif
 
-public partial class GridController
+public class GridController
 {
     private static Vector2Int[] _surroundingCoordinateMatrises = new Vector2Int[]
     {
@@ -47,6 +47,7 @@ public partial class GridController
     private ShuffleController _shuffleController; 
 
     private GridEntitySpawner _entitySpawner;
+    private GridGoalsController _goalController;
 
     public GridController(GridControllerSettings settings , GridControllerSceneReferences references)
     {
@@ -61,7 +62,16 @@ public partial class GridController
         CalculateCellSpacing(settings, references);
         CreateGridAndCalculatePositions();
         ResizeGridFrame(references.GridFrame, settings);
-        CreateSystemComponents(settings, references);
+    }
+
+    public void StartGrid(ShuffleController shuffleController, GridEntitySpawner entitySpawner, GridGoalsController goalController)
+    {
+        _shuffleController = shuffleController;
+        _entitySpawner = entitySpawner;
+        _goalController = goalController;
+
+        _entitySpawner.FillAllGridWithStartLayout();
+        _shuffleController.CheckShuffleRequired();
         UpdateAllEntities();
     }
 
@@ -71,14 +81,6 @@ public partial class GridController
         float rowCellSpacing = references.GridRect.rect.width / (settings.MaxEntitiesPerSide);
         float collumnCellSpacing = references.GridRect.rect.height / (settings.MaxEntitiesPerSide);
         gridCellSpacing = Mathf.Min(rowCellSpacing, collumnCellSpacing);
-    }
-    
-    private void CreateSystemComponents(GridControllerSettings settings, GridControllerSceneReferences references)
-    {
-        _shuffleController = new ShuffleController(this, references.ShuffleControllerSceneReferences);
-        _entitySpawner = new GridEntitySpawner(this, settings.GridEntitySpawnerSettings, references.GridEntitySpawnerSceneReferences);
-        _entitySpawner.FillAllGridWithStartLayout();
-        _shuffleController.CheckShuffleRequired();
     }
 
     private void WriteEntityMovementToGrid(Vector2Int newCoordinates, IGridEntity entity)
@@ -179,6 +181,7 @@ public partial class GridController
     
     public void RegisterGridEntityToPosition(IGridEntity entity, int collumnIndex, int rowIndex)
     {
+        entity.OnEntityDestroyed.AddListener(_goalController.OnEntityDestroyed); // subscribe GridGoalController to new entity to keep track of destroyed entities
         EntityGrid[collumnIndex, rowIndex] = entity;
         CacheGridChange(new Vector2Int(collumnIndex, rowIndex), GridChangeEventType.EntityMoved, entity.EntityType);
         OnGridChange.AddListener(entity.OnGridChange);

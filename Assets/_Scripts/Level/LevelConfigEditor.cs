@@ -7,10 +7,10 @@ public class LevelConfigEditor : Editor
     {
         base.OnInspectorGUI();
         LevelConfig levelConfig = (LevelConfig)target;
-        GridStartLayout gridStartLayout = levelConfig.GridControllerSettings.GridEntitySpawnerSettings.gridStartLayout;
+        GridStartLayout gridStartLayout = levelConfig.GridEntitySpawnerSettings.gridStartLayout;
         if (gridStartLayout.RowCount != levelConfig.GridControllerSettings.RowCount || gridStartLayout.CollumnCount != levelConfig.GridControllerSettings.CollumnCount)
         {
-            levelConfig.GridControllerSettings.GridEntitySpawnerSettings.gridStartLayout = new GridStartLayout((int)levelConfig.GridControllerSettings.RowCount, (int)levelConfig.GridControllerSettings.CollumnCount);
+            levelConfig.GridEntitySpawnerSettings.gridStartLayout = new GridStartLayout((int)levelConfig.GridControllerSettings.RowCount, (int)levelConfig.GridControllerSettings.CollumnCount);
         }
     }
 }

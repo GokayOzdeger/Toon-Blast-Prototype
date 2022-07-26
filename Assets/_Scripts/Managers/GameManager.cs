@@ -5,7 +5,7 @@ using Utilities;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] LevelConfig[] levelConfigurations;
-    [SerializeField] LevelController.LevelSceneReferences levelSceneReferences;
+    [SerializeField] LevelSceneReferences levelSceneReferences;
 
     public LevelController CurrentLevel { get; private set; }
     
@@ -30,7 +30,13 @@ public class GameManager : MonoBehaviour
         CurrentLevel = new LevelController(ChosenLevelConfig, levelSceneReferences);
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
+    {
+        DrawGridEntityNames();
+    }
+
+    private void DrawGridEntityNames()
     {
         if (CurrentLevel == null) return;
         foreach (IGridEntity entity in CurrentLevel.GridController.EntityGrid)
@@ -40,4 +46,5 @@ public class GameManager : MonoBehaviour
             Extensions.drawString(entity.EntityType.GridEntityTypeName, entity.EntityTransform.position, Color.black);
         }
     }
+#endif
 }

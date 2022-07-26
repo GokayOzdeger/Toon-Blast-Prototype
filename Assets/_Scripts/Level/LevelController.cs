@@ -5,21 +5,26 @@ using UnityEngine;
 public class LevelController
 {
     public LevelConfig Config { get; private set; }
+    public LevelSceneReferences LevelSceneReferences { get; private set; }
 
     public GridController GridController { get; private set; }
-    
+    public GridEntitySpawner GridEntitySpawner { get; private set; }
+    public ShuffleController ShuffleController { get; private set; }
+    public GridGoalsController GridGoalsController { get; private set; }
+
     public LevelController(LevelConfig config, LevelSceneReferences levelSceneReferences)
     {
         this.Config = config;
-
-        GridController = new GridController(Config.GridControllerSettings, levelSceneReferences.GridControllerSceneReferences);
+        this.LevelSceneReferences = levelSceneReferences;
+        CreateLevelControllers();
     }
 
-    [System.Serializable]
-    public class LevelSceneReferences
+    private void CreateLevelControllers()
     {
-        [Group]
-        [SerializeField] private GridController.GridControllerSceneReferences gridControllerSceneReferences;
-        public GridController.GridControllerSceneReferences GridControllerSceneReferences => gridControllerSceneReferences;
+        GridController = new GridController(Config.GridControllerSettings, LevelSceneReferences.GridControllerSceneReferences);
+        GridEntitySpawner = new GridEntitySpawner(GridController, Config.GridEntitySpawnerSettings, LevelSceneReferences.GridEntitySpawnerSceneReferences);
+        ShuffleController = new ShuffleController(GridController, LevelSceneReferences.ShuffleControllerSceneReferences);
+        GridGoalsController = new GridGoalsController(Config.GridGoalsControllerSettings, LevelSceneReferences.GridGoalsControllerReferences);
+        GridController.StartGrid(ShuffleController, GridEntitySpawner, GridGoalsController);
     }
 }
