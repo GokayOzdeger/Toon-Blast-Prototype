@@ -20,11 +20,6 @@ public class MatchGridEvent : IGridEvent
     {
         if (!grid.GridInterractable) return false;
         if (effectedEntities.Count < MinGroupSizeForExplosion) return false;
-        Debug.Log("Match!");
-        foreach (var entity in effectedEntities)
-        {
-            Debug.Log($"{entity.EntityTransform.name} is matched");
-        }
 
         _gridController = grid;
         _entitiesToDestory = effectedEntities.Count;

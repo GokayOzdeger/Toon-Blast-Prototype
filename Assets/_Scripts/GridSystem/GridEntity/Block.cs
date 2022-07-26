@@ -82,9 +82,9 @@ public class Block : BasicFallingGridEntity
         MatchGroupCalculated = false;
         base.OnMoveEntity(newCoordinates, movementMode);
     }
-    public override void OnGridChange(Vector2Int changeCoordinate, GridChangeEventType gridChangeEventType)
+    public override void OnGridChange(Vector2Int changeCoordinate, GridChangeEventType gridChangeEventType, IGridEntityTypeDefinition entityType)
     {
-        base.OnGridChange(changeCoordinate, gridChangeEventType);
+        base.OnGridChange(changeCoordinate, gridChangeEventType, entityType);
         
         // if a surrounding block is changed, we need to recalculate the match group
         if ((GridCoordinates - changeCoordinate).magnitude == 1)

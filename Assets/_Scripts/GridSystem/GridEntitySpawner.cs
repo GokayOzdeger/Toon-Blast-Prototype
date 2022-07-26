@@ -64,12 +64,14 @@ public class GridEntitySpawner
     public void SummonRequestedEntities(GridStartLayout layout = null)
     {
         int[] summonRequestsCopy = (int[]) BlockSpawnRequests.Clone();
+        int blocksSummoned = 0;
         ClearRequests();
 
         for (int i = 0; i < _collumnCount; i++)
         {
             for (int j = summonRequestsCopy[i]-1; j >=0 ; j--)
             {
+                blocksSummoned++;
                 Vector2Int gridCoordinates = new Vector2Int(_gridController.RowCount - j - 1, i);
 
                 // choose random entity type if startLayout is missing a configuration for it
@@ -90,7 +92,7 @@ public class GridEntitySpawner
                 newEntity.OnMoveEntity(gridCoordinates, MovementMode.Linear);
             }
         }
-        _gridController.CallCachedChanges();
+        if(blocksSummoned > 0) _gridController.CallCachedChanges();
     }
 
     [System.Serializable]

@@ -22,6 +22,7 @@ public partial class GridController
     
     private CanvasScaler _canvasScaler;
     private RectTransform _gridCenterTransform;
+    private RectTransform _gridOverlayTransform;
     
     private uint gridRowCount;
     private uint gridCollumnCount;
@@ -32,12 +33,13 @@ public partial class GridController
     public int CollumnCount { get { return (int)gridCollumnCount; } }
     public float GridCellSpacing { get { return gridCellSpacing * _canvasScaler.transform.localScale.x; } }
 
-    private UnityEvent<Vector2Int,GridChangeEventType> OnGridChange = new UnityEvent<Vector2Int,GridChangeEventType>();
+    private UnityEvent<Vector2Int,GridChangeEventType,IGridEntityTypeDefinition> OnGridChange = new UnityEvent<Vector2Int,GridChangeEventType,IGridEntityTypeDefinition>();
     public Vector2[,] GridPositions { get; private set; }
     public IGridEntity[,] EntityGrid { get; private set; }
-    public bool GridInterractable { get { return _gridEventsInProgress == 0 && _entitiesInProcess == 0; } } 
+    public bool GridInterractable { get { return _gridEventsInProgress == 0 && _entitiesInProcess == 0; } }
+    public RectTransform GridOverlay => _gridOverlayTransform;
 
-    private List<(Vector2Int,GridChangeEventType)> _cachedGridChanges = new List<(Vector2Int,GridChangeEventType)>();
+    private List<(Vector2Int,GridChangeEventType,IGridEntityTypeDefinition)> _cachedGridChanges = new List<(Vector2Int,GridChangeEventType,IGridEntityTypeDefinition)>();
     private bool[,] _controlledGridCoordinates;
     private int _entitiesInProcess = 0;
     private int _gridEventsInProgress = 0;
@@ -51,6 +53,7 @@ public partial class GridController
         // cache settings and references
         this._canvasScaler = references.CanvasScaler;
         this._gridCenterTransform = references.GridRect;
+        this._gridOverlayTransform = references.GridOverlay;
         
         gridRowCount = settings.RowCount;
         gridCollumnCount = settings.CollumnCount;
@@ -84,13 +87,13 @@ public partial class GridController
         EntityGrid[entity.GridCoordinates.x, entity.GridCoordinates.y] = null;
         EntityGrid[newCoordinates.x, newCoordinates.y] = entity;
         entity.OnMoveEntity(newCoordinates, MovementMode.Linear);
-        CacheGridChange(newCoordinates, GridChangeEventType.EntityMoved);
-        CacheGridChange(oldEntityCoordinates, GridChangeEventType.EntityMoved);
+        CacheGridChange(newCoordinates, GridChangeEventType.EntityMoved, entity.EntityType);
+        CacheGridChange(oldEntityCoordinates, GridChangeEventType.EntityMoved, entity.EntityType);
     }
 
-    private void CacheGridChange(Vector2Int changeCords, GridChangeEventType gridChangeEventType)
+    private void CacheGridChange(Vector2Int changeCords, GridChangeEventType gridChangeEventType, IGridEntityTypeDefinition entityType)
     {
-        _cachedGridChanges.Add((changeCords, gridChangeEventType));
+        _cachedGridChanges.Add((changeCords, gridChangeEventType, entityType));
     }
 
     // called on all grid entities after all grid changes are calculated
@@ -177,7 +180,7 @@ public partial class GridController
     public void RegisterGridEntityToPosition(IGridEntity entity, int collumnIndex, int rowIndex)
     {
         EntityGrid[collumnIndex, rowIndex] = entity;
-        CacheGridChange(new Vector2Int(collumnIndex, rowIndex), GridChangeEventType.EntityMoved);
+        CacheGridChange(new Vector2Int(collumnIndex, rowIndex), GridChangeEventType.EntityMoved, entity.EntityType);
         OnGridChange.AddListener(entity.OnGridChange);
     }
 
@@ -199,7 +202,8 @@ public partial class GridController
         foreach (T entityToRemove in entitiesToRemove)
         {
             EntityGrid[entityToRemove.GridCoordinates.x, entityToRemove.GridCoordinates.y] = null;
-            CacheGridChange(entityToRemove.GridCoordinates, GridChangeEventType.EntityDestroyed);
+            CacheGridChange(entityToRemove.GridCoordinates, GridChangeEventType.EntityDestroyed, entityToRemove.EntityType);
+            entityToRemove.EntityTransform.SetParent(_gridOverlayTransform);
         }
     }
 
@@ -219,7 +223,7 @@ public partial class GridController
     {
         while (_cachedGridChanges.Count > 0)
         {
-            OnGridChange.Invoke(_cachedGridChanges[0].Item1, _cachedGridChanges[0].Item2);
+            OnGridChange.Invoke(_cachedGridChanges[0].Item1, _cachedGridChanges[0].Item2, _cachedGridChanges[0].Item3);
             _cachedGridChanges.RemoveAt(0);
         }
         UpdateAllEntities();

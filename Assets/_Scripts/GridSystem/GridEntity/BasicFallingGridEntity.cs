@@ -19,6 +19,7 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
     
     protected GridController _gridController;
     protected Tween _lastTween = null;
+    protected bool _inProcess;
     
     public virtual void SetupEntity(GridController grid, IGridEntityTypeDefinition blockType)
     {
@@ -37,7 +38,7 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
         entityImage.sprite = sprite;
     }
 
-    public virtual void OnGridChange(Vector2Int changeCoordinate, GridChangeEventType gridChangeEventType)
+    public virtual void OnGridChange(Vector2Int changeCoordinate, GridChangeEventType gridChangeEventType, IGridEntityTypeDefinition entityType)
     {
         if (GridCoordinates - changeCoordinate != new Vector2Int(1, 0)) return;
         if (_gridController.EntityGrid[changeCoordinate.x, changeCoordinate.y] != null) return;
@@ -63,7 +64,7 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
     protected void MoveToCoordinate(Vector2Int newCoordinates, MovementMode movementMode)
     {
         KillLastTween();
-        _gridController.EntityStartProcess();
+        ProcessStarted();
         GridCoordinates = newCoordinates;
         Vector2 targetPos = _gridController.GridPositions[newCoordinates.x, newCoordinates.y];
         float moveDuration = .5f;
@@ -79,7 +80,7 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
                 Vector2 moveDir = (targetPos - (Vector2)transform.position).normalized;
                 Vector2 moveDirNormal = new Vector2(-moveDir.y, moveDir.x);
                 Sequence sequenceTween = DOTween.Sequence();
-                sequenceTween.Join(transform.DOBlendableMoveBy(moveDirNormal * distanceToTarget * curveAmountMultiplier, moveDuration/2).SetEase(Ease.InOutCubic));
+                sequenceTween.Join(transform.DOBlendableMoveBy(moveDirNormal * distanceToTarget * curveAmountMultiplier, moveDuration / 2).SetEase(Ease.InOutCubic));
                 sequenceTween.Append(transform.DOBlendableMoveBy(-moveDirNormal * distanceToTarget * curveAmountMultiplier, moveDuration / 2).SetEase(Ease.InOutCubic));
                 sequenceTween.Insert(0, transform.DOBlendableMoveBy(targetPos - (Vector2)transform.position, moveDuration).SetEase(Ease.InOutBack));
                 moveTween = sequenceTween;
@@ -87,8 +88,20 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
             default:
                 break;
         }
-        moveTween.onComplete += () => { _gridController.EntityEndProcess(); OnMoveEnded(); };
+        moveTween.onComplete += () => { ProcessEnded(); OnMoveEnded(); };
         CacheTween(moveTween);
+    }
+
+    private void ProcessStarted()
+    {
+        _gridController.EntityStartProcess();
+        _inProcess = true;
+    }
+
+    private void ProcessEnded()
+    {
+        _gridController.EntityEndProcess();
+        _inProcess = false;
     }
 
     public void CacheTween(Tween tween)
@@ -115,9 +128,21 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
 
     public virtual void OnGoToPool()
     {
+        if (_inProcess) ProcessEnded();
         KillLastTween();
-        EntityType = null;
         OnEntityDestroyed.RemoveAllListeners();
+        SummonOnDestroyParticle();
+        EntityType = null;
+    }
+
+    private void SummonOnDestroyParticle()
+    {
+        if (!EntityType.OnDestroyParticle) return;
+        Debug.Log("Summoning on destroy particle");
+        GameObject particle = ObjectPooler.Instance.Spawn(EntityType.OnDestroyParticle.name, transform.position);
+        particle.transform.SetParent(_gridController.GridOverlay);
+        float particleScale = _gridController.GridCellSpacing;
+        particle.transform.localScale = new Vector2(particleScale,particleScale);
     }
 
     public virtual void OnPoolSpawn()
