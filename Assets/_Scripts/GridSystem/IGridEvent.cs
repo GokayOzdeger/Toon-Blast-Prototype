@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IGridEvent 
 {
-    public bool TryEventStart<T>(GridController grid, List<T> effectedEntities) where T : IGridEntity;
+    public void StartEvent<T>(GridController grid, List<T> effectedEntities) where T : IGridEntity;
 
     public void OnEventEnd();
 }

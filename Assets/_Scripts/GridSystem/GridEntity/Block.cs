@@ -12,9 +12,8 @@ public class Block : BasicFallingGridEntity
    
     public List<Block> CurrentMatchGroup { get; private set; }
     public int GroupSize { get { if (CurrentMatchGroup == null) return 0; return CurrentMatchGroup.Count; } }
-    
+
     private bool MatchGroupCalculated = false;
-    private bool _matchOnClick;
 
     public void AnimateBlockPunchScale(Action onComplete = null)
     {
@@ -41,33 +40,21 @@ public class Block : BasicFallingGridEntity
 
     public void OnClickBlock()
     {
+        if (!_gridController.GridInterractable) return;
         TryMatch();
     }
 
     public void TryMatch()
     {
         if (!_gridController.GridInterractable) return;
-        if (!_matchOnClick) return;
-        bool matchSuccess = CreateMatchEvent();
+        bool matchSuccess = GameManager.Instance.CurrentLevel.MovesController.TryMakeMatchMove(this);
         Debug.Log("TryMatch: " + matchSuccess);
         if (!matchSuccess) MatchFail();
-    }
-
-    private bool CreateMatchEvent()
-    {
-        MatchGridEvent matchEvent = new MatchGridEvent();
-        return matchEvent.TryEventStart(_gridController, CurrentMatchGroup);
     }
 
     private void MatchFail()
     {
         AnimateShake();
-    }
-
-    public override void SetupEntity(GridController grid, IGridEntityTypeDefinition blockType)
-    {
-        base.SetupEntity(grid, blockType);
-        _matchOnClick = ((BlockTypeDefinition)blockType).MatchesOnClick;
     }
 
     public override void OnPoolSpawn()

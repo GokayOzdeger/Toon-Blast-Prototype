@@ -15,7 +15,7 @@ public class Duck : BasicFallingGridEntity
         {
             Debug.Log("Duck destroy start");
             DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent();
-            destroyEvent.TryEventStart(_gridController, new List<Duck>() { this });
+            destroyEvent.StartEvent(_gridController, new List<Duck>() { this });
         }
     }
 

@@ -17,7 +17,7 @@ public class Balloon : BasicFallingGridEntity
             if ((GridCoordinates - changeCoordinate).magnitude <= 1)
             {
                 DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent();
-                destroyEvent.TryEventStart(_gridController, new List<Balloon>() { this });
+                destroyEvent.StartEvent(_gridController, new List<Balloon>() { this });
             }
         }
     }

@@ -21,7 +21,7 @@ public class ShuffleController
             if(entity is Block)
             {
                 Block block = (Block)entity;
-                if (block.CurrentMatchGroup.Count >= MatchGridEvent.MinGroupSizeForExplosion)
+                if (block.CurrentMatchGroup.Count >= MovesController.MinGroupSizeForExplosion)
                 {
                     return true;
                 }

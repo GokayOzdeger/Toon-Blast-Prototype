@@ -10,7 +10,7 @@ public interface IGridEntity
     public IGridEntityTypeDefinition EntityType { get; }
     public Vector2Int GridCoordinates { get; }
     public UnityEvent<IGridEntity> OnEntityDestroyed { get; }
-    public void SetupEntity(GridController gridController, IGridEntityTypeDefinition entityType);
+    public void SetupEntity(GridController grid, IGridEntityTypeDefinition entityType);
     public void DestoryEntity();
     public void OnGridChange(Vector2Int changeCoordinate, GridChangeEventType gridChangeEventType, IGridEntityTypeDefinition entityType);
     public void OnMoveEntity(Vector2Int newCoordinates, MovementMode movementMode);
