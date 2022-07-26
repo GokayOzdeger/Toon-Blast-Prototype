@@ -78,10 +78,9 @@ public class GridEntitySpawner
                 IGridEntityTypeDefinition randomEntityType = null;
                 if (layout == null || layout.rows[j].row[i] == null) randomEntityType = _gridEntityTypes[Random.Range(0, _gridEntityTypes.Length)];
                 else randomEntityType = layout.rows[j].row[i];
-                
-                GameObject newEntityGO = ObjectPooler.Instance.Spawn(randomEntityType.GridEntityPrefab.name, 
-                    _spawnPositionRow[i]-j*new Vector2(0,_gridController.GridCellSpacing),
-                    Quaternion.identity);
+
+                Vector2 spawnPos = _spawnPositionRow[i] - j * new Vector2(0, _gridController.GridCellSpacing);
+                GameObject newEntityGO = ObjectPooler.Instance.Spawn(randomEntityType.GridEntityPrefab.name, spawnPos);
                 newEntityGO.transform.SetParent(_gridParentTransform);
                 newEntityGO.gameObject.name = $"{randomEntityType.GridEntityTypeName} {i}_{j}";
 
