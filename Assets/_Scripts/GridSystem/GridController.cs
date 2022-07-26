@@ -203,7 +203,6 @@ public partial class GridController
         {
             EntityGrid[entityToRemove.GridCoordinates.x, entityToRemove.GridCoordinates.y] = null;
             CacheGridChange(entityToRemove.GridCoordinates, GridChangeEventType.EntityDestroyed, entityToRemove.EntityType);
-            entityToRemove.EntityTransform.SetParent(_gridOverlayTransform);
         }
     }
 

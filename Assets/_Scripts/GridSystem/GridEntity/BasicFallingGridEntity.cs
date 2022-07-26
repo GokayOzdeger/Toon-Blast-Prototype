@@ -129,18 +129,20 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
     public virtual void OnGoToPool()
     {
         if (_inProcess) ProcessEnded();
+        SummonOnDestroyParticle();
         KillLastTween();
         OnEntityDestroyed.RemoveAllListeners();
-        SummonOnDestroyParticle();
         EntityType = null;
     }
 
     private void SummonOnDestroyParticle()
     {
-        if (!EntityType.OnDestroyParticle) return;
-        Debug.Log("Summoning on destroy particle");
+        if (!EntityType.OnDestroyParticle) return; // dont do anyting if no death particles are provided
+        
         GameObject particle = ObjectPooler.Instance.Spawn(EntityType.OnDestroyParticle.name, transform.position);
-        particle.transform.SetParent(_gridController.GridOverlay);
+        particle.transform.SetParent(_gridController.GridOverlay); // move particle to grid overlay transform
+        
+        // scale particle to match current grid entity cell size
         float particleScale = _gridController.GridCellSpacing;
         particle.transform.localScale = new Vector2(particleScale,particleScale);
     }

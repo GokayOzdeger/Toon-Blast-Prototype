@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4838614157849939756}
   - component: {fileID: 1927984958135659057}
   m_Layer: 0
-  m_Name: BalloonPopParticle
+  m_Name: GreenBlockDestroyParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1539,7 +1539,7 @@ ParticleSystem:
     uvChannelMask: -1
     rowMode: 1
     sprites:
-    - sprite: {fileID: 21300000, guid: 7c68210abc545d243b04871c4aae9198, type: 3}
+    - sprite: {fileID: 21300000, guid: e1ada36e74f3ec946a435d0ee6920f6c, type: 3}
     flipU: 0
     flipV: 0
   VelocityModule:

@@ -12,8 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c91e3abba1c6cd4ba805230c7fcbc7b, type: 3}
   m_Name: UIElementsPoolPack
   m_EditorClassIdentifier: 
-  pools:
-  - pooledObjects: []
-    prefab: {fileID: 9049895042151772740, guid: 46b6c2cd4f357324ea6e2a60cf2a9d1c, type: 3}
-    startingParent: {fileID: 0}
-    startingQuantity: 0
+  pools: []
