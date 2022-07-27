@@ -90,6 +90,12 @@ public class Block : FallingGridEntity
         AnimateDestroy();
     }
 
+    public void MoveToPointThanDestroy(Vector3 position)
+    {
+        _lastTween = transform.DOMove(position, .3f).SetEase(Ease.InBack);
+        _lastTween.onComplete += () => OnEntityDestroy();
+    }
+
     private void OnEntityDestroy()
     {
         OnEntityDestroyed.Invoke(this);

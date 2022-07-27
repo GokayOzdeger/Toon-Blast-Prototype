@@ -135,7 +135,7 @@ public class FallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
         SummonOnDestroyParticle();
         KillLastTween();
         OnEntityDestroyed.RemoveAllListeners();
-        EntityType = null;
+        Debug.Log("OnGoToPool: " + gameObject.name);
     }
 
     private void SummonOnDestroyParticle()
@@ -152,11 +152,16 @@ public class FallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
 
     public virtual void OnPoolSpawn()
     {
-        //
+        EntityType = null;
     }
 
     public virtual bool IsDestroyableBy(EntityDestroyTypes destroyType)
     {
         return !EntityType.ImmuneToDestroyTypes.Contains(destroyType) ;
+    }
+
+    public virtual void GotoPoolWithDelay(float delay)
+    {
+        poolObject.GoToPool(delay);
     }
 }

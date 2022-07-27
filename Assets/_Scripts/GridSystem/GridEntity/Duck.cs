@@ -11,14 +11,14 @@ public class Duck : FallingGridEntity
         base.OnMoveEnded();
         if (GridCoordinates.x == 0)
         {
-            DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent(EntityDestroyTypes.DestroyedByFallOff,"DuckFall");
+            DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent(EntityDestroyTypes.DestroyedByFallOff);
             destroyEvent.StartEvent(_gridController, new List<Duck>() { this });
         }
     }
 
     public override void DestoryEntity(EntityDestroyTypes destroyType)
     {
-        if (destroyType != EntityDestroyTypes.DestroyedByFallOff) return;
+        if (destroyType != EntityDestroyTypes.DestroyedByFallOff  && destroyType != EntityDestroyTypes.DestroyedByLevelEnd) return;
         AnimateDestroy();
     }
 

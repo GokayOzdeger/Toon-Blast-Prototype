@@ -41,7 +41,7 @@ public class GameManager : AutoSingleton<GameManager>
         if (CurrentLevel == null) return;
         foreach (IGridEntity entity in CurrentLevel.GridController.EntityGrid)
         {
-            if (entity == null) continue;
+            if (entity == null || entity.EntityType == null) continue;
             Gizmos.color = Color.red;
             Extensions.drawString(entity.EntityType.GridEntityTypeName, entity.EntityTransform.position, Color.black);
         }

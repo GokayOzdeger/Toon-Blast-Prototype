@@ -5,6 +5,7 @@ using UnityEngine;
 using Utilities;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -34,6 +35,7 @@ public class GridController
     public float GridCellSpacing { get { return gridCellSpacing * _canvasScaler.transform.localScale.x; } }
 
     private UnityEvent<Vector2Int,GridChangeEventType,IGridEntityTypeDefinition> OnGridChange = new UnityEvent<Vector2Int,GridChangeEventType,IGridEntityTypeDefinition>();
+    public UnityEvent OnGridInterractable = new UnityEvent();
     public Vector2[,] GridPositions { get; private set; }
     public IGridEntity[,] EntityGrid { get; private set; }
     public bool GridInterractable { get { return _gridEventsInProgress == 0 && _entitiesInProcess == 0; } }
@@ -43,6 +45,7 @@ public class GridController
     private bool[,] _controlledGridCoordinates;
     private int _entitiesInProcess = 0;
     private int _gridEventsInProgress = 0;
+    private bool _gridDestroyed = false;
     
     private ShuffleController _shuffleController; 
 
@@ -107,6 +110,12 @@ public class GridController
             if (entity == null) continue;
             entity.OnUpdateEntity();
         }
+        
+        if (GridInterractable) 
+        {
+            _shuffleController.CheckShuffleRequired();
+            OnGridInterractable.Invoke(); 
+        }
     }
 
     private void CreateGridAndCalculatePositions()
@@ -164,6 +173,26 @@ public class GridController
     #endregion
 
     #region Public Methods
+
+    public void GridDestroyOnLevelClear()
+    {
+        _gridDestroyed = true;
+        foreach (IGridEntity entity in EntityGrid)
+        {
+            if (entity == null) continue;
+            entity.DestoryEntity(EntityDestroyTypes.DestroyedByLevelEnd);
+        }
+    }
+
+    public void GridDestroyOnLevelFailed()
+    {
+        _gridDestroyed = true;
+        foreach (IGridEntity entity in EntityGrid)
+        {
+            if (entity == null) continue;
+            entity.GotoPoolWithDelay(Random.Range(0f, 1.5f));
+        }
+    }
 
     public List<IGridEntity> GetEntitiesTowardsRight(Vector2Int entityCords)
     {
@@ -243,15 +272,16 @@ public class GridController
         OnGridChange.AddListener(entity.OnGridChange);
     }
 
-    public void OnGridEventStart(IGridEvent gridEvent, string name)
+    public void OnGridEventStart(IGridEvent gridEvent)
     {
-        Debug.Log("Start event: " + name);
+        Debug.Log("Start event: ");
         _gridEventsInProgress++;
     }
 
-    public void OnGridEventEnd(IGridEvent gridEvent, string name)
+    public void OnGridEventEnd(IGridEvent gridEvent)
     {
-        Debug.Log("GridEventEnd: " + name);
+        if (_gridDestroyed) return;
+        Debug.Log("GridEventEnd: ");
         _gridEventsInProgress--;
         Debug.Log("GridEventsInProgress: " + _gridEventsInProgress);
 
@@ -263,13 +293,13 @@ public class GridController
         }
     }
 
-    public void RemoveEntitiesFromGridArray<T>(List<T> entitiesToRemove) where T : IGridEntity
+    public void RemoveEntitiesFromGridArray<T>(List<T> entitiesToRemove, GridChangeEventType gridChangeEventType) where T : IGridEntity
     {
         foreach (T entityToRemove in entitiesToRemove) OnGridChange.RemoveListener(entityToRemove.OnGridChange);
         foreach (T entityToRemove in entitiesToRemove)
         {
             EntityGrid[entityToRemove.GridCoordinates.x, entityToRemove.GridCoordinates.y] = null;
-            CacheGridChange(entityToRemove.GridCoordinates, GridChangeEventType.EntityDestroyed, entityToRemove.EntityType);
+            CacheGridChange(entityToRemove.GridCoordinates, gridChangeEventType, entityToRemove.EntityType);
         }
     }
 
@@ -312,6 +342,7 @@ public class GridController
         if (GridInterractable)
         {
             _shuffleController.CheckShuffleRequired();
+            OnGridInterractable.Invoke();
         }
     }
 

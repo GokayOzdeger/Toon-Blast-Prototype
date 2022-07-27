@@ -18,10 +18,14 @@ MonoBehaviour:
     startingParent: {fileID: 0}
     startingQuantity: 0
   - pooledObjects: []
+    prefab: {fileID: 1905907544835078951, guid: b1c82f91e03816d45b06f341f92659fb, type: 3}
+    startingParent: {fileID: 0}
+    startingQuantity: 0
+  - pooledObjects: []
     prefab: {fileID: 1905907544835078951, guid: 76cefc99b8f06114ebb6ed442958875e, type: 3}
     startingParent: {fileID: 0}
     startingQuantity: 0
   - pooledObjects: []
-    prefab: {fileID: 1905907544835078951, guid: b1c82f91e03816d45b06f341f92659fb, type: 3}
+    prefab: {fileID: 2035506434247442920, guid: 356682d97ee05b746bebc88642db2052, type: 3}
     startingParent: {fileID: 0}
     startingQuantity: 0

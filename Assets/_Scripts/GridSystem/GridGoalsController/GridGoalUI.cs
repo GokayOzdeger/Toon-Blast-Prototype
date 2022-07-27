@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Utilities;
 
 public class GridGoalUI : MonoBehaviour
 {
+    [SerializeField] private GameObject particleEffectPrefab;
     [SerializeField] private TMPro.TMP_Text goalAmountLeftText;
     [SerializeField] private Image goalImage;
     [SerializeField] private Image goalCompletedImage;
@@ -15,12 +17,12 @@ public class GridGoalUI : MonoBehaviour
     {
         Goal = goal;
         goalImage.sprite = goal.entityType.DefaultEntitySprite;
-        UpdateUIElements();
+        UpdateUIElements(false);
     }
     
-    public void UpdateUIElements()
+    public void UpdateUIElements(bool playParticles = true)
     {
-        Debug.Log("UpdateUIElements");
+        if (playParticles) ObjectPooler.Instance.Spawn(particleEffectPrefab.name, transform.position);
         if (Goal.GoalLeft == 0)
         {
             goalCompletedImage.enabled = true;

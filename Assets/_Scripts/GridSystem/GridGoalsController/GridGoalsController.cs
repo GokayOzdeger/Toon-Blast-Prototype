@@ -28,11 +28,15 @@ public class GridGoalsController : PocoSingleton<GridGoalsController>
     {
         for (int i = 0; i < GridGoals.Count; i++)
         {
-            if (GridGoals[i].entityType.GridEntityTypeName == entity.EntityType.GridEntityTypeName)
+            Goal goal = GridGoals[i];
+            GridGoalUI goalUI = GridGoalUiElements[i];
+
+            if (goal.IsCompleted) continue;
+            if (goal.entityType.GridEntityTypeName == entity.EntityType.GridEntityTypeName)
             {
-                GridGoals[i].DecreaseGoal();
-                CreateFlyingSpriteToGoal(entity, GridGoalUiElements[i]);
-                if (GridGoals[i].IsCompleted) CheckAllGoalsCompleted();
+                goal.DecreaseGoal();
+                CreateFlyingSpriteToGoal(entity, goalUI);
+                if (goal.IsCompleted) CheckAllGoalsCompleted();
             }
         }
     }
@@ -70,5 +74,6 @@ public class GridGoalsController : PocoSingleton<GridGoalsController>
     {
         foreach (Goal goal in GridGoals) if (!goal.IsCompleted) return;
         Debug.Log("All Goals Completed !!!");
+        GameManager.Instance.CurrentLevel.LevelCleared();
     }
 }

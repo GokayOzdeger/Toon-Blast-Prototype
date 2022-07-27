@@ -9,23 +9,19 @@ public class DestroyBlocksGridEvent : IGridEvent
     private EntityDestroyTypes _destroyType;
     private int _entitiesToDestroy;
     private int _entitiesDestroyed;
-    private string _name;
-    public DestroyBlocksGridEvent(EntityDestroyTypes destroyType, string name) 
+
+    public DestroyBlocksGridEvent(EntityDestroyTypes destroyType) 
     {
-        _name = name;
         this._destroyType = destroyType;
     }
 
     public void OnEventEnd()
     {
-        _gridController.OnGridEventEnd(this,_name);
+        _gridController.OnGridEventEnd(this);
     }
 
     public void StartEvent<T>(GridController grid, List<T> effectedEntities) where T : IGridEntity
     {
-        if (effectedEntities.Count == 0) return;
-        _gridController = grid;
-
         // remove entity from list if entity is immune to destroy type
         for (int i = 0; i < effectedEntities.Count; i++)
         {
@@ -36,9 +32,11 @@ public class DestroyBlocksGridEvent : IGridEvent
                 i--;
             }
         }
-        
-        _gridController.OnGridEventStart(this,_name);
-        _gridController.RemoveEntitiesFromGridArray(effectedEntities);
+        if (effectedEntities.Count == 0) return;
+        _gridController = grid;
+
+        _gridController.OnGridEventStart(this);
+        _gridController.RemoveEntitiesFromGridArray(effectedEntities, GridChangeEventType.EntityDestroyed);
 
         foreach (IGridEntity entityObject in effectedEntities)
         {

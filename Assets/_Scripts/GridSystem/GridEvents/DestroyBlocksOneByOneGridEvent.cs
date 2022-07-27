@@ -9,17 +9,16 @@ public class DestroyBlocksOneByOneGridEvent : IGridEvent
     private EntityDestroyTypes _destroyType;
     private int _entitiesToDestroy;
     private int _entitiesDestroyed;
-    private string _name;
 
-    public DestroyBlocksOneByOneGridEvent(EntityDestroyTypes destroyType, string name)
+    public DestroyBlocksOneByOneGridEvent(EntityDestroyTypes destroyType)
     {
-        _name = name;
+
         this._destroyType = destroyType;
     }
 
     public void OnEventEnd()
     {
-        _gridController.OnGridEventEnd(this, _name);
+        _gridController.OnGridEventEnd(this);
     }
 
     public void StartEvent<T>(GridController grid, List<T> effectedEntities) where T : IGridEntity
@@ -37,9 +36,9 @@ public class DestroyBlocksOneByOneGridEvent : IGridEvent
         if (effectedEntities.Count == 0) return;
         _gridController = grid;
 
-        _gridController.OnGridEventStart(this, _name);
-        _gridController.RemoveEntitiesFromGridArray(effectedEntities);
-        Debug.Log("Remove from grid DestroyBlocksOneByOneGridEvent: " + _name);
+        _gridController.OnGridEventStart(this);
+        _gridController.RemoveEntitiesFromGridArray(effectedEntities, GridChangeEventType.EntityDestroyed);
+        Debug.Log("Remove from grid DestroyBlocksOneByOneGridEvent: ");
 
         CoroutineHelper.Instance.StartCoroutine(DestroyOneByOneRoutine(effectedEntities));
     }
@@ -48,10 +47,10 @@ public class DestroyBlocksOneByOneGridEvent : IGridEvent
     {
         foreach (IGridEntity entityObject in effectedEntities)
         {
+            yield return new WaitForSeconds(.08f);
             _gridController.CallEntitySpawn(entityObject.GridCoordinates.y);
             entityObject.OnEntityDestroyed.AddListener(OnEntityDestroyed);
             entityObject.DestoryEntity(_destroyType);
-            yield return new WaitForSeconds(.08f);
         }
     }
 

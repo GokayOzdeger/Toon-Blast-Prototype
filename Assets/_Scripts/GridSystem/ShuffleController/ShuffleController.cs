@@ -33,6 +33,8 @@ public class ShuffleController
 
     private void DoShuffle()
     {
+        CallShufflingFlyingText();
+        
         // collect entities to shuffle
         List<IGridEntity> entitiesToShuffle = new List<IGridEntity>();
         
@@ -57,6 +59,14 @@ public class ShuffleController
         _gridController.UpdateAllEntities();
     }
 
+    private void CallShufflingFlyingText()
+    {
+        Vector2 flyingTextStartPos = UIEffectsManager.Instance.GetReferencePointByName("LeftCenterOutside");
+        Vector2 flyingTextWaitingPos = UIEffectsManager.Instance.GetReferencePointByName("ScreenCenter");
+        Vector2 flyingTextEndPos = UIEffectsManager.Instance.GetReferencePointByName("RightCenterOutside");
+        UIEffectsManager.Instance.CreatePassingByFlyingText("Shuffling", 130, flyingTextStartPos, flyingTextWaitingPos, flyingTextEndPos, UIEffectsManager.CanvasLayer.OverGridUnderUI, 1f, 0);
+    }
+    
     private T PopRandomFromList<T>(ref List<T> list)
     {
         if (list.Count == 0) return default(T);

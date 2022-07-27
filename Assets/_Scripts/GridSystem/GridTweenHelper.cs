@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class TweenHelper : MonoBehaviour
 {
-    public static Tween BouncyMoveTo(Transform transform, Vector2 targetPos, Action onComplete = null, float duration = .5f)
+    public static Tween BouncyMoveTo(Transform transform, Vector2 targetPos, Action onComplete = null, float duration = .4f)
     {
         Tween tween = transform.DOMove(targetPos, duration).SetEase(Ease.OutBounce);
         if (onComplete != null) tween.onComplete += () => onComplete();
@@ -34,7 +34,26 @@ public class TweenHelper : MonoBehaviour
         return sequence;
     }
 
-    public static Tween Shake(Transform target, Action onComplete = null, float shakeAngle = 14, float duration = 0.1f)
+    public static Tween PassingBy(Transform transform, Vector2 spawnPoint, Vector2 waitingPoint, Vector2 targetPoint, float moveDuration, float waitDuration, Action onComplete = null)
+    {
+        float distanceToTarget = Vector2.Distance(spawnPoint, waitingPoint);
+        Vector2 moveDir = (targetPoint - (Vector2)transform.position).normalized;
+        Vector2 moveDirNormal = new Vector2(-moveDir.y, moveDir.x);
+        Sequence sequence = DOTween.Sequence();
+        sequence.Join(transform.DOBlendableMoveBy(moveDirNormal * distanceToTarget * .2f, moveDuration / 4).SetEase(Ease.InOutQuad));
+        sequence.Append(transform.DOBlendableMoveBy(-moveDirNormal * distanceToTarget * .2f, moveDuration / 4).SetEase(Ease.InOutQuad));
+        sequence.Insert(0, transform.DOBlendableMoveBy(waitingPoint - spawnPoint, moveDuration/2).SetEase(Ease.InOutQuad));
+        sequence.AppendInterval(waitDuration);
+
+        distanceToTarget = Vector2.Distance(waitingPoint, targetPoint);
+        sequence.Append(transform.DOBlendableMoveBy(-moveDirNormal * distanceToTarget * .2f, moveDuration / 4).SetEase(Ease.InOutQuad));
+        sequence.Append(transform.DOBlendableMoveBy(moveDirNormal * distanceToTarget * .2f, moveDuration / 4).SetEase(Ease.InOutQuad));
+        sequence.Insert(waitDuration+(moveDuration/2), transform.DOBlendableMoveBy(targetPoint - waitingPoint, moveDuration/2).SetEase(Ease.InOutQuad));
+        if (onComplete != null) sequence.onComplete += () => onComplete();
+        return sequence;
+    }
+
+        public static Tween Shake(Transform target, Action onComplete = null, float shakeAngle = 14, float duration = 0.1f)
     {
         int randomDirection = UnityEngine.Random.value < .5 ? 1 : -1;
         Sequence sequence = DOTween.Sequence();

@@ -12,20 +12,21 @@ public class Rocket : FallingGridEntity
     {
         if (!_gridController.GridInterractable) return;
         GameManager.Instance.CurrentLevel.MovesController.ClickedPowerUp();
-        DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent(EntityDestroyTypes.DestroyedByMatch,"RocketDestroySelf"+gameObject.name);
+        DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent(EntityDestroyTypes.DestroyedByMatch);
         destroyEvent.StartEvent(_gridController, new List<Rocket>() { this });
     }
 
     public override void DestoryEntity(EntityDestroyTypes destroyType)
     {
+        Debug.Log("Destroy Rocker: " + gameObject.name);
         StartExplosion();
         base.DestoryEntity(destroyType);
     }
 
     private void StartExplosion()
     {
-        DestroyBlocksOneByOneGridEvent destroyEvent1 = new DestroyBlocksOneByOneGridEvent(EntityDestroyTypes.DestroyedByPowerUp,"RocketUP"+gameObject.name);
-        DestroyBlocksOneByOneGridEvent destroyEvent2 = new DestroyBlocksOneByOneGridEvent(EntityDestroyTypes.DestroyedByPowerUp,"RocketDOWN"+gameObject.name);
+        DestroyBlocksOneByOneGridEvent destroyEvent1 = new DestroyBlocksOneByOneGridEvent(EntityDestroyTypes.DestroyedByPowerUp);
+        DestroyBlocksOneByOneGridEvent destroyEvent2 = new DestroyBlocksOneByOneGridEvent(EntityDestroyTypes.DestroyedByPowerUp);
         
         List<IGridEntity> entitiesInDirection1 = null;
         List<IGridEntity> entitiesInDirection2 = null;
@@ -63,6 +64,7 @@ public class Rocket : FallingGridEntity
     private void CreateVerticalVisiualRockets()
     {
         Vector2 rocketSize = GetComponent<RectTransform>().sizeDelta;
+        Debug.Log($"RocketRefs: {EntityType.GetType()}");
         GameObject effectUp = ObjectPooler.Instance.Spawn((EntityType as RocketTypeDefinition).RocketExplodeAnimPrefab.name, transform.position);
         GameObject effectDown = ObjectPooler.Instance.Spawn((EntityType as RocketTypeDefinition).RocketExplodeAnimPrefab.name, transform.position);
         RectTransform layerParent = UIEffectsManager.Instance.GetLayerParent(UIEffectsManager.CanvasLayer.OverEverything);

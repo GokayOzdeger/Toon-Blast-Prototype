@@ -61,6 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3d8ebc0f09934f45b388e4be9669445, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  particleEffectPrefab: {fileID: 9049895042151772740, guid: 8eb39bc9b816d4a48acc313276344f95, type: 3}
   goalAmountLeftText: {fileID: 9160621383924292898}
   goalImage: {fileID: 6482323194498928289}
   goalCompletedImage: {fileID: 7119268670952548246}
