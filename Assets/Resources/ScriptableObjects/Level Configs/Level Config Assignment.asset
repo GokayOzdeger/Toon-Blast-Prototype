@@ -36,18 +36,8 @@ MonoBehaviour:
       - row:
         - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
         - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-      - row:
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 0}
-        - {fileID: 0}
+        - {fileID: 11400000, guid: 13aaf49889056f84e8ff0fa91ba3f284, type: 2}
+        - {fileID: 11400000, guid: 13aaf49889056f84e8ff0fa91ba3f284, type: 2}
         - {fileID: 0}
         - {fileID: 0}
         - {fileID: 0}
@@ -56,7 +46,17 @@ MonoBehaviour:
       - row:
         - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
         - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
+        - {fileID: 11400000, guid: 13aaf49889056f84e8ff0fa91ba3f284, type: 2}
+        - {fileID: 11400000, guid: 13aaf49889056f84e8ff0fa91ba3f284, type: 2}
         - {fileID: 0}
+        - {fileID: 0}
+        - {fileID: 0}
+        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
+        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
+      - row:
+        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
+        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
+        - {fileID: 11400000, guid: 13aaf49889056f84e8ff0fa91ba3f284, type: 2}
         - {fileID: 0}
         - {fileID: 0}
         - {fileID: 0}
@@ -119,8 +119,6 @@ MonoBehaviour:
     - {fileID: 11400000, guid: bdc70d9deda57ba4db97895bc119d53c, type: 2}
     - {fileID: 11400000, guid: 841d8ed8f448fbb43b9fef754a714d48, type: 2}
     - {fileID: 11400000, guid: 319c644cdc1abc34db28782897426d92, type: 2}
-    - {fileID: 11400000, guid: 46c60340f54922248979de67105639f8, type: 2}
-    - {fileID: 11400000, guid: c70f6ccd10a4a264fb8316e1f2094b5f, type: 2}
     spawnHeight: 500
   goalsControllerSettings:
     uiGoalPrefab: {fileID: 233327313712590955, guid: 1cad3eb0494fb0b42a6a15134de99372, type: 3}

@@ -26,7 +26,7 @@ public class LevelController
         GridEntitySpawner = new GridEntitySpawner(GridController, Config.GridEntitySpawnerSettings, LevelSceneReferences.GridEntitySpawnerSceneReferences);
         ShuffleController = new ShuffleController(GridController, LevelSceneReferences.ShuffleControllerSceneReferences);
         GridGoalsController = new GridGoalsController(Config.GridGoalsControllerSettings, LevelSceneReferences.GridGoalsControllerReferences);
-        MovesController = new MovesController(GridController, Config.MovesControllerSettings, LevelSceneReferences.MovesControllerReferences);
+        MovesController = new MovesController(GridController, GridEntitySpawner, Config.MovesControllerSettings, LevelSceneReferences.MovesControllerReferences);
         GridController.StartGrid(ShuffleController, GridEntitySpawner, GridGoalsController);
     }
 }

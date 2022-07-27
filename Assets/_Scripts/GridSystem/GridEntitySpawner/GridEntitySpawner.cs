@@ -8,7 +8,7 @@ public class GridEntitySpawner
     private int[] BlockSpawnRequests { get; set; }
 
     private Vector2[] _spawnPositionRow;
-    private IGridEntityTypeDefinition[] _gridEntityTypes;
+    private IGridEntityTypeDefinition[] _gridEntityTypesToSpawnFrom;
     private RectTransform _gridParentTransform;
     private int _collumnCount;
 
@@ -17,7 +17,7 @@ public class GridEntitySpawner
 
     public GridEntitySpawner(GridController gridController, GridEntitySpawnerSettings settings, GridEntitySpawnerSceneReferences references )
     {
-        this._gridEntityTypes = settings.EntityTypes;
+        this._gridEntityTypesToSpawnFrom = settings.EntityTypes;
         this._gridParentTransform = references.GridParentTransform;
         this._gridController = gridController;
         this._collumnCount = gridController.ColumnCount;
@@ -60,6 +60,12 @@ public class GridEntitySpawner
         BlockSpawnRequests[collumnIndex] ++;
     }
 
+    // unregisters a spawn request to collumn index
+    public void RemoveEntitySpawnReqeust(int collumnIndex)
+    {
+        BlockSpawnRequests[collumnIndex]--;
+    }
+
     // spawns grid entities at the requested collumns
     public void SummonRequestedEntities(GridStartLayout layout = null)
     {
@@ -76,7 +82,7 @@ public class GridEntitySpawner
 
                 // choose random entity type if startLayout is missing a configuration for it
                 IGridEntityTypeDefinition randomEntityType = null;
-                if (layout == null || layout.rows[j].row[i] == null) randomEntityType = _gridEntityTypes[Random.Range(0, _gridEntityTypes.Length)];
+                if (layout == null || layout.rows[j].row[i] == null) randomEntityType = _gridEntityTypesToSpawnFrom[Random.Range(0, _gridEntityTypesToSpawnFrom.Length)];
                 else randomEntityType = layout.rows[j].row[i];
 
                 Vector2 spawnPos = _spawnPositionRow[i] - j * new Vector2(0, _gridController.GridCellSpacing);
@@ -92,5 +98,19 @@ public class GridEntitySpawner
             }
         }
         if(blocksSummoned > 0) _gridController.CallCachedChanges();
+    }
+
+    public void SpawnEntity(IGridEntityTypeDefinition entityType, Vector2Int gridCoordinates)
+    {
+        Vector2 spawnPos = _gridController.GridPositions[gridCoordinates.x, gridCoordinates.y];
+        GameObject newEntityGO = ObjectPooler.Instance.Spawn(entityType.GridEntityPrefab.name, spawnPos);
+        newEntityGO.transform.SetParent(_gridParentTransform);
+        newEntityGO.gameObject.name = $"{entityType.GridEntityTypeName} {gridCoordinates.x}_{gridCoordinates.y}";
+
+        newEntityGO.GetComponent<RectTransform>().sizeDelta = new Vector2(_gridController.GridCellSpacing, _gridController.GridCellSpacing);
+        IGridEntity newEntity = newEntityGO.GetComponent<IGridEntity>();
+        newEntity.SetupEntity(_gridController, entityType);
+        _gridController.RegisterGridEntityToPosition(newEntity, gridCoordinates.x, gridCoordinates.y);
+        newEntity.OnMoveEntity(gridCoordinates, MovementMode.Linear);
     }
 }

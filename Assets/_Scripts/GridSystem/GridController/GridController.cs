@@ -272,7 +272,6 @@ public class GridController
     public void EntityEndProcess()
     {
         _entitiesInProcess--;
-        Debug.Log("Entities in process: " + _entitiesInProcess);
         if (GridInterractable)
         {
             _shuffleController.CheckShuffleRequired();

@@ -6,45 +6,19 @@ using DG.Tweening;
 using System;
 using Utilities;
 
-public class Block : BasicFallingGridEntity
+public class Block : FallingGridEntity
 {
-    private readonly float DestroyAnimationDuration = .2f;
-
     public List<Block> CurrentMatchGroup { get; private set; }
     public int GroupSize { get { if (CurrentMatchGroup == null) return 0; return CurrentMatchGroup.Count; } }
 
     private bool MatchGroupCalculated = false;
 
-    public void AnimateBlockPunchScale(Action onComplete = null)
-    {
-        CompleteLastTween();
-        _lastTween = transform.DOPunchScale(new Vector2(.15f, .15f), DestroyAnimationDuration);
-        if (onComplete != null) _lastTween.onComplete += () => onComplete();
-    }
-
-    public void AnimateShake()
-    {
-        int randomDirection = UnityEngine.Random.value < .5 ? 1 : -1;
-        CompleteLastTween();
-        _lastTween = transform.DOPunchRotation(new Vector3(0, 0, randomDirection * 14), .1f);
-        _lastTween.onComplete += () => transform.DOPunchRotation(new Vector3(0, 0, -randomDirection * 7), .1f);
-    }
-
-    public void AnimateDestroy()
-    {
-        int randomDirection = UnityEngine.Random.value < .5 ? 1 : -1;
-        CompleteLastTween();
-        _lastTween = transform.DOPunchScale(new Vector3(.3f, .3f, .3f), DestroyAnimationDuration);
-        _lastTween.onComplete += OnEntityDestroy;
-    }
-
     public void OnClickBlock()
     {
-        if (!_gridController.GridInterractable) return;
         TryMatch();
     }
 
-    public void TryMatch()
+    private void TryMatch()
     {
         if (!_gridController.GridInterractable) return;
         bool matchSuccess = GameManager.Instance.CurrentLevel.MovesController.TryMakeMatchMove(this);
@@ -56,6 +30,18 @@ public class Block : BasicFallingGridEntity
         AnimateShake();
     }
 
+    public void AnimateShake()
+    {
+        CompleteLastTween();
+        _lastTween = GridTweenHelper.Shake(transform);
+    }
+
+    public void AnimateDestroy()
+    {
+        CompleteLastTween();
+        _lastTween = GridTweenHelper.PunchScale(transform, OnEntityDestroy);
+    }
+    
     public override void OnPoolSpawn()
     {
         base.OnPoolSpawn();
@@ -89,23 +75,31 @@ public class Block : BasicFallingGridEntity
         List<Block> blockGroup = new List<Block>();
         _gridController.CollectMatchingSurroundingEntities<Block>(this, ref blockGroup);
 
+        AssignMatchGroup(blockGroup);
+        BlockMatchCondition? condition = ActiveBlockCondition();
+        
         foreach (Block block in blockGroup)
         {
             block.AssignMatchGroup(blockGroup);
-            block.CheckConditionsAndChooseSprite();
+            block.SetSpriteOfCondition(condition);
         }
     }
 
-    public override void DestoryEntity()
+    public override void DestoryEntity(EntityDestroyTypes destroyType)
     {
         AnimateDestroy();
     }
 
     private void OnEntityDestroy()
     {
-        Debug.Log("OnEntityDestroy: " + StackTraceUtility.ExtractStackTrace());
         OnEntityDestroyed.Invoke(this);
         poolObject.GoToPool();
+    }
+
+    private void SetSpriteOfCondition(BlockMatchCondition? condition)
+    {
+        if (condition != null) entityImage.sprite = condition.Value.Sprite;
+        else entityImage.sprite = EntityType.DefaultEntitySprite;
     }
 
     public void AssignMatchGroup(List<Block> group)
@@ -114,17 +108,16 @@ public class Block : BasicFallingGridEntity
         CurrentMatchGroup = group;
     }
 
-    private void CheckConditionsAndChooseSprite()
+    public BlockMatchCondition? ActiveBlockCondition()
     {
         BlockTypeDefinition blockTypeDefinition = EntityType as BlockTypeDefinition;
-        foreach (var spriteConditionPair in blockTypeDefinition.SpriteConditionPairs)
+        foreach (var blockMatchCondition in blockTypeDefinition.BlockMatchConditions)
         {
-            if (spriteConditionPair.condition.IsConditionMet(this))
+            if (blockMatchCondition.Condition.IsConditionMet(this))
             {
-                entityImage.sprite = spriteConditionPair.sprite;
-                return;
+                return blockMatchCondition;
             }
         }
-        entityImage.sprite = blockTypeDefinition.DefaultEntitySprite;
+        return null;
     }
 }

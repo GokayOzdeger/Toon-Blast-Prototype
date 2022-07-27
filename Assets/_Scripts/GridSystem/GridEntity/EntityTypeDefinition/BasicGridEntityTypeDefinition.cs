@@ -11,6 +11,7 @@ public class BasicGridEntityTypeDefinition : ScriptableObject, IGridEntityTypeDe
     [SerializeField] protected Sprite defaultSprite;
     [SerializeField] protected GameObject onDestroyParticle;
     [SerializeField] protected bool entityIncludedInShuffle = true;
+    [SerializeField] protected List<EntityDestroyTypes> immuneToDestroyTypes = new List<EntityDestroyTypes>();
 
     public string GridEntityTypeName => gridEntityTypeName;
 
@@ -21,4 +22,5 @@ public class BasicGridEntityTypeDefinition : ScriptableObject, IGridEntityTypeDe
     public GameObject GridEntityPrefab => gridEntityPrefab;
 
     public bool EntityIncludedInShuffle => entityIncludedInShuffle;
+    public List<EntityDestroyTypes> ImmuneToDestroyTypes => immuneToDestroyTypes;
 }

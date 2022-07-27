@@ -10,8 +10,11 @@ public interface IGridEntity
     public IGridEntityTypeDefinition EntityType { get; }
     public Vector2Int GridCoordinates { get; }
     public UnityEvent<IGridEntity> OnEntityDestroyed { get; }
+    
     public void SetupEntity(GridController grid, IGridEntityTypeDefinition entityType);
-    public void DestoryEntity();
+    public bool IsDestroyableBy(EntityDestroyTypes destroyType);
+    public void DestoryEntity(EntityDestroyTypes destroyType);
+    public void DestoryEntity(EntityDestroyTypes destroyType, float delay);
     public void OnGridChange(Vector2Int changeCoordinate, GridChangeEventType gridChangeEventType, IGridEntityTypeDefinition entityType);
     public void OnMoveEntity(Vector2Int newCoordinates, MovementMode movementMode);
     public void OnUpdateEntity();
@@ -28,4 +31,12 @@ public enum GridChangeEventType
     EntityDestroyed,
     EntityMatched,
     EntityMoved,
+}
+
+public enum EntityDestroyTypes
+{
+    DestroyedByMatch,
+    DestroyedByPowerUp,
+    DestroyedByFallOff,
+    DestroyedByNearbyMove,
 }

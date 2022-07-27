@@ -9,4 +9,5 @@ public interface IGridEntityTypeDefinition
     public string GridEntityTypeName { get; }
     public Sprite DefaultEntitySprite { get; }
     public GameObject OnDestroyParticle { get; }
+    public List<EntityDestroyTypes> ImmuneToDestroyTypes { get; }
 }

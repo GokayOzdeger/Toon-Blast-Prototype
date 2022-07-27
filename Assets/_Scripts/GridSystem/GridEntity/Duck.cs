@@ -4,32 +4,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Duck : BasicFallingGridEntity
+public class Duck : FallingGridEntity
 {
-    private readonly float DestroyAnimationDuration = .5f;
-    
     public override void OnMoveEnded()
     {
         base.OnMoveEnded();
         if (GridCoordinates.x == 0)
         {
-            Debug.Log("Duck destroy start");
-            DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent();
+            DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent(EntityDestroyTypes.DestroyedByFallOff);
             destroyEvent.StartEvent(_gridController, new List<Duck>() { this });
         }
     }
 
-    public override void DestoryEntity()
+    public override void DestoryEntity(EntityDestroyTypes destroyType)
     {
+        if (destroyType != EntityDestroyTypes.DestroyedByFallOff) return;
         AnimateDestroy();
     }
 
     public void AnimateDestroy()
     {
-        int randomDirection = UnityEngine.Random.value < .5 ? 1 : -1;
         CompleteLastTween();
-        _lastTween = transform.DOPunchScale(new Vector3(.3f, .3f, .3f), DestroyAnimationDuration);
-        _lastTween.onComplete += OnEntityDestroy;
+        _lastTween = GridTweenHelper.PunchScale(transform, OnEntityDestroy);
     }
 
     private void OnEntityDestroy()

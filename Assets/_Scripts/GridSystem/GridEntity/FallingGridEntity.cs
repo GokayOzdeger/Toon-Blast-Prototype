@@ -7,7 +7,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using Utilities;
 
-public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
+public class FallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
 {
     [SerializeField] protected Image entityImage;
     [SerializeField] protected PoolObject poolObject;
@@ -68,23 +68,14 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
         ProcessStarted();
         GridCoordinates = newCoordinates;
         Vector2 targetPos = _gridController.GridPositions[newCoordinates.x, newCoordinates.y];
-        float moveDuration = .5f;
         Tween moveTween = null;
         switch (movementMode)
         {
             case MovementMode.Linear:
-                moveTween = transform.DOMove(targetPos, moveDuration).SetEase(Ease.OutBounce);
+                moveTween = GridTweenHelper.BouncyMoveTo(transform, targetPos);
                 break;
             case MovementMode.Curvy:
-                float curveAmountMultiplier = .2f;
-                float distanceToTarget = Vector2.Distance((Vector2)transform.position, targetPos);
-                Vector2 moveDir = (targetPos - (Vector2)transform.position).normalized;
-                Vector2 moveDirNormal = new Vector2(-moveDir.y, moveDir.x);
-                Sequence sequenceTween = DOTween.Sequence();
-                sequenceTween.Join(transform.DOBlendableMoveBy(moveDirNormal * distanceToTarget * curveAmountMultiplier, moveDuration / 2).SetEase(Ease.InOutCubic));
-                sequenceTween.Append(transform.DOBlendableMoveBy(-moveDirNormal * distanceToTarget * curveAmountMultiplier, moveDuration / 2).SetEase(Ease.InOutCubic));
-                sequenceTween.Insert(0, transform.DOBlendableMoveBy(targetPos - (Vector2)transform.position, moveDuration).SetEase(Ease.InOutBack));
-                moveTween = sequenceTween;
+                moveTween = GridTweenHelper.CurvingMoveTo(transform, targetPos);
                 break;
             default:
                 break;
@@ -121,11 +112,22 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
         _lastTween.Kill(true);
     }
 
-    public virtual void DestoryEntity()
+    public virtual void DestoryEntity(EntityDestroyTypes destroyType)
     {
         OnEntityDestroyed.Invoke(this);
         poolObject.GoToPool();
-    }    
+    }
+
+    public void DestoryEntity(EntityDestroyTypes destroyType, float delay)
+    {
+        StartCoroutine(WaitDestroyRoutine(destroyType, delay));
+    }
+    
+    private IEnumerator WaitDestroyRoutine(EntityDestroyTypes destroyType, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        DestoryEntity(destroyType);
+    }
 
     public virtual void OnGoToPool()
     {
@@ -151,5 +153,10 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
     public virtual void OnPoolSpawn()
     {
         //
+    }
+
+    public virtual bool IsDestroyableBy(EntityDestroyTypes destroyType)
+    {
+        return !EntityType.ImmuneToDestroyTypes.Contains(destroyType) ;
     }
 }

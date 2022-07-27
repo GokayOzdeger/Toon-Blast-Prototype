@@ -4,25 +4,25 @@ using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
 
-public class Rocket : BasicFallingGridEntity
+public class Rocket : FallingGridEntity
 {
     [SerializeField] RocketDirection direction;
     public void OnClickRocket()
     {
         if (!_gridController.GridInterractable) return;
-        DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent();
+        DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent(EntityDestroyTypes.DestroyedByMatch);
         destroyEvent.StartEvent(_gridController, new List<Rocket>() { this });
     }
 
-    public override void DestoryEntity()
+    public override void DestoryEntity(EntityDestroyTypes destroyType)
     {
         StartExplosion();
-        base.DestoryEntity();
+        base.DestoryEntity(destroyType);
     }
 
     private void StartExplosion()
     {
-        DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent();
+        DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent(EntityDestroyTypes.DestroyedByPowerUp);
         
         List<IGridEntity> entitiesInDirection = null;
         

@@ -4,11 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Balloon : BasicFallingGridEntity
+public class Balloon : FallingGridEntity
 {
-    private readonly float DestroyAnimationDuration = .1f;
-    
-
     public override void OnGridChange(Vector2Int changeCoordinate, GridChangeEventType gridChangeEventType, IGridEntityTypeDefinition entityType)
     {
         base.OnGridChange(changeCoordinate, gridChangeEventType, entityType);
@@ -16,23 +13,21 @@ public class Balloon : BasicFallingGridEntity
         {
             if ((GridCoordinates - changeCoordinate).magnitude <= 1)
             {
-                DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent();
+                DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent(EntityDestroyTypes.DestroyedByNearbyMove);
                 destroyEvent.StartEvent(_gridController, new List<Balloon>() { this });
             }
         }
     }
 
-    public override void DestoryEntity()
+    public override void DestoryEntity(EntityDestroyTypes destroyType)
     {
         AnimateDestroy();
     }
 
     public void AnimateDestroy()
     {
-        int randomDirection = UnityEngine.Random.value < .5 ? 1 : -1;
-        _lastTween.Kill();
-        _lastTween = transform.DOPunchScale(new Vector3(.4f, .4f, .4f), DestroyAnimationDuration).SetEase(Ease.OutCubic);
-        _lastTween.onComplete += OnEntityDestroy;
+        CompleteLastTween();
+        _lastTween = GridTweenHelper.PunchScale(transform, OnEntityDestroy);
     }
 
     private void OnEntityDestroy()
