@@ -27,7 +27,7 @@ public class MovesController
         if (blockEntity.CurrentMatchGroup.Count < MinGroupSizeForExplosion) return false;
         Vector2Int matchClickCoordinates = blockEntity.GridCoordinates;
         BlockMatchCondition? condition = blockEntity.ActiveBlockCondition();
-        DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent(EntityDestroyTypes.DestroyedByMatch);
+        DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent(EntityDestroyTypes.DestroyedByMatch,"Match");
         destroyEvent.StartEvent(_gridController, blockEntity.CurrentMatchGroup);
         if (condition != null)
         {

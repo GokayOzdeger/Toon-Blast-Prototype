@@ -11,7 +11,7 @@ public class Duck : FallingGridEntity
         base.OnMoveEnded();
         if (GridCoordinates.x == 0)
         {
-            DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent(EntityDestroyTypes.DestroyedByFallOff);
+            DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent(EntityDestroyTypes.DestroyedByFallOff,"DuckFall");
             destroyEvent.StartEvent(_gridController, new List<Duck>() { this });
         }
     }
@@ -25,7 +25,7 @@ public class Duck : FallingGridEntity
     public void AnimateDestroy()
     {
         CompleteLastTween();
-        _lastTween = GridTweenHelper.PunchScale(transform, OnEntityDestroy);
+        _lastTween = TweenHelper.PunchScale(transform, OnEntityDestroy);
     }
 
     private void OnEntityDestroy()

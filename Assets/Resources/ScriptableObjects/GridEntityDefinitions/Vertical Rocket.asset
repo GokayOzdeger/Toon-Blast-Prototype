@@ -9,12 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e02a92592a51084981b01e48f0fe347, type: 3}
+  m_Script: {fileID: 11500000, guid: 82f2467a896d2be4a982d9afccd5b3fa, type: 3}
   m_Name: Vertical Rocket
   m_EditorClassIdentifier: 
   gridEntityPrefab: {fileID: 1905907544835078951, guid: 0d5b08323382bfa4c920d9ded74d23f8, type: 3}
   gridEntityTypeName: Rocket
-  defaultSprite: {fileID: 0}
+  defaultSprite: {fileID: 21300000, guid: 3393d5312808b374990f1f55276fad15, type: 3}
   onDestroyParticle: {fileID: 0}
   entityIncludedInShuffle: 0
-  spriteConditionPairs: []
+  immuneToDestroyTypes: 
+  rocketExplodeAnimPrefab: {fileID: 1905907544835078951, guid: b1c82f91e03816d45b06f341f92659fb, type: 3}

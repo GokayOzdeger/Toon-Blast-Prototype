@@ -165,12 +165,12 @@ public class GridController
 
     #region Public Methods
 
-    public List<IGridEntity> GetEntitiesInRow(int rowIndex)
+    public List<IGridEntity> GetEntitiesTowardsRight(Vector2Int entityCords)
     {
         List<IGridEntity> entitiesInRow = new List<IGridEntity>();
-        for (int i = 0; i < gridColumnCount; i++)
+        for (int i = entityCords.y; i < gridColumnCount; i++)
         {
-            IGridEntity entity = EntityGrid[rowIndex, i];
+            IGridEntity entity = EntityGrid[entityCords.x, i];
             if (entity != null)
             {
                 entitiesInRow.Add(entity);
@@ -179,12 +179,40 @@ public class GridController
         return entitiesInRow;
     }
 
-    public List<IGridEntity> GetEntitiesInColumn(int columnIndex)
+    public List<IGridEntity> GetEntitiesTowardsLeft(Vector2Int entityCords)
     {
         List<IGridEntity> entitiesInRow = new List<IGridEntity>();
-        for (int i = 0; i < gridRowCount; i++)
+        for (int i = entityCords.y; i >= 0; i--)
         {
-            IGridEntity entity = EntityGrid[i, columnIndex];
+            IGridEntity entity = EntityGrid[entityCords.x, i];
+            if (entity != null)
+            {
+                entitiesInRow.Add(entity);
+            }
+        }
+        return entitiesInRow;
+    }
+
+    public List<IGridEntity> GetEntitiesTowardsUp(Vector2Int entityCords)
+    {
+        List<IGridEntity> entitiesInRow = new List<IGridEntity>();
+        for (int i = entityCords.x; i < gridRowCount; i++)
+        {
+            IGridEntity entity = EntityGrid[i, entityCords.y];
+            if (entity != null)
+            {
+                entitiesInRow.Add(entity);
+            }
+        }
+        return entitiesInRow;
+    }
+
+    public List<IGridEntity> GetEntitiesTowardsDown(Vector2Int entityCords)
+    {
+        List<IGridEntity> entitiesInRow = new List<IGridEntity>();
+        for (int i = entityCords.x; i >= 0; i--)
+        {
+            IGridEntity entity = EntityGrid[i, entityCords.y];
             if (entity != null)
             {
                 entitiesInRow.Add(entity);
@@ -215,16 +243,24 @@ public class GridController
         OnGridChange.AddListener(entity.OnGridChange);
     }
 
-    public void OnGridEventStart(IGridEvent gridEvent)
+    public void OnGridEventStart(IGridEvent gridEvent, string name)
     {
+        Debug.Log("Start event: " + name);
         _gridEventsInProgress++;
     }
 
-    public void OnGridEventEnd(IGridEvent gridEvent)
+    public void OnGridEventEnd(IGridEvent gridEvent, string name)
     {
+        Debug.Log("GridEventEnd: " + name);
         _gridEventsInProgress--;
-        CallCachedChanges();
-        _entitySpawner.SummonRequestedEntities();
+        Debug.Log("GridEventsInProgress: " + _gridEventsInProgress);
+
+        // call all changes made if grid events are completed
+        if (_gridEventsInProgress == 0)
+        {
+            CallCachedChanges();
+            _entitySpawner.SummonRequestedEntities();
+        }
     }
 
     public void RemoveEntitiesFromGridArray<T>(List<T> entitiesToRemove) where T : IGridEntity
@@ -251,6 +287,7 @@ public class GridController
     
     public void CallCachedChanges()
     {
+        Debug.Log("CallCachedChanges");
         while (_cachedGridChanges.Count > 0)
         {
             OnGridChange.Invoke(_cachedGridChanges[0].Item1, _cachedGridChanges[0].Item2, _cachedGridChanges[0].Item3);

@@ -9,15 +9,16 @@ public class DestroyBlocksGridEvent : IGridEvent
     private EntityDestroyTypes _destroyType;
     private int _entitiesToDestroy;
     private int _entitiesDestroyed;
-
-    public DestroyBlocksGridEvent(EntityDestroyTypes destroyType) 
+    private string _name;
+    public DestroyBlocksGridEvent(EntityDestroyTypes destroyType, string name) 
     {
+        _name = name;
         this._destroyType = destroyType;
     }
 
     public void OnEventEnd()
     {
-        _gridController.OnGridEventEnd(this);
+        _gridController.OnGridEventEnd(this,_name);
     }
 
     public void StartEvent<T>(GridController grid, List<T> effectedEntities) where T : IGridEntity
@@ -35,13 +36,12 @@ public class DestroyBlocksGridEvent : IGridEvent
                 i--;
             }
         }
-
-        _gridController.OnGridEventStart(this);
+        
+        _gridController.OnGridEventStart(this,_name);
         _gridController.RemoveEntitiesFromGridArray(effectedEntities);
 
         foreach (IGridEntity entityObject in effectedEntities)
         {
-
             _gridController.CallEntitySpawn(entityObject.GridCoordinates.y);
             entityObject.OnEntityDestroyed.AddListener(OnEntityDestroyed);
             entityObject.DestoryEntity(_destroyType);

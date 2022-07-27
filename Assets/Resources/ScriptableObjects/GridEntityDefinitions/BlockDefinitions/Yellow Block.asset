@@ -17,9 +17,10 @@ MonoBehaviour:
   defaultSprite: {fileID: 21300000, guid: f5eb4ba10e73c9642bed6d314d9855de, type: 3}
   onDestroyParticle: {fileID: 6506318762500221075, guid: 0c6b151306fd3664391e6ae7e45532fa, type: 3}
   entityIncludedInShuffle: 1
+  immuneToDestroyTypes: 
   blockMatchConditions:
   - condition: {fileID: 11400000, guid: 4e5e2688aa252f943b09f7e6a360a970, type: 2}
-    sprite: {fileID: 21300000, guid: 41d8876eb6ec8fa4199dd92da22f1151, type: 3}
+    sprite: {fileID: 21300000, guid: f86d391038110ae41b590f73c5f7dea5, type: 3}
     entitiesToSpawnOnMatch:
-    - {fileID: 11400000, guid: c70f6ccd10a4a264fb8316e1f2094b5f, type: 2}
-    - {fileID: 11400000, guid: 46c60340f54922248979de67105639f8, type: 2}
+    - {fileID: 11400000, guid: 5cb32bb09f27f6f4ab89428681f45461, type: 2}
+    - {fileID: 11400000, guid: 5dba36ad7d34d1847970bfd8fb30bf63, type: 2}

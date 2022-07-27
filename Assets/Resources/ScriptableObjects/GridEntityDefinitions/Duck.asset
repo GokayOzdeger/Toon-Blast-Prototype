@@ -15,4 +15,6 @@ MonoBehaviour:
   gridEntityPrefab: {fileID: 1905907544835078951, guid: 0e3a313c1a83a6a408452eb608e7f680, type: 3}
   gridEntityTypeName: Duck
   defaultSprite: {fileID: 21300000, guid: 49c10b10e26eb7543b660ba4ed53df32, type: 3}
+  onDestroyParticle: {fileID: 0}
   entityIncludedInShuffle: 0
+  immuneToDestroyTypes: 01000000

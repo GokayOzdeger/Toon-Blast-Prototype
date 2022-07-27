@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Utilities;
 
-public class GridGoalsController
+public class GridGoalsController : PocoSingleton<GridGoalsController>
 {
     private List<Goal> GridGoals { get; set; }
     private List<GridGoalUI> GridGoalUiElements { get; set; }
@@ -14,6 +14,7 @@ public class GridGoalsController
     
     public GridGoalsController(GridGoalsControllerSettings settings, GridGoalsControllerReferences references)
     {
+        Instance = this;
         this._gridUiElementsParent = references.GoalObjectsParent;
         this._gridUiElementPrefab = settings.UIGoalPrefab;
         GridGoals = new List<Goal>(settings.GridGoals);
@@ -30,10 +31,21 @@ public class GridGoalsController
             if (GridGoals[i].entityType.GridEntityTypeName == entity.EntityType.GridEntityTypeName)
             {
                 GridGoals[i].DecreaseGoal();
-                GridGoalUiElements[i].UpdateGoalAmount(GridGoals[i].GoalLeft);
+                CreateFlyingSpriteToGoal(entity, GridGoalUiElements[i]);
                 if (GridGoals[i].IsCompleted) CheckAllGoalsCompleted();
             }
         }
+    }
+
+    public void CreateFlyingSpriteToGoal(IGridEntity entity, GridGoalUI goalUI)
+    {
+        UIEffectsManager.Instance.CreateCurvyFlyingSprite(
+            entity.EntityType.DefaultEntitySprite,
+            entity.EntityTransform.GetComponent<RectTransform>().sizeDelta * 1.25f, // create bigger flying image for better visual representation
+            entity.EntityTransform.position, 
+            goalUI.transform.position, 
+            UIEffectsManager.CanvasLayer.OverEverything, 
+            ()=> goalUI.UpdateUIElements());
     }
 
     private void StartAllGoals()
@@ -48,8 +60,7 @@ public class GridGoalsController
             GameObject newGo = ObjectPooler.Instance.Spawn(_gridUiElementPrefab.name, _gridUiElementsParent.position);
             newGo.transform.SetParent(_gridUiElementsParent);
             GridGoalUI goalUi = newGo.GetComponent<GridGoalUI>();
-            goalUi.UpdateGoalAmountSprite(goal.entityType.DefaultEntitySprite);
-            goalUi.UpdateGoalAmount(goal.GoalLeft);
+            goalUi.SetupGoalUI(goal);
             GridGoalUiElements.Add(goalUi);
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(_gridUiElementsParent);

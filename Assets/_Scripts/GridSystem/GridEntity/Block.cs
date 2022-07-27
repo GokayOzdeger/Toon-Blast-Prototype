@@ -33,13 +33,13 @@ public class Block : FallingGridEntity
     public void AnimateShake()
     {
         CompleteLastTween();
-        _lastTween = GridTweenHelper.Shake(transform);
+        _lastTween = TweenHelper.Shake(transform);
     }
 
     public void AnimateDestroy()
     {
         CompleteLastTween();
-        _lastTween = GridTweenHelper.PunchScale(transform, OnEntityDestroy);
+        _lastTween = TweenHelper.PunchScale(transform, OnEntityDestroy);
     }
     
     public override void OnPoolSpawn()

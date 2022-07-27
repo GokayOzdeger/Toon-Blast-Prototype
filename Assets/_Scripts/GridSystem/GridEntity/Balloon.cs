@@ -13,7 +13,7 @@ public class Balloon : FallingGridEntity
         {
             if ((GridCoordinates - changeCoordinate).magnitude <= 1)
             {
-                DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent(EntityDestroyTypes.DestroyedByNearbyMove);
+                DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent(EntityDestroyTypes.DestroyedByNearbyMove,"BalloonPop");
                 destroyEvent.StartEvent(_gridController, new List<Balloon>() { this });
             }
         }
@@ -27,7 +27,7 @@ public class Balloon : FallingGridEntity
     public void AnimateDestroy()
     {
         CompleteLastTween();
-        _lastTween = GridTweenHelper.PunchScale(transform, OnEntityDestroy);
+        _lastTween = TweenHelper.PunchScale(transform, OnEntityDestroy);
     }
 
     private void OnEntityDestroy()

@@ -72,10 +72,10 @@ public class FallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
         switch (movementMode)
         {
             case MovementMode.Linear:
-                moveTween = GridTweenHelper.BouncyMoveTo(transform, targetPos);
+                moveTween = TweenHelper.BouncyMoveTo(transform, targetPos);
                 break;
             case MovementMode.Curvy:
-                moveTween = GridTweenHelper.CurvingMoveTo(transform, targetPos);
+                moveTween = TweenHelper.CurvingMoveTo(transform, targetPos);
                 break;
             default:
                 break;

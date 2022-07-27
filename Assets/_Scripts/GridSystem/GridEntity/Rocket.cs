@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
+using Utilities;
 
 public class Rocket : FallingGridEntity
 {
@@ -10,7 +11,7 @@ public class Rocket : FallingGridEntity
     public void OnClickRocket()
     {
         if (!_gridController.GridInterractable) return;
-        DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent(EntityDestroyTypes.DestroyedByMatch);
+        DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent(EntityDestroyTypes.DestroyedByMatch,"RocketDestroySelf"+gameObject.name);
         destroyEvent.StartEvent(_gridController, new List<Rocket>() { this });
     }
 
@@ -22,21 +23,57 @@ public class Rocket : FallingGridEntity
 
     private void StartExplosion()
     {
-        DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent(EntityDestroyTypes.DestroyedByPowerUp);
+        DestroyBlocksOneByOneGridEvent destroyEvent1 = new DestroyBlocksOneByOneGridEvent(EntityDestroyTypes.DestroyedByPowerUp,"RocketUP"+gameObject.name);
+        DestroyBlocksOneByOneGridEvent destroyEvent2 = new DestroyBlocksOneByOneGridEvent(EntityDestroyTypes.DestroyedByPowerUp,"RocketDOWN"+gameObject.name);
         
-        List<IGridEntity> entitiesInDirection = null;
+        List<IGridEntity> entitiesInDirection1 = null;
+        List<IGridEntity> entitiesInDirection2 = null;
         
         switch (direction)
         {
             case RocketDirection.Horizontal:
-                entitiesInDirection = _gridController.GetEntitiesInRow(GridCoordinates.x);
+                entitiesInDirection1 = _gridController.GetEntitiesTowardsLeft(GridCoordinates);
+                entitiesInDirection2 = _gridController.GetEntitiesTowardsRight(GridCoordinates);
+                CreateHorizontalVisiualRockets();
                 break;
             case RocketDirection.Vertical:
-                entitiesInDirection = _gridController.GetEntitiesInColumn(GridCoordinates.y);
+                entitiesInDirection1 = _gridController.GetEntitiesTowardsUp(GridCoordinates);
+                entitiesInDirection2 = _gridController.GetEntitiesTowardsDown(GridCoordinates);
+                CreateVerticalVisiualRockets();
                 break;
         }
 
-        destroyEvent.StartEvent(_gridController, entitiesInDirection);
+        destroyEvent1.StartEvent(_gridController, entitiesInDirection1);
+        destroyEvent2.StartEvent(_gridController, entitiesInDirection2);
+    }
+
+    private void CreateHorizontalVisiualRockets()
+    {
+        Vector2 rocketSize = GetComponent<RectTransform>().sizeDelta;
+        GameObject effectLeft = ObjectPooler.Instance.Spawn((EntityType as RocketTypeDefinition).RocketExplodeAnimPrefab.name, transform.position);
+        GameObject effectRight = ObjectPooler.Instance.Spawn((EntityType as RocketTypeDefinition).RocketExplodeAnimPrefab.name, transform.position);
+        RectTransform layerParent = UIEffectsManager.Instance.GetLayerParent(UIEffectsManager.CanvasLayer.OverGridUnderUI);
+
+        effectRight.transform.Rotate(0, 0, 180);
+        effectLeft.transform.SetParent(layerParent);
+        effectRight.transform.SetParent(layerParent);
+    }
+
+    private void CreateVerticalVisiualRockets()
+    {
+        Vector2 rocketSize = GetComponent<RectTransform>().sizeDelta;
+        GameObject effectUp = ObjectPooler.Instance.Spawn((EntityType as RocketTypeDefinition).RocketExplodeAnimPrefab.name, transform.position);
+        GameObject effectDown = ObjectPooler.Instance.Spawn((EntityType as RocketTypeDefinition).RocketExplodeAnimPrefab.name, transform.position);
+        RectTransform layerParent = UIEffectsManager.Instance.GetLayerParent(UIEffectsManager.CanvasLayer.OverGridUnderUI);
+
+        effectUp.transform.Rotate(0, 0, 90);
+        effectDown.transform.Rotate(0, 0, 270);
+
+        effectDown.GetComponent<RectTransform>().sizeDelta = rocketSize;
+        effectUp.GetComponent<RectTransform>().sizeDelta = rocketSize;
+
+        effectUp.transform.SetParent(layerParent);
+        effectDown.transform.SetParent(layerParent);
     }
 
     private enum RocketDirection

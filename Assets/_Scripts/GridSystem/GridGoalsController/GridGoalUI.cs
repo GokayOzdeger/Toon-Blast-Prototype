@@ -9,13 +9,19 @@ public class GridGoalUI : MonoBehaviour
     [SerializeField] private Image goalImage;
     [SerializeField] private Image goalCompletedImage;
 
-    public void UpdateGoalAmountSprite(Sprite sprite)
+    public Goal Goal { get; private set; }
+
+    public void SetupGoalUI(Goal goal)
     {
-        goalImage.sprite = sprite;
+        Goal = goal;
+        goalImage.sprite = goal.entityType.DefaultEntitySprite;
+        UpdateUIElements();
     }
-    public void UpdateGoalAmount(int goalAmount)
+    
+    public void UpdateUIElements()
     {
-        if(goalAmount == 0)
+        Debug.Log("UpdateUIElements");
+        if (Goal.GoalLeft == 0)
         {
             goalCompletedImage.enabled = true;
             goalAmountLeftText.text = "";
@@ -23,7 +29,7 @@ public class GridGoalUI : MonoBehaviour
         else
         {
             goalCompletedImage.enabled = false;
-            goalAmountLeftText.text = goalAmount.ToString();
+            goalAmountLeftText.text = Goal.GoalLeft.ToString();
         }
     }
 }

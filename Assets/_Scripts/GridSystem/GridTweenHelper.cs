@@ -4,24 +4,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridTweenHelper : MonoBehaviour
+public class TweenHelper : MonoBehaviour
 {
     public static Tween BouncyMoveTo(Transform transform, Vector2 targetPos, Action onComplete = null, float duration = .5f)
     {
         Tween tween = transform.DOMove(targetPos, duration).SetEase(Ease.OutBounce);
         if (onComplete != null) tween.onComplete += () => onComplete();
         return tween;
-     }
+    }
 
-    public static Tween CurvingMoveTo(Transform transform, Vector2 targetPoint, Action onComplete = null, float duration = .5f, float curveAmountMultiplier = .2f)
+    public static Tween LinearMoveTo(Transform transform, Vector2 targetPos, Action onComplete = null, float duration = .5f)
+    {
+        Tween tween = transform.DOMove(targetPos, duration).SetEase(Ease.Linear);
+        if (onComplete != null) tween.onComplete += () => onComplete();
+        return tween;
+    }
+
+    public static Tween CurvingMoveTo(Transform transform, Vector2 targetPoint, Action onComplete = null, float duration = .5f, 
+        float curveAmountMultiplier = .2f, Ease sidewaysEase = Ease.InOutCubic, Ease forwardEase = Ease.InOutBack)
     {
         float distanceToTarget = Vector2.Distance((Vector2)transform.position, targetPoint);
         Vector2 moveDir = (targetPoint - (Vector2)transform.position).normalized;
         Vector2 moveDirNormal = new Vector2(-moveDir.y, moveDir.x);
         Sequence sequence = DOTween.Sequence();
-        sequence.Join(transform.DOBlendableMoveBy(moveDirNormal * distanceToTarget * curveAmountMultiplier, duration / 2).SetEase(Ease.InOutCubic));
-        sequence.Append(transform.DOBlendableMoveBy(-moveDirNormal * distanceToTarget * curveAmountMultiplier, duration / 2).SetEase(Ease.InOutCubic));
-        sequence.Insert(0, transform.DOBlendableMoveBy(targetPoint - (Vector2)transform.position, duration).SetEase(Ease.InOutBack));
+        sequence.Join(transform.DOBlendableMoveBy(moveDirNormal * distanceToTarget * curveAmountMultiplier, duration / 2).SetEase(sidewaysEase));
+        sequence.Append(transform.DOBlendableMoveBy(-moveDirNormal * distanceToTarget * curveAmountMultiplier, duration / 2).SetEase(sidewaysEase));
+        sequence.Insert(0, transform.DOBlendableMoveBy(targetPoint - (Vector2)transform.position, duration).SetEase(forwardEase));
+        if (onComplete != null) sequence.onComplete += () => onComplete();
         return sequence;
     }
 
