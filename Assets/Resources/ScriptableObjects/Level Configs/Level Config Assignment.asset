@@ -36,7 +36,7 @@ MonoBehaviour:
       - row:
         - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
         - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 13aaf49889056f84e8ff0fa91ba3f284, type: 2}
+        - {fileID: 11400000, guid: f15001bb2e484b94ab3fc54dc93cd279, type: 2}
         - {fileID: 11400000, guid: 540eade90e6cd8143b92d701976e47d8, type: 2}
         - {fileID: 0}
         - {fileID: 0}
@@ -46,8 +46,8 @@ MonoBehaviour:
       - row:
         - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
         - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 13aaf49889056f84e8ff0fa91ba3f284, type: 2}
-        - {fileID: 11400000, guid: 13aaf49889056f84e8ff0fa91ba3f284, type: 2}
+        - {fileID: 11400000, guid: f15001bb2e484b94ab3fc54dc93cd279, type: 2}
+        - {fileID: 11400000, guid: f15001bb2e484b94ab3fc54dc93cd279, type: 2}
         - {fileID: 0}
         - {fileID: 0}
         - {fileID: 0}
@@ -56,8 +56,8 @@ MonoBehaviour:
       - row:
         - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
         - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 13aaf49889056f84e8ff0fa91ba3f284, type: 2}
-        - {fileID: 11400000, guid: 13aaf49889056f84e8ff0fa91ba3f284, type: 2}
+        - {fileID: 11400000, guid: f15001bb2e484b94ab3fc54dc93cd279, type: 2}
+        - {fileID: 11400000, guid: f15001bb2e484b94ab3fc54dc93cd279, type: 2}
         - {fileID: 0}
         - {fileID: 11400000, guid: 5dba36ad7d34d1847970bfd8fb30bf63, type: 2}
         - {fileID: 0}
@@ -128,6 +128,6 @@ MonoBehaviour:
     - entityType: {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
       goalAmount: 10
     - entityType: {fileID: 11400000, guid: f15001bb2e484b94ab3fc54dc93cd279, type: 2}
-      goalAmount: 25
+      goalAmount: 15
   movesController:
     moveCount: 25

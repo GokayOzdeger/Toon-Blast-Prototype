@@ -39,6 +39,12 @@ public class MovesController
         return true;
     }
 
+    public void ClickedPowerUp()
+    {
+        MovesLeft--;
+        UpdateMovesLeftUiText();
+    }
+
     private void UpdateMovesLeftUiText()
     {
         _movesLeftText.text = MovesLeft.ToString();

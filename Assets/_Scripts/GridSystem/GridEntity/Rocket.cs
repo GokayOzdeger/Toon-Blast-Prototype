@@ -11,6 +11,7 @@ public class Rocket : FallingGridEntity
     public void OnClickRocket()
     {
         if (!_gridController.GridInterractable) return;
+        GameManager.Instance.CurrentLevel.MovesController.ClickedPowerUp();
         DestroyBlocksGridEvent destroyEvent = new DestroyBlocksGridEvent(EntityDestroyTypes.DestroyedByMatch,"RocketDestroySelf"+gameObject.name);
         destroyEvent.StartEvent(_gridController, new List<Rocket>() { this });
     }
@@ -52,7 +53,7 @@ public class Rocket : FallingGridEntity
         Vector2 rocketSize = GetComponent<RectTransform>().sizeDelta;
         GameObject effectLeft = ObjectPooler.Instance.Spawn((EntityType as RocketTypeDefinition).RocketExplodeAnimPrefab.name, transform.position);
         GameObject effectRight = ObjectPooler.Instance.Spawn((EntityType as RocketTypeDefinition).RocketExplodeAnimPrefab.name, transform.position);
-        RectTransform layerParent = UIEffectsManager.Instance.GetLayerParent(UIEffectsManager.CanvasLayer.OverGridUnderUI);
+        RectTransform layerParent = UIEffectsManager.Instance.GetLayerParent(UIEffectsManager.CanvasLayer.OverEverything);
 
         effectRight.transform.Rotate(0, 0, 180);
         effectLeft.transform.SetParent(layerParent);
@@ -64,7 +65,7 @@ public class Rocket : FallingGridEntity
         Vector2 rocketSize = GetComponent<RectTransform>().sizeDelta;
         GameObject effectUp = ObjectPooler.Instance.Spawn((EntityType as RocketTypeDefinition).RocketExplodeAnimPrefab.name, transform.position);
         GameObject effectDown = ObjectPooler.Instance.Spawn((EntityType as RocketTypeDefinition).RocketExplodeAnimPrefab.name, transform.position);
-        RectTransform layerParent = UIEffectsManager.Instance.GetLayerParent(UIEffectsManager.CanvasLayer.OverGridUnderUI);
+        RectTransform layerParent = UIEffectsManager.Instance.GetLayerParent(UIEffectsManager.CanvasLayer.OverEverything);
 
         effectUp.transform.Rotate(0, 0, 90);
         effectDown.transform.Rotate(0, 0, 270);
