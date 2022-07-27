@@ -25,7 +25,7 @@ public class GameManager : AutoSingleton<GameManager>
         CreateNewLevel();   
     }
 
-    private void CreateNewLevel()
+    public void CreateNewLevel()
     {
         CurrentLevel = new LevelController(ChosenLevelConfig, levelSceneReferences);
     }

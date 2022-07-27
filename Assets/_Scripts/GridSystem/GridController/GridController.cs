@@ -38,10 +38,11 @@ public class GridController
     public UnityEvent OnGridInterractable = new UnityEvent();
     public Vector2[,] GridPositions { get; private set; }
     public IGridEntity[,] EntityGrid { get; private set; }
-    public bool GridInterractable { get { return _gridEventsInProgress == 0 && _entitiesInProcess == 0; } }
+    public bool GridInterractable { get { return _gridEventsInProgress == 0 && _entitiesInProcess == 0 && _gridDestroyed == false; } }
     public RectTransform GridOverlay => _gridOverlayTransform;
 
     private List<(Vector2Int,GridChangeEventType,IGridEntityTypeDefinition)> _cachedGridChanges = new List<(Vector2Int,GridChangeEventType,IGridEntityTypeDefinition)>();
+    private RectTransform _gridFrame;
     private bool[,] _controlledGridCoordinates;
     private int _entitiesInProcess = 0;
     private int _gridEventsInProgress = 0;
@@ -49,7 +50,7 @@ public class GridController
     
     private ShuffleController _shuffleController; 
 
-    private GridEntitySpawner _entitySpawner;
+    private GridEntitySpawnController _entitySpawner;
     private GridGoalsController _goalController;
 
     public GridController(GridControllerSettings settings , GridControllerSceneReferences references)
@@ -58,16 +59,16 @@ public class GridController
         this._canvasScaler = references.CanvasScaler;
         this._gridCenterTransform = references.GridRect;
         this._gridOverlayTransform = references.GridOverlay;
-        
+        this._gridFrame = references.GridFrame;
         gridRowCount = settings.RowCount;
         gridColumnCount = settings.ColumnCount;
 
         CalculateCellSpacing(settings, references);
         CreateGridAndCalculatePositions();
-        ResizeGridFrame(references.GridFrame, settings);
+        ResizeGridFrame(settings);
     }
 
-    public void StartGrid(ShuffleController shuffleController, GridEntitySpawner entitySpawner, GridGoalsController goalController)
+    public void StartGrid(ShuffleController shuffleController, GridEntitySpawnController entitySpawner, GridGoalsController goalController)
     {
         _shuffleController = shuffleController;
         _entitySpawner = entitySpawner;
@@ -142,11 +143,11 @@ public class GridController
         }
     }
 
-    private void ResizeGridFrame(RectTransform frame, GridControllerSettings settings)
+    private void ResizeGridFrame(GridControllerSettings settings)
     {
         Vector2 frameSizeAdd = new Vector2(settings.GridFrameWidthAdd, settings.GridFrameBottomAdd + settings.GridFrameTopAdd);
-        frame.sizeDelta = new Vector2(ColumnCount * gridCellSpacing, RowCount * gridCellSpacing) + frameSizeAdd * GridCellSpacing;
-        frame.transform.position += new Vector3(0, settings.GridFrameTopAdd - settings.GridFrameBottomAdd, 0) * GridCellSpacing;
+        _gridFrame.sizeDelta = new Vector2(ColumnCount * gridCellSpacing, RowCount * gridCellSpacing) + frameSizeAdd * GridCellSpacing;
+        _gridFrame.transform.position += new Vector3(0, settings.GridFrameTopAdd - settings.GridFrameBottomAdd, 0) * GridCellSpacing;
     }
 
     private void CollectMatchingSurroundingEntitiesRecursive<T>(T entity, ref List<T> entityListToCollect) where T : IGridEntity
@@ -176,6 +177,7 @@ public class GridController
 
     public void GridDestroyOnLevelClear()
     {
+        _gridFrame.localPosition = Vector2.zero;
         _gridDestroyed = true;
         foreach (IGridEntity entity in EntityGrid)
         {
@@ -186,6 +188,7 @@ public class GridController
 
     public void GridDestroyOnLevelFailed()
     {
+        _gridFrame.localPosition = Vector2.zero;
         _gridDestroyed = true;
         foreach (IGridEntity entity in EntityGrid)
         {

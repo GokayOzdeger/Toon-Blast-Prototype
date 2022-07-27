@@ -52,6 +52,14 @@ public class GridGoalsController : PocoSingleton<GridGoalsController>
             ()=> goalUI.UpdateUIElements());
     }
 
+    public void ClearUIElementsOnLevelEnd()
+    {
+        for (int i = 0; i < GridGoalUiElements.Count; i++)
+        {
+            GridGoalUiElements[i].GoToPool();
+        }
+    }
+
     private void StartAllGoals()
     {
         foreach (Goal goal in GridGoals) goal.StartGoal();
@@ -64,6 +72,7 @@ public class GridGoalsController : PocoSingleton<GridGoalsController>
             GameObject newGo = ObjectPooler.Instance.Spawn(_gridUiElementPrefab.name, _gridUiElementsParent.position);
             newGo.transform.SetParent(_gridUiElementsParent);
             GridGoalUI goalUi = newGo.GetComponent<GridGoalUI>();
+            goalUi.transform.localScale = Vector3.one;
             goalUi.SetupGoalUI(goal);
             GridGoalUiElements.Add(goalUi);
         }

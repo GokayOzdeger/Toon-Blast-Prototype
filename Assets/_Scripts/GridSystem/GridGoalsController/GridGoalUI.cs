@@ -6,6 +6,7 @@ using Utilities;
 
 public class GridGoalUI : MonoBehaviour
 {
+    [SerializeField] private PoolObject poolObject;
     [SerializeField] private GameObject particleEffectPrefab;
     [SerializeField] private TMPro.TMP_Text goalAmountLeftText;
     [SerializeField] private Image goalImage;
@@ -33,5 +34,10 @@ public class GridGoalUI : MonoBehaviour
             goalCompletedImage.enabled = false;
             goalAmountLeftText.text = Goal.GoalLeft.ToString();
         }
+    }
+
+    public void GoToPool()
+    {
+        poolObject.GoToPool();
     }
 }

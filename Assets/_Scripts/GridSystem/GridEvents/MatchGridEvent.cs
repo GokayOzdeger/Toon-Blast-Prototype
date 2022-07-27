@@ -23,8 +23,8 @@ public class MatchGridEvent : IGridEvent
     {
         if (_activeMatchCondition != null)
         {
-            GridEntitySpawner.Instance.SpawnEntity(_activeMatchCondition.Value.GetRandomEntityToSpawn(), _matchMergeCoordinates);
-            GridEntitySpawner.Instance.RemoveEntitySpawnReqeust(_matchMergeCoordinates.y);
+            GridEntitySpawnController.Instance.SpawnEntity(_activeMatchCondition.Value.GetRandomEntityToSpawn(), _matchMergeCoordinates);
+            GridEntitySpawnController.Instance.RemoveEntitySpawnReqeust(_matchMergeCoordinates.y);
         }
         _gridController.OnGridEventEnd(this);
     }

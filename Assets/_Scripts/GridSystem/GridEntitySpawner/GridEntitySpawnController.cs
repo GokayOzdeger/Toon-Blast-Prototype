@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utilities;
 
-public class GridEntitySpawner : PocoSingleton<GridEntitySpawner>
+public class GridEntitySpawnController : PocoSingleton<GridEntitySpawnController>
 {
     private int[] BlockSpawnRequests { get; set; }
 
@@ -15,7 +15,7 @@ public class GridEntitySpawner : PocoSingleton<GridEntitySpawner>
     private GridController _gridController;
     private GridStartLayout _startLayout;
 
-    public GridEntitySpawner(GridController gridController, GridEntitySpawnerSettings settings, GridEntitySpawnerSceneReferences references )
+    public GridEntitySpawnController(GridController gridController, GridEntitySpawnerSettings settings, GridEntitySpawnerSceneReferences references )
     {
         Instance = this;
         this._gridEntityTypesToSpawnFrom = settings.EntityTypes;

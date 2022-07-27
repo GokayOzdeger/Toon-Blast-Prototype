@@ -9,10 +9,10 @@ public class MovesController
     public int MovesLeft { get; private set; }
 
     private GridController _gridController;
-    private GridEntitySpawner _gridEntitySpawner;
+    private GridEntitySpawnController _gridEntitySpawner;
     private TMPro.TMP_Text _movesLeftText;
 
-    public MovesController(GridController gridController, GridEntitySpawner entitySpawner, MovesControllerSettings settings, MovesControllerSceneReferences references)
+    public MovesController(GridController gridController, GridEntitySpawnController entitySpawner, MovesControllerSettings settings, MovesControllerSceneReferences references)
     {
         this._gridController = gridController;
         this._gridEntitySpawner = entitySpawner;
