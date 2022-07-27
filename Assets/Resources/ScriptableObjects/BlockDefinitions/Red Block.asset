@@ -17,4 +17,6 @@ MonoBehaviour:
   defaultSprite: {fileID: 21300000, guid: 6c10e0d2e3cb83b4e8a67a7b68d3b5c8, type: 3}
   onDestroyParticle: {fileID: 9019399418969879188, guid: a93639d8bce626e4ab117037c7f9841d, type: 3}
   entityIncludedInShuffle: 1
-  explodesOnClick: 1
+  spriteConditionPairs:
+  - sprite: {fileID: 21300000, guid: 41d8876eb6ec8fa4199dd92da22f1151, type: 3}
+    condition: {fileID: 11400000, guid: 4e5e2688aa252f943b09f7e6a360a970, type: 2}

@@ -38,7 +38,7 @@ public class ShuffleController
         
         for (int i = 0; i < _gridController.RowCount; i++)
         {
-            for (int j = 0; j < _gridController.CollumnCount; j++)
+            for (int j = 0; j < _gridController.ColumnCount; j++)
             {
                 IGridEntity entity = _gridController.EntityGrid[i, j];
                 if (entity == null) continue;

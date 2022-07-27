@@ -9,7 +9,7 @@ using Utilities;
 public class Block : BasicFallingGridEntity
 {
     private readonly float DestroyAnimationDuration = .2f;
-   
+
     public List<Block> CurrentMatchGroup { get; private set; }
     public int GroupSize { get { if (CurrentMatchGroup == null) return 0; return CurrentMatchGroup.Count; } }
 
@@ -48,7 +48,6 @@ public class Block : BasicFallingGridEntity
     {
         if (!_gridController.GridInterractable) return;
         bool matchSuccess = GameManager.Instance.CurrentLevel.MovesController.TryMakeMatchMove(this);
-        Debug.Log("TryMatch: " + matchSuccess);
         if (!matchSuccess) MatchFail();
     }
 
@@ -93,6 +92,7 @@ public class Block : BasicFallingGridEntity
         foreach (Block block in blockGroup)
         {
             block.AssignMatchGroup(blockGroup);
+            block.CheckConditionsAndChooseSprite();
         }
     }
 
@@ -112,5 +112,19 @@ public class Block : BasicFallingGridEntity
     {
         MatchGroupCalculated = true;
         CurrentMatchGroup = group;
+    }
+
+    private void CheckConditionsAndChooseSprite()
+    {
+        BlockTypeDefinition blockTypeDefinition = EntityType as BlockTypeDefinition;
+        foreach (var spriteConditionPair in blockTypeDefinition.SpriteConditionPairs)
+        {
+            if (spriteConditionPair.condition.IsConditionMet(this))
+            {
+                entityImage.sprite = spriteConditionPair.sprite;
+                return;
+            }
+        }
+        entityImage.sprite = blockTypeDefinition.DefaultEntitySprite;
     }
 }

@@ -5,9 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "ScriptableObjects/Block Type Definition")]
 public class BlockTypeDefinition : BasicGridEntityTypeDefinition
 {
-    [BHeader("Block Type Settings")]
-    [SerializeField] private bool explodesOnClick = true;
-
-    public bool MatchesOnClick => explodesOnClick;
-
+    [SerializeField] private List<SpriteConditionPair> spriteConditionPairs = new List<SpriteConditionPair>();
+    public List<SpriteConditionPair> SpriteConditionPairs => spriteConditionPairs;
 }

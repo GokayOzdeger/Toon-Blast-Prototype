@@ -16,6 +16,8 @@ public class DestroyBlocksGridEvent : IGridEvent
 
     public void StartEvent<T>(GridController grid, List<T> effectedEntities) where T : IGridEntity
     {
+        if (effectedEntities.Count == 0) return;
+        Debug.Log("Started DestroyBlocksGridEvent: "+effectedEntities.Count);
         _gridController = grid;
         _entitiesToDestory = effectedEntities.Count;
 
@@ -33,6 +35,7 @@ public class DestroyBlocksGridEvent : IGridEvent
     private void OnEntityDestroyed(IGridEntity entityDestroyed)
     {
         _entitiesDestroyed++;
+        Debug.Log("Ended DestroyBlocksGridEvent: " + _entitiesDestroyed);
         if (_entitiesDestroyed == _entitiesToDestory) OnEventEnd();
     }
 }

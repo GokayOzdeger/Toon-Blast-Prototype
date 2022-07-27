@@ -35,6 +35,7 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
 
     public void SetBlockImage(Sprite sprite)
     {
+        if (sprite == null || entityImage == null) return;
         entityImage.sprite = sprite;
     }
 
@@ -122,8 +123,8 @@ public class BasicFallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
 
     public virtual void DestoryEntity()
     {
-        poolObject.GoToPool();
         OnEntityDestroyed.Invoke(this);
+        poolObject.GoToPool();
     }    
 
     public virtual void OnGoToPool()

@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e02a92592a51084981b01e48f0fe347, type: 3}
-  m_Name: GreenBlock
+  m_Name: Green Block
   m_EditorClassIdentifier: 
   gridEntityPrefab: {fileID: 1905907544835078951, guid: dc5bcb2e100efcc4896a74f905bb6b9d, type: 3}
   gridEntityTypeName: Green
   defaultSprite: {fileID: 21300000, guid: e1ada36e74f3ec946a435d0ee6920f6c, type: 3}
   onDestroyParticle: {fileID: 7218581546105527683, guid: 2f27c087957ed804ab709482003f8c3a, type: 3}
   entityIncludedInShuffle: 1
-  explodesOnClick: 1
+  spriteConditionPairs:
+  - sprite: {fileID: 21300000, guid: 41d8876eb6ec8fa4199dd92da22f1151, type: 3}
+    condition: {fileID: 11400000, guid: 4e5e2688aa252f943b09f7e6a360a970, type: 2}

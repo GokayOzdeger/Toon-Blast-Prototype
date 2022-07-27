@@ -16,7 +16,7 @@ public class GridControllerSettings
     [SerializeField] private float gridFrameTopAdd;
 
     public uint RowCount => rowCount;
-    public uint CollumnCount => collumnCount;
+    public uint ColumnCount => collumnCount;
     public int MaxEntitiesPerSide => maxEntitiesPerRow;
     public float GridFrameWidthAdd => gridFrameWidthAdd/100;
     public float GridFrameBottomAdd => gridFrameBottomAdd/100;

@@ -20,7 +20,7 @@ public class GridEntitySpawner
         this._gridEntityTypes = settings.EntityTypes;
         this._gridParentTransform = references.GridParentTransform;
         this._gridController = gridController;
-        this._collumnCount = gridController.CollumnCount;
+        this._collumnCount = gridController.ColumnCount;
         this._startLayout = settings.gridStartLayout;
         BlockSpawnRequests = new int[_collumnCount];
         CalculateSpawnPositionRow(settings.SpawnHeight);

@@ -8,9 +8,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2062658639165959239, guid: 46b6c2cd4f357324ea6e2a60cf2a9d1c, type: 3}
-      propertyPath: UVModule.sprites.Array.data[0].sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 1f87078b8bd88574498c2af164b8edbd, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2062658639165959239, guid: 46b6c2cd4f357324ea6e2a60cf2a9d1c, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2062658639165959239, guid: 46b6c2cd4f357324ea6e2a60cf2a9d1c, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0.63324785
+      objectReference: {fileID: 0}
     - target: {fileID: 3139013470064094785, guid: 46b6c2cd4f357324ea6e2a60cf2a9d1c, type: 3}
       propertyPath: m_RootOrder
       value: 0
