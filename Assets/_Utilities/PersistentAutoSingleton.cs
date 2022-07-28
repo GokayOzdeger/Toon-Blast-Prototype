@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utilities;
 
-public class PersistentAutoSingleton<T> : ModifiedMonoBehaviour
-    where T : ModifiedMonoBehaviour
+public class PersistentAutoSingleton<T> : MonoBehaviour
+    where T : MonoBehaviour
 {
     #region Fields
 

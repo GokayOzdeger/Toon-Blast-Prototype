@@ -15,8 +15,8 @@ MonoBehaviour:
   gridControllerSettings:
     rowCount: 3
     collumnCount: 3
-    maxEntitiesPerRow: 12
-    maxEntitiesPerCollumn: 12
+    maxEntitiesPerRow: 4
+    maxEntitiesPerCollumn: 4
     gridFrameWidthAdd: 20
     gridFrameBottomAdd: 16
     gridFrameTopAdd: 26
@@ -41,6 +41,7 @@ MonoBehaviour:
     spawnHeight: 500
   goalsControllerSettings:
     uiGoalPrefab: {fileID: 233327313712590955, guid: 1cad3eb0494fb0b42a6a15134de99372, type: 3}
+    goalCollectAudio: {fileID: 0}
     gridGoals:
     - entityType: {fileID: 11400000, guid: 13aaf49889056f84e8ff0fa91ba3f284, type: 2}
       goalAmount: 5

@@ -6,8 +6,8 @@ namespace Utilities
     /// Singleton pattern with auto destroy
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class AutoSingleton<T> : ModifiedMonoBehaviour
-        where T : ModifiedMonoBehaviour
+    public class AutoSingleton<T> : MonoBehaviour
+        where T : MonoBehaviour
     {
         #region Fields
 

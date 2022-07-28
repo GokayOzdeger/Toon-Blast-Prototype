@@ -24,7 +24,7 @@ public class GridGoalUI : MonoBehaviour
     public void SetGoalAmount(int goalAmount, bool playParticles = true)
     {
         if (playParticles) ObjectPooler.Instance.Spawn(particleEffectPrefab.name, transform.position);
-        if (Goal.GoalLeft == 0)
+        if (goalAmount == 0)
         {
             goalCompletedImage.enabled = true;
             goalAmountLeftText.text = "";
@@ -32,7 +32,7 @@ public class GridGoalUI : MonoBehaviour
         else
         {
             goalCompletedImage.enabled = false;
-            goalAmountLeftText.text = Goal.GoalLeft.ToString();
+            goalAmountLeftText.text = goalAmount.ToString();
         }
     }
 

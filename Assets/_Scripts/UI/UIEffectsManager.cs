@@ -5,7 +5,6 @@ using Utilities;
 using DG.Tweening;
 using System;
 using UnityEngine.UI;
-using Utilities;
 
 public class UIEffectsManager : AutoSingleton<UIEffectsManager>
 {
