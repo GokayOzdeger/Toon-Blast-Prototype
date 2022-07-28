@@ -62,7 +62,7 @@ public class GridController
         this._gridFrame = references.GridFrame;
         gridRowCount = settings.RowCount;
         gridColumnCount = settings.ColumnCount;
-
+        
         CalculateCellSpacing(settings, references);
         CreateGridAndCalculatePositions();
         ResizeGridFrame(settings);
@@ -74,8 +74,8 @@ public class GridController
         _entitySpawner = entitySpawner;
         _goalController = goalController;
 
+        OnGridInterractable.AddListener(_shuffleController.CheckShuffleRequired);
         _entitySpawner.FillAllGridWithStartLayout();
-        _shuffleController.CheckShuffleRequired();
         UpdateAllEntities();
     }
 
@@ -112,11 +112,7 @@ public class GridController
             entity.OnUpdateEntity();
         }
         
-        if (GridInterractable) 
-        {
-            _shuffleController.CheckShuffleRequired();
-            OnGridInterractable.Invoke(); 
-        }
+        if (GridInterractable) OnGridInterractable.Invoke(); 
     }
 
     private void CreateGridAndCalculatePositions()
@@ -342,11 +338,7 @@ public class GridController
     public void EntityEndProcess()
     {
         _entitiesInProcess--;
-        if (GridInterractable)
-        {
-            _shuffleController.CheckShuffleRequired();
-            OnGridInterractable.Invoke();
-        }
+        if (GridInterractable) OnGridInterractable.Invoke();
     }
 
     public void CollectMatchingSurroundingEntities<T>(T entity, ref List<T> entityListToCollect) where T : IGridEntity

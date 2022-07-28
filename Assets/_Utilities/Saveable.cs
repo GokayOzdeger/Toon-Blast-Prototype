@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+/// <summary>
+/// Saveable is a basic save system, each saveable class acts as a signleton.
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public abstract class Saveable<T> where T : new()
 {
     private static T _data;

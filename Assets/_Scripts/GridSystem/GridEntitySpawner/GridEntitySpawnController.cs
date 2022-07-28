@@ -29,8 +29,24 @@ public class GridEntitySpawnController : PocoSingleton<GridEntitySpawnController
 
     public void FillAllGridWithStartLayout()
     {
+        TryLoadGridLayoutFromSavedData();
         StartFillBoardRequest();
         SummonRequestedEntities(_startLayout);
+    }
+
+    private void TryLoadGridLayoutFromSavedData()
+    {
+        if(!LevelSaveData.Data.HasLevelSaved) return;
+        
+        GridStartLayout gridLayout = new GridStartLayout(_gridController.RowCount, _gridController.ColumnCount);
+        
+        BasicGridEntityTypeDefinition[] entityTypes = new BasicGridEntityTypeDefinition[_gridController.EntityGrid.Length];
+        for (int i = 0; i < entityTypes.Length; i++)
+        {
+            string entityTypeName = LevelSaveData.Data.SavedGrid[i];
+            entityTypes[i] = AllGridEntities.GetEntityTypeByName(entityTypeName);
+        }
+        _startLayout = GridStartLayout.FromArray(_gridController.RowCount, _gridController.ColumnCount, entityTypes);
     }
 
     private void CalculateSpawnPositionRow(int spawnHeight)

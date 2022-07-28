@@ -6,7 +6,7 @@ using Utilities;
 
 public class GridGoalsController : PocoSingleton<GridGoalsController>
 {
-    private List<Goal> GridGoals { get; set; }
+    public List<Goal> GridGoals { get; private set; }
     private List<GridGoalUI> GridGoalUiElements { get; set; }
 
     private RectTransform _gridUiElementsParent;
@@ -21,6 +21,7 @@ public class GridGoalsController : PocoSingleton<GridGoalsController>
         GridGoalUiElements = new List<GridGoalUI>();
 
         StartAllGoals();
+        TryLoadGoalSaveData();
         SpawnUiElements();
     }
 
@@ -63,6 +64,16 @@ public class GridGoalsController : PocoSingleton<GridGoalsController>
     private void StartAllGoals()
     {
         foreach (Goal goal in GridGoals) goal.StartGoal();
+    }
+
+    private void TryLoadGoalSaveData()
+    {
+        if (!LevelSaveData.Data.HasLevelSaved) return;
+        for (int i = 0; i < GridGoals.Count; i++)
+        {
+            Goal goal = GridGoals[i];
+            goal.LoadGoalAmountLeft(LevelSaveData.Data.GoalAmountsLeft[i]);
+        }
     }
 
     private void SpawnUiElements()

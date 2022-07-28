@@ -25,4 +25,18 @@ public class GridStartLayout  {
             rows[i].row = new BasicGridEntityTypeDefinition[collumnCount];
         }
     }
+
+    public static GridStartLayout FromArray(int rowCount, int collumnCount, BasicGridEntityTypeDefinition[] entityTypes)
+    {
+        GridStartLayout layout = new GridStartLayout(rowCount, collumnCount);
+        for (int i = rowCount -1; i >= 0; i--)
+        {
+            for (int j = 0; j < collumnCount; j++)
+            {
+                Debug.Log("Write : " + i + "/" + j + "|" + entityTypes[i * collumnCount + j].GridEntityTypeName);
+                layout.rows[i].row[j] = entityTypes[i * collumnCount + j];
+            }
+        }
+        return layout;
+    }
 }

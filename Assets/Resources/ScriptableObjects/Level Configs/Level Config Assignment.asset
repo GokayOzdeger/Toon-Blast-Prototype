@@ -130,4 +130,4 @@ MonoBehaviour:
     - entityType: {fileID: 11400000, guid: f15001bb2e484b94ab3fc54dc93cd279, type: 2}
       goalAmount: 1
   movesController:
-    moveCount: 1
+    moveCount: 20

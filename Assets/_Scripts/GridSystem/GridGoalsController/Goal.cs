@@ -22,4 +22,9 @@ public class Goal
         goalLeft--;
         if (goalLeft < 0) goalLeft = 0;
     }
+
+    public void LoadGoalAmountLeft(int loadedGoalLeft)
+    {
+        goalLeft = loadedGoalLeft;
+    }
 }

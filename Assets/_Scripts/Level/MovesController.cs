@@ -19,6 +19,7 @@ public class MovesController
         this._movesLeftText = references.MovesLeftText;
         _gridController.OnGridInterractable.AddListener(OnGridReadyForNextMove);
         MovesLeft = settings.MoveCount;
+        TryLoadMovesLeftSaveData();
         UpdateMovesLeftUiText();
     }
 
@@ -41,6 +42,12 @@ public class MovesController
     {
         MovesLeft--;
         UpdateMovesLeftUiText();
+    }
+
+    private void TryLoadMovesLeftSaveData()
+    {
+        if (!LevelSaveData.Data.HasLevelSaved) return;
+        MovesLeft = LevelSaveData.Data.MovesLeft;
     }
 
     private void OnGridReadyForNextMove()

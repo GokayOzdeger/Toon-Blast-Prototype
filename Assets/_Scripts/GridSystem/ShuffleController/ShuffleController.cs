@@ -14,21 +14,17 @@ public class ShuffleController
             references.ForceShuffleButton.onClick.AddListener(OnClickForceShuffleButton);
     }
 
-    public bool CheckShuffleRequired()
+    public void CheckShuffleRequired()
     {
         foreach(IGridEntity entity in _gridController.EntityGrid)
         {
             if(entity is Block)
             {
                 Block block = (Block)entity;
-                if (block.CurrentMatchGroup.Count >= MovesController.MinGroupSizeForExplosion)
-                {
-                    return true;
-                }
+                if (block.CurrentMatchGroup.Count >= MovesController.MinGroupSizeForExplosion) return;
             }
         }
         DoShuffle();
-        return false;
     }
 
     private void DoShuffle()
