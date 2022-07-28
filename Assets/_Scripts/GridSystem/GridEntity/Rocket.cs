@@ -58,6 +58,10 @@ public class Rocket : FallingGridEntity
         RectTransform layerParent = UIEffectsManager.Instance.GetLayerParent(UIEffectsManager.CanvasLayer.OverEverything);
 
         effectRight.transform.Rotate(0, 0, 180);
+
+        effectRight.GetComponent<RectTransform>().sizeDelta = rocketSize;
+        effectLeft.GetComponent<RectTransform>().sizeDelta = rocketSize;
+
         effectLeft.transform.SetParent(layerParent);
         effectRight.transform.SetParent(layerParent);
     }
@@ -65,7 +69,6 @@ public class Rocket : FallingGridEntity
     private void CreateVerticalVisiualRockets()
     {
         Vector2 rocketSize = GetComponent<RectTransform>().sizeDelta;
-        Debug.Log($"RocketRefs: {EntityType.GetType()}");
         GameObject effectUp = ObjectPooler.Instance.Spawn((EntityType as RocketTypeDefinition).RocketExplodeAnimPrefab.name, transform.position);
         GameObject effectDown = ObjectPooler.Instance.Spawn((EntityType as RocketTypeDefinition).RocketExplodeAnimPrefab.name, transform.position);
         RectTransform layerParent = UIEffectsManager.Instance.GetLayerParent(UIEffectsManager.CanvasLayer.OverEverything);

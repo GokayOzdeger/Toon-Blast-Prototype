@@ -48,7 +48,6 @@ public class GridGoalsController : PocoSingleton<GridGoalsController>
     public void CreateFlyingSpriteToGoal(IGridEntity entity, GridGoalUI goalUI)
     {
         int goalAmount = goalUI.Goal.GoalLeft;
-        Debug.Log("Goal: " + goalAmount);
         UIEffectsManager.Instance.CreateCurvyFlyingSprite(
             entity.EntityType.DefaultEntitySprite,
             entity.EntityTransform.GetComponent<RectTransform>().sizeDelta * 1.25f, // create bigger flying image for better visual representation

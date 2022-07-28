@@ -62,7 +62,6 @@ public class LevelSaveData : Saveable<LevelSaveData>
         {
             if (entity != null)
             {
-                Debug.Log("Save : " + entity.EntityTransform.gameObject.name);
                 SavedGrid[currentIndex] = entity.EntityType.GridEntityTypeName;
             }
             currentIndex++;

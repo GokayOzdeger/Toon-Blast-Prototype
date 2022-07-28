@@ -141,7 +141,6 @@ public class FallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
         SummonOnDestroyParticle();
         KillLastTween();
         OnEntityDestroyed.RemoveAllListeners();
-        Debug.Log("OnGoToPool: " + gameObject.name);
     }
 
     private void SummonOnDestroyParticle()

@@ -38,7 +38,6 @@ public class DestroyBlocksOneByOneGridEvent : IGridEvent
 
         _gridController.OnGridEventStart(this);
         _gridController.RemoveEntitiesFromGridArray(effectedEntities, GridChangeEventType.EntityDestroyed);
-        Debug.Log("Remove from grid DestroyBlocksOneByOneGridEvent: ");
 
         CoroutineHelper.Instance.StartCoroutine(DestroyOneByOneRoutine(effectedEntities));
     }
@@ -57,7 +56,6 @@ public class DestroyBlocksOneByOneGridEvent : IGridEvent
     private void OnEntityDestroyed(IGridEntity entityDestroyed)
     {
         _entitiesDestroyed++;
-        Debug.Log("Ended DestroyBlocksGridEvent: " + _entitiesDestroyed + "/" + _entitiesToDestroy);
         if (_entitiesDestroyed == _entitiesToDestroy) OnEventEnd();
     }
 }

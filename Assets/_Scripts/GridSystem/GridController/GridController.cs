@@ -271,16 +271,13 @@ public class GridController
 
     public void OnGridEventStart(IGridEvent gridEvent)
     {
-        Debug.Log("Start event: ");
         _gridEventsInProgress++;
     }
 
     public void OnGridEventEnd(IGridEvent gridEvent)
     {
         if (_gridDestroyed) return;
-        Debug.Log("GridEventEnd: ");
         _gridEventsInProgress--;
-        Debug.Log("GridEventsInProgress: " + _gridEventsInProgress);
 
         // call all changes made if grid events are completed
         if (_gridEventsInProgress == 0)
@@ -314,7 +311,6 @@ public class GridController
     
     public void CallCachedChanges()
     {
-        Debug.Log("CallCachedChanges");
         while (_cachedGridChanges.Count > 0)
         {
             OnGridChange.Invoke(_cachedGridChanges[0].Item1, _cachedGridChanges[0].Item2, _cachedGridChanges[0].Item3);
@@ -336,7 +332,7 @@ public class GridController
     public void EntityEndProcess()
     {
         _entitiesInProcess--;
-        if (GridInterractable && !_gridDestroyed) { Debug.Log("grid destory: " + _gridDestroyed); OnGridInterractable.Invoke(); }
+        if (GridInterractable && !_gridDestroyed) { OnGridInterractable.Invoke(); }
     }
 
     public void CollectMatchingSurroundingEntities<T>(T entity, ref List<T> entityListToCollect) where T : IGridEntity

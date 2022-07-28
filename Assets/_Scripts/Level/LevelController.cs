@@ -41,7 +41,6 @@ public class LevelController
         LevelState = LevelStates.Failed;
         CreateLevelResultFlyingText("Level Failed");
         GridController.GridDestroyOnLevelFailed();
-        Debug.Log("destroy save data");
         LevelSaveData.Data.ClearSavedLevelState();
     }
 
