@@ -10,6 +10,7 @@ public class BasicGridEntityTypeDefinition : ScriptableObject, IGridEntityTypeDe
     [SerializeField] protected string gridEntityTypeName;
     [SerializeField] protected Sprite defaultSprite;
     [SerializeField] protected GameObject onDestroyParticle;
+    [SerializeField] protected AudioClip onDestroyAudio;
     [SerializeField] protected bool entityIncludedInShuffle = true;
     [SerializeField] protected List<EntityDestroyTypes> immuneToDestroyTypes = new List<EntityDestroyTypes>();
 
@@ -18,6 +19,8 @@ public class BasicGridEntityTypeDefinition : ScriptableObject, IGridEntityTypeDe
     public Sprite DefaultEntitySprite => defaultSprite;
     
     public GameObject OnDestroyParticle => onDestroyParticle;
+    
+    public AudioClip OnDestroyAudio => onDestroyAudio;
 
     public GameObject GridEntityPrefab => gridEntityPrefab;
 

@@ -16,4 +16,6 @@ MonoBehaviour:
   gridEntityTypeName: Balloon
   defaultSprite: {fileID: 21300000, guid: 7c68210abc545d243b04871c4aae9198, type: 3}
   onDestroyParticle: {fileID: 4978614817292425221, guid: 8ec97fadcb7b77e4bbfe088b7dde75fa, type: 3}
+  onDestroyAudio: {fileID: 8300000, guid: a7637a8f775d5be44b81f7e6f5f5ded0, type: 3}
   entityIncludedInShuffle: 0
+  immuneToDestroyTypes: 

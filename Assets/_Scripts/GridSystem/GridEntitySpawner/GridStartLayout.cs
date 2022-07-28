@@ -33,11 +33,9 @@ public class GridStartLayout  {
         {
             for (int j =0; j < rowCount; j++)
             {
-                Debug.Log("Layout created: " + i + "/" + j);
                 layout.rows[i].row[j] = entityTypes[(collumnCount -1 - i) * rowCount + j];
             }
         }
-        GameManager.Instance.loadedLayout = layout;
         return layout;
     }
 }

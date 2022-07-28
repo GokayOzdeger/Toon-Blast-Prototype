@@ -18,6 +18,7 @@ public class Rocket : FallingGridEntity
 
     public override void DestoryEntity(EntityDestroyTypes destroyType)
     {
+        PlayOnDestroyAudio();
         Debug.Log("Destroy Rocker: " + gameObject.name);
         StartExplosion();
         base.DestoryEntity(destroyType);

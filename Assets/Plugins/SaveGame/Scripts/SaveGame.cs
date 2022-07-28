@@ -623,11 +623,6 @@ namespace BayatGames.SaveGameFree
 			if ( !Exists ( filePath, path ) )
 #endif
             {
-                Debug.LogWarningFormat(
-                    "The specified identifier ({1}) does not exists. please use Exists () to check for existent before calling Load.\n" +
-                    "returning the default(T) instance.",
-                    filePath,
-                    identifier);
                 return result;
             }
             Stream stream = null;

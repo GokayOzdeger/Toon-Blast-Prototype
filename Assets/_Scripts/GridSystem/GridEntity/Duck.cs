@@ -30,6 +30,7 @@ public class Duck : FallingGridEntity
 
     private void OnEntityDestroy()
     {
+        PlayOnDestroyAudio();
         OnEntityDestroyed.Invoke(this);
         poolObject.GoToPool();
     }

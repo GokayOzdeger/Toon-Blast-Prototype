@@ -1,3 +1,4 @@
+using AudioSystem;
 using DG.Tweening;
 using System;
 using System.Collections;
@@ -60,6 +61,11 @@ public class FallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
     public virtual void OnMoveEntity(Vector2Int newCoordinates, MovementMode movementMode)
     {
         MoveToCoordinate(newCoordinates, movementMode);
+    }
+
+    protected virtual void PlayOnDestroyAudio()
+    {
+        if (EntityType.OnDestroyAudio) AudioManager.Instance.PlayAudio(EntityType.OnDestroyAudio, AudioManager.PlayMode.Single, 1);
     }
 
     protected void MoveToCoordinate(Vector2Int newCoordinates, MovementMode movementMode)

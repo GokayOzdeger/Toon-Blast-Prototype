@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Horizontal Rocket
   m_EditorClassIdentifier: 
   gridEntityPrefab: {fileID: 1905907544835078951, guid: 3ba5a9b084475724cb2aaf21b6c88642, type: 3}
-  gridEntityTypeName: Rocket
+  gridEntityTypeName: Horizontal Rocket
   defaultSprite: {fileID: 21300000, guid: bfc5ce00e482ae44d89954d42facb0e0, type: 3}
   onDestroyParticle: {fileID: 0}
+  onDestroyAudio: {fileID: 8300000, guid: f712a24c58db01b4981e28362833daad, type: 3}
   entityIncludedInShuffle: 0
   immuneToDestroyTypes: 
   rocketExplodeAnimPrefab: {fileID: 1905907544835078951, guid: b1c82f91e03816d45b06f341f92659fb, type: 3}

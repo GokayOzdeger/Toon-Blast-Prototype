@@ -16,5 +16,6 @@ MonoBehaviour:
   gridEntityTypeName: Duck
   defaultSprite: {fileID: 21300000, guid: 49c10b10e26eb7543b660ba4ed53df32, type: 3}
   onDestroyParticle: {fileID: 0}
+  onDestroyAudio: {fileID: 8300000, guid: 445d98e60c2643b4d994d2e5aab6ab64, type: 3}
   entityIncludedInShuffle: 0
   immuneToDestroyTypes: 01000000

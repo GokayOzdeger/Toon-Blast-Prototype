@@ -24,15 +24,15 @@ MonoBehaviour:
     gridStartLayout:
       rows:
       - row:
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-      - row:
-        - {fileID: 0}
+        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
         - {fileID: 0}
         - {fileID: 0}
       - row:
+        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
         - {fileID: 0}
+        - {fileID: 0}
+      - row:
+        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
         - {fileID: 0}
         - {fileID: 0}
     entityTypes:

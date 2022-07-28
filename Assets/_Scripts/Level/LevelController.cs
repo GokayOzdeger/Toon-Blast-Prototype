@@ -59,10 +59,7 @@ public class LevelController
 
     private void SaveLevelState()
     {
-        Debug.Log("SAVE LEVLE!!!");
         LevelSaveData.Data.SaveLevelState(this);
-        GameManager.Instance.savedNamesArr = LevelSaveData.Data.SavedGrid;
-        Debug.Log("LevelState Saved: " + JsonUtility.ToJson(LevelSaveData.Data));
     }
 
     private void CreateLevelResultFlyingText(string levelResult)

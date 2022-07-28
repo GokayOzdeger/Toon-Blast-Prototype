@@ -32,6 +32,7 @@ public class Balloon : FallingGridEntity
 
     private void OnEntityDestroy()
     {
+        PlayOnDestroyAudio();
         OnEntityDestroyed.Invoke(this);
         poolObject.GoToPool();
     }

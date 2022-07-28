@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System;
 using Utilities;
+using AudioSystem;
 
 public class Block : FallingGridEntity
 {
@@ -98,6 +99,7 @@ public class Block : FallingGridEntity
 
     private void OnEntityDestroy()
     {
+        PlayOnDestroyAudio();
         OnEntityDestroyed.Invoke(this);
         poolObject.GoToPool();
     }

@@ -16,6 +16,7 @@ MonoBehaviour:
   gridEntityTypeName: Yellow
   defaultSprite: {fileID: 21300000, guid: f5eb4ba10e73c9642bed6d314d9855de, type: 3}
   onDestroyParticle: {fileID: 6506318762500221075, guid: 0c6b151306fd3664391e6ae7e45532fa, type: 3}
+  onDestroyAudio: {fileID: 8300000, guid: da2c044c4b0fe08429e354ec8aa9092e, type: 3}
   entityIncludedInShuffle: 1
   immuneToDestroyTypes: 
   blockMatchConditions:
