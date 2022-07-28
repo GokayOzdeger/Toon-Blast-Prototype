@@ -209,6 +209,7 @@ namespace AudioSystem
         /// <param name="mode">Play mode; loop or single</param>
         public AudioSource PlayAudio(AudioClip audioClip, PlayMode mode, float volume , MixerGroupVolumeNames groupName = MixerGroupVolumeNames.GeneralSoundsVolume, float pitch = 1f)
         {
+            if (audioClip == null) return null;
             AudioMixerGroup group = audioMixer;
             switch (groupName)
             {

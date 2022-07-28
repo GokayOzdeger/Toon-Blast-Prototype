@@ -18,10 +18,10 @@ public class GridGoalUI : MonoBehaviour
     {
         Goal = goal;
         goalImage.sprite = goal.entityType.DefaultEntitySprite;
-        UpdateUIElements(false);
+        SetGoalAmount(goal.GoalLeft, false);
     }
     
-    public void UpdateUIElements(bool playParticles = true)
+    public void SetGoalAmount(int goalAmount, bool playParticles = true)
     {
         if (playParticles) ObjectPooler.Instance.Spawn(particleEffectPrefab.name, transform.position);
         if (Goal.GoalLeft == 0)

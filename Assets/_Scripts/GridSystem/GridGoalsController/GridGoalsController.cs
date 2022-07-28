@@ -1,3 +1,4 @@
+using AudioSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class GridGoalsController : PocoSingleton<GridGoalsController>
     public List<Goal> GridGoals { get; private set; }
     private List<GridGoalUI> GridGoalUiElements { get; set; }
 
+    private AudioClip _goalCollectAudio;
     private RectTransform _gridUiElementsParent;
     private GameObject _gridUiElementPrefab;
     
@@ -17,6 +19,7 @@ public class GridGoalsController : PocoSingleton<GridGoalsController>
         Instance = this;
         this._gridUiElementsParent = references.GoalObjectsParent;
         this._gridUiElementPrefab = settings.UIGoalPrefab;
+        this._goalCollectAudio = settings.GoalCollectAudio;
         GridGoals = new List<Goal>(settings.GridGoals);
         GridGoalUiElements = new List<GridGoalUI>();
 
@@ -44,13 +47,15 @@ public class GridGoalsController : PocoSingleton<GridGoalsController>
 
     public void CreateFlyingSpriteToGoal(IGridEntity entity, GridGoalUI goalUI)
     {
+        int goalAmount = goalUI.Goal.GoalLeft;
+        Debug.Log("Goal: " + goalAmount);
         UIEffectsManager.Instance.CreateCurvyFlyingSprite(
             entity.EntityType.DefaultEntitySprite,
             entity.EntityTransform.GetComponent<RectTransform>().sizeDelta * 1.25f, // create bigger flying image for better visual representation
             entity.EntityTransform.position, 
             goalUI.transform.position, 
             UIEffectsManager.CanvasLayer.OverEverything, 
-            ()=> goalUI.UpdateUIElements());
+            () => OnFlyingSpriteReachGoal(goalAmount, goalUI));
     }
 
     public void ClearUIElementsOnLevelEnd()
@@ -59,6 +64,12 @@ public class GridGoalsController : PocoSingleton<GridGoalsController>
         {
             GridGoalUiElements[i].GoToPool();
         }
+    }
+
+    private void OnFlyingSpriteReachGoal(int goalAmount, GridGoalUI goalUI)
+    {
+        AudioManager.Instance.PlayAudio(_goalCollectAudio, AudioManager.PlayMode.Single, 1);
+        goalUI.SetGoalAmount(goalAmount);
     }
 
     private void StartAllGoals()
