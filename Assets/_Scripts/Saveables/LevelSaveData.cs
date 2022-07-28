@@ -23,7 +23,6 @@ public class LevelSaveData : Saveable<LevelSaveData>
 
         CollectGridGoalControllerDatas(controller);
 
-        foreach (var name in SavedGrid) Debug.Log(name);
         Save();
     }
 
@@ -42,7 +41,6 @@ public class LevelSaveData : Saveable<LevelSaveData>
         GoalAmountsLeft = new int[goals.Count];
         for (int i = 0; i < goals.Count; i++)
         {
-            Debug.Log("Save : " + i);
             GoalAmountsLeft[i] = goals[i].GoalLeft;
         }
     }
@@ -64,6 +62,7 @@ public class LevelSaveData : Saveable<LevelSaveData>
         {
             if (entity != null)
             {
+                Debug.Log("Save : " + entity.EntityTransform.gameObject.name);
                 SavedGrid[currentIndex] = entity.EntityType.GridEntityTypeName;
             }
             currentIndex++;

@@ -26,12 +26,13 @@ public class LevelController
     private void CreateLevelControllers()
     {
         GridController = new GridController(Config.GridControllerSettings, LevelSceneReferences.GridControllerSceneReferences);
+        GridController.OnGridInterractable.AddListener(SaveLevelState);
+
         GridEntitySpawnController = new GridEntitySpawnController(GridController, Config.GridEntitySpawnerSettings, LevelSceneReferences.GridEntitySpawnerSceneReferences);
         ShuffleController = new ShuffleController(GridController, LevelSceneReferences.ShuffleControllerSceneReferences);
         GridGoalController = new GridGoalsController(Config.GridGoalsControllerSettings, LevelSceneReferences.GridGoalsControllerReferences);
         MovesController = new MovesController(GridController, GridEntitySpawnController, Config.MovesControllerSettings, LevelSceneReferences.MovesControllerReferences);
         GridController.StartGrid(ShuffleController, GridEntitySpawnController, GridGoalController);
-        GridController.OnGridInterractable.AddListener(SaveLevelState);
     }
 
     public void LevelFailed()
@@ -40,7 +41,7 @@ public class LevelController
         LevelState = LevelStates.Failed;
         CreateLevelResultFlyingText("Level Failed");
         GridController.GridDestroyOnLevelFailed();
-        
+        Debug.Log("destroy save data");
         LevelSaveData.Data.ClearSavedLevelState();
     }
 
@@ -58,7 +59,9 @@ public class LevelController
 
     private void SaveLevelState()
     {
+        Debug.Log("SAVE LEVLE!!!");
         LevelSaveData.Data.SaveLevelState(this);
+        GameManager.Instance.savedNamesArr = LevelSaveData.Data.SavedGrid;
         Debug.Log("LevelState Saved: " + JsonUtility.ToJson(LevelSaveData.Data));
     }
 

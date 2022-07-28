@@ -111,8 +111,6 @@ public class GridController
             if (entity == null) continue;
             entity.OnUpdateEntity();
         }
-        
-        if (GridInterractable) OnGridInterractable.Invoke(); 
     }
 
     private void CreateGridAndCalculatePositions()
@@ -338,7 +336,7 @@ public class GridController
     public void EntityEndProcess()
     {
         _entitiesInProcess--;
-        if (GridInterractable) OnGridInterractable.Invoke();
+        if (GridInterractable && !_gridDestroyed) { Debug.Log("grid destory: " + _gridDestroyed); OnGridInterractable.Invoke(); }
     }
 
     public void CollectMatchingSurroundingEntities<T>(T entity, ref List<T> entityListToCollect) where T : IGridEntity

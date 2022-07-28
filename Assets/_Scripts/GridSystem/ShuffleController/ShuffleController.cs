@@ -46,6 +46,7 @@ public class ShuffleController
 
         // shuffle entities in pairs
         int shufflePairsCount = (entitiesToShuffle.Count / 2)-1;
+        if (shufflePairsCount == 0) return;
         for (int i = 0; i < shufflePairsCount; i++)
         {
             Vector2Int entityACoordinates = PopRandomFromList(ref entitiesToShuffle).GridCoordinates;

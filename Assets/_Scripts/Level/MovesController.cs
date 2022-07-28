@@ -17,6 +17,7 @@ public class MovesController
         this._gridController = gridController;
         this._gridEntitySpawner = entitySpawner;
         this._movesLeftText = references.MovesLeftText;
+
         _gridController.OnGridInterractable.AddListener(OnGridReadyForNextMove);
         MovesLeft = settings.MoveCount;
         TryLoadMovesLeftSaveData();

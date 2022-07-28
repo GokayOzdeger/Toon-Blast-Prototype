@@ -4,6 +4,8 @@ using UnityEngine;
 using Utilities;
 public class GameManager : AutoSingleton<GameManager>
 {
+    public GridStartLayout loadedLayout;
+    public string[] savedNamesArr;
     [SerializeField] LevelConfig[] levelList;
     [Group][SerializeField] LevelSceneReferences levelSceneReferences;
     
