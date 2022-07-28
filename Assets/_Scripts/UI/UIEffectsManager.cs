@@ -77,6 +77,7 @@ public class UIEffectsManager : AutoSingleton<UIEffectsManager>
         return Vector2.zero;
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
@@ -87,4 +88,5 @@ public class UIEffectsManager : AutoSingleton<UIEffectsManager>
             Extensions.drawString(rect.name, rect.position);
         }
     }
+#endif
 }

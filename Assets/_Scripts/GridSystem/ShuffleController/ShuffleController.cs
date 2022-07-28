@@ -10,8 +10,11 @@ public class ShuffleController
     public ShuffleController(GridController grid, ShuffleControllerSceneReferences references)
     {
         this._gridController = grid;
-        if (references.ForceShuffleButton) 
+        if (references.ForceShuffleButton)
+        {
+            references.ForceShuffleButton.onClick.RemoveAllListeners();
             references.ForceShuffleButton.onClick.AddListener(OnClickForceShuffleButton);
+        }
     }
 
     public void CheckShuffleRequired()
