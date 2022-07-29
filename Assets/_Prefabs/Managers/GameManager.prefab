@@ -48,6 +48,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 764b0d39890b84f41b5b1d5db143220c, type: 2}
   - {fileID: 11400000, guid: ebe52eaf9e02ddb4fa43a29930cabe3c, type: 2}
   - {fileID: 11400000, guid: a475f2c7d5368c54a9d84c12b8a17b2d, type: 2}
+  - {fileID: 11400000, guid: 17dcb64f369003c4e9b4dd1cbc001460, type: 2}
   levelSceneReferences:
     gridControllerSceneReferences:
       gridRect: {fileID: 0}
