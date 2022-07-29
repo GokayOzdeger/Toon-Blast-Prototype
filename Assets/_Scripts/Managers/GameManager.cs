@@ -9,8 +9,18 @@ public class GameManager : AutoSingleton<GameManager>
     
     public LevelController CurrentLevel { get; private set; }
 
-    public LevelConfig CurrentLevelConfig => levelList[GameManagerSaveData.Data.CurrentLevelIndex];
-
+    public LevelConfig CurrentLevelConfig
+    {
+        get
+        {
+            if(GameManagerSaveData.Data.CurrentLevelIndex == levelList.Length)
+            {
+                Debug.Log("All Levels Completed Restarting");
+                GameManagerSaveData.Data.ResetLevelIndex();
+            }
+            return levelList[GameManagerSaveData.Data.CurrentLevelIndex];
+        }
+    }
     private LevelConfig chosenLevelConfig;
 
     private void Start()

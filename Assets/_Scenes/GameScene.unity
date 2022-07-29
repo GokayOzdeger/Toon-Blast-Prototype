@@ -444,66 +444,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1220429152
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1220429153}
-  - component: {fileID: 1220429154}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1220429153
+--- !u!4 &1220429153 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 7200803990104003710, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+  m_PrefabInstance: {fileID: 7200803989173244191}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1220429152}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1449.4631, y: -464.48495, z: 363.1052}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 394838037}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1220429154
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1220429152}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5818d2d7df4d7b449ff3a44a22c4d94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelList:
-  - {fileID: 11400000, guid: 773845dfa745c944d8052605a80b3152, type: 2}
-  - {fileID: 11400000, guid: 16bce67c844f1834f9b5434506549567, type: 2}
-  levelSceneReferences:
-    gridControllerSceneReferences:
-      gridRect: {fileID: 1298546746}
-      gridOverlay: {fileID: 435024593}
-      gridFrame: {fileID: 2092846610}
-      canvasScaler: {fileID: 1666083823}
-    gridEntitySpawnerSceneReferences:
-      gridParentTransform: {fileID: 1298546746}
-    shuffleControllerSceneReferences:
-      forceShuffleButton: {fileID: 290711978}
-    goalsControllerReferences:
-      goalObjectsParent: {fileID: 894057199}
-    movesControllerReferences:
-      movesLeftText: {fileID: 359285153}
 --- !u!224 &1298546746 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1874593893271603492, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
@@ -688,3 +633,92 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
+--- !u!1001 &7200803989173244191
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 394838037}
+    m_Modifications:
+    - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: levelSceneReferences.gridControllerSceneReferences.gridRect
+      value: 
+      objectReference: {fileID: 1298546746}
+    - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: levelSceneReferences.gridControllerSceneReferences.gridFrame
+      value: 
+      objectReference: {fileID: 2092846610}
+    - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: levelSceneReferences.movesControllerReferences.movesLeftText
+      value: 
+      objectReference: {fileID: 359285153}
+    - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: levelSceneReferences.gridControllerSceneReferences.gridOverlay
+      value: 
+      objectReference: {fileID: 435024593}
+    - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: levelSceneReferences.gridControllerSceneReferences.canvasScaler
+      value: 
+      objectReference: {fileID: 1666083823}
+    - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: levelSceneReferences.goalsControllerReferences.goalObjectsParent
+      value: 
+      objectReference: {fileID: 894057199}
+    - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: levelSceneReferences.shuffleControllerSceneReferences.forceShuffleButton
+      value: 
+      objectReference: {fileID: 290711978}
+    - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: levelSceneReferences.gridEntitySpawnerSceneReferences.gridParentTransform
+      value: 
+      objectReference: {fileID: 1298546746}
+    - target: {fileID: 7200803990104003710, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7200803990104003710, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7200803990104003710, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7200803990104003710, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7200803990104003710, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7200803990104003710, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7200803990104003710, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7200803990104003710, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7200803990104003710, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7200803990104003710, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7200803990104003710, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7200803990104003711, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: m_Name
+      value: GameManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}

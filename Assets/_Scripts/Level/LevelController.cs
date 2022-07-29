@@ -52,8 +52,7 @@ public class LevelController
         GridController.GridDestroyOnLevelClear();
         
         LevelSaveData.Data.ClearSavedLevelState();
-        GameManagerSaveData.Data.CurrentLevelIndex++;
-        GameManagerSaveData.Data.Save();
+        GameManagerSaveData.Data.ProgressLevel();
     }
 
     private void SaveLevelState()

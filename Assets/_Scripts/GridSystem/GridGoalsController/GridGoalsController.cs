@@ -103,7 +103,6 @@ public class GridGoalsController : PocoSingleton<GridGoalsController>
     private void CheckAllGoalsCompleted()
     {
         foreach (Goal goal in GridGoals) if (!goal.IsCompleted) return;
-        Debug.Log("All Goals Completed !!!");
         GameManager.Instance.CurrentLevel.LevelCleared();
     }
 }

@@ -138,6 +138,7 @@ public class FallingGridEntity : MonoBehaviour, IGridEntity, IPoolable
     public virtual void OnGoToPool()
     {
         if (_inProcess) ProcessEnded();
+        PlayOnDestroyAudio();
         SummonOnDestroyParticle();
         KillLastTween();
         OnEntityDestroyed.RemoveAllListeners();

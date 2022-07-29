@@ -5,5 +5,18 @@ using UnityEngine;
 
 public class GameManagerSaveData : Saveable<GameManagerSaveData>
 {
-    public int CurrentLevelIndex = 0;
+    private int currentLevelIndex = 0;
+    public int CurrentLevelIndex => currentLevelIndex;
+
+    public void ProgressLevel()
+    {
+        currentLevelIndex++;
+        Save();
+    }
+
+    public void ResetLevelIndex()
+    {
+        currentLevelIndex = 0;
+        Save();
+    }
 }
