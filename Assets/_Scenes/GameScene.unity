@@ -779,6 +779,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 533816644}
     - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: levelSceneReferences.wordControllerReferences.canvasScaler
+      value: 
+      objectReference: {fileID: 1666083823}
+    - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
       propertyPath: levelSceneReferences.gridControllerSceneReferences.gridRect
       value: 
       objectReference: {fileID: 0}
@@ -796,11 +800,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
       propertyPath: levelSettings.wordControllerSettings.wordFormingAreaExtents.x
-      value: 0
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
       propertyPath: levelSettings.wordControllerSettings.wordFormingAreaExtents.y
-      value: 25
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
       propertyPath: levelSceneReferences.gridControllerSceneReferences.gridOverlay

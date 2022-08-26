@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SetCameraSizeScreenSize : MonoBehaviour
 {
-    void Start()
+    void Awake()
     {
         GetComponent<Camera>().orthographicSize = Mathf.Max(Screen.width, Screen.height)/2;       
     }

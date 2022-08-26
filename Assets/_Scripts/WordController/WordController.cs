@@ -40,19 +40,18 @@ public class WordController
 
     private void ResizeWordFormingArea(TileController tileController)
     {
-        Debug.Log("wordFormingPos: " + References.wordFormingAreaTransform.position);
         float tileSize = tileController.TileSize;
-        References.wordFormingAreaRect.sizeDelta = new Vector2(tileSize * Settings.maxLetterCount + Settings.wordFormingAreaExtents.x, tileSize + Settings.wordFormingAreaExtents.y);
+        References.wordFormingAreaRect.sizeDelta = new Vector2(tileSize * Settings.maxLetterCount + Settings.wordFormingAreaExtents.x, tileSize + Settings.wordFormingAreaExtents.y) / References.canvasScaler.transform.lossyScale.x;
 
         // cache letter positions
-        Vector3 wordFormingAreaPosition = References.wordFormingAreaTransform.position;
-        Debug.Log(References.wordFormingAreaTransform.position);
+        Vector3 wordFormingAreaPosition = References.wordFormingAreaRect.position;
+        Debug.Log(References.wordFormingAreaRect.position);
         Debug.Log("wordFormingPos: "+wordFormingAreaPosition.y);
         float currentLetterX = 0;
         for (int i = 0; i < Settings.maxLetterCount; i++)
         {
             currentLetterX += tileSize;
-            letterPositions.Add(new Vector2(currentLetterX - (tileSize * Settings.maxLetterCount / 2f), wordFormingAreaPosition.y));
+            letterPositions.Add(new Vector2(currentLetterX - (tileSize * (Settings.maxLetterCount+1) / 2f), wordFormingAreaPosition.y));
         }
     }
 
@@ -104,8 +103,8 @@ public class WordController
 [System.Serializable]
 public class WordControllerReferences
 {
+    public CanvasScaler canvasScaler;
     public RectTransform wordFormingAreaRect;
-    public Transform wordFormingAreaTransform;
     public Button submitWordButton;
     public Button undoButton;
 }
