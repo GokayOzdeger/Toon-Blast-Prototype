@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Utilities;
 
@@ -76,10 +77,37 @@ public class TileManagerConfig
 
     private void FixTileZPositions()
     {
+        Debug.Log($"Fixing {tileDatas.Length} Z Positions...");
         for (int i = 0; i < tileDatas.Length; i++)
         {
-            tileDatas[i].SetPositionEditor(tileDatas[i].Position - new Vector3(0, 0, 5 * i));
+            Debug.Log("Helloo");
+            int childLevel = ChildLevel(tileDatas[i].Id);
+            Debug.Log("Fin level: "+childLevel);
+            tileDatas[i].SetPositionEditor(tileDatas[i].Position + new Vector3(0, 0, 10 * childLevel));
         }
+    }
+
+    private int ChildLevel(int id)
+    {
+        TileData tile = GetTileWithId(id);
+        int[] childLevels = new int[tile.Children.Length];
+        for (int i = 0; i < tile.Children.Length; i++)
+        {
+            childLevels[i] = ChildLevel(tile.Children[i]) + 1;
+        }
+
+        int highestChildLevel = 0;
+        foreach(int childLevel in childLevels)
+        {
+            if(childLevel > highestChildLevel) highestChildLevel = childLevel;
+        }
+        return highestChildLevel;
+    }
+
+    private TileData GetTileWithId(int id)
+    {
+        foreach (TileData tile in tileDatas) if (tile.Id == id) return tile;
+        return null;
     }
 #endif
 }
