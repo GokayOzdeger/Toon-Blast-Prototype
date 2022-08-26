@@ -5,7 +5,8 @@ using Utilities;
 public class GameManager : AutoSingleton<GameManager>
 {
     [SerializeField] LevelConfig[] levelList;
-    [Group][SerializeField] LevelSceneReferences levelSceneReferences;
+    [Group][SerializeField] LevelSettings levelSettings;
+    [Group][SerializeField] LevelReferences levelSceneReferences;
     
     public LevelController CurrentLevel { get; private set; }
 
@@ -30,13 +31,13 @@ public class GameManager : AutoSingleton<GameManager>
 
     public void CreateCurrentLevel()
     {
-        CurrentLevel = new LevelController(CurrentLevelConfig, levelSceneReferences);
+        CurrentLevel = new LevelController(levelSceneReferences, levelSettings, CurrentLevelConfig);
     }
 
-    
+
 
 #if UNITY_EDITOR
-
+    
     [EasyButtons.Button(Mode = EasyButtons.ButtonMode.EnabledInPlayMode)]
     private void WinLevel()
     {
@@ -57,18 +58,9 @@ public class GameManager : AutoSingleton<GameManager>
     
     private void OnDrawGizmos()
     {
-        DrawGridEntityNames();
+        //
     }
 
-    private void DrawGridEntityNames()
-    {
-        if (CurrentLevel == null) return;
-        foreach (IGridEntity entity in CurrentLevel.GridController.EntityGrid)
-        {
-            if (entity == null || entity.EntityType == null) continue;
-            Gizmos.color = Color.red;
-            Extensions.drawString(entity.EntityType.GridEntityTypeName, entity.EntityTransform.position, Color.black);
-        }
-    }
+
 #endif
 }

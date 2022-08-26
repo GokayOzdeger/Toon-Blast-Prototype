@@ -17,11 +17,6 @@ public class LevelSaveData : Saveable<LevelSaveData>
 
     public void SaveLevelState(LevelController controller)
     {
-        CollectGridControllerDatas(controller);
-
-        CollectMovesControllerDatas(controller);
-
-        CollectGridGoalControllerDatas(controller);
 
         Save();
     }
@@ -34,38 +29,4 @@ public class LevelSaveData : Saveable<LevelSaveData>
         Save();
     }
 
-    private void CollectGridGoalControllerDatas(LevelController controller)
-    {
-        // cache grid entity type names
-        List<Goal> goals = controller.GridGoalController.GridGoals;
-        GoalAmountsLeft = new int[goals.Count];
-        for (int i = 0; i < goals.Count; i++)
-        {
-            GoalAmountsLeft[i] = goals[i].GoalLeft;
-        }
-    }
-
-    private void CollectMovesControllerDatas(LevelController controller)
-    {
-        // cache moves left
-        MovesLeft = controller.MovesController.MovesLeft;
-    }
-
-    private void CollectGridControllerDatas(LevelController controller)
-    {
-        // cache goal amounts left
-        IGridEntity[,] grid = controller.GridController.EntityGrid;
-        SavedGrid = new string[grid.Length];
-        
-        int currentIndex = 0;
-        foreach (IGridEntity entity in grid)
-        {
-            if (entity != null)
-            {
-                SavedGrid[currentIndex] = entity.EntityType.GridEntityTypeName;
-            }
-            currentIndex++;
-        }
-
-    }
 }

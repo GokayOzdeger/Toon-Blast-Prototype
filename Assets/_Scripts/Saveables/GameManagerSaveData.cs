@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameManagerSaveData : Saveable<GameManagerSaveData>
 {
-    private int currentLevelIndex = 0;
+    [SerializeField] private int currentLevelIndex = 0;
     public int CurrentLevelIndex => currentLevelIndex;
 
     public void ProgressLevel()

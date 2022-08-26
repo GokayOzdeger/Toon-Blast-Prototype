@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 037866f8ef085c84fbf15252ce7c6ab2, type: 3}
+  m_Name: SoftBalloon
+  m_EditorClassIdentifier: 
+  gridEntityPrefab: {fileID: 1905907544835078951, guid: c9002aa3bf7fd9b4fafa62a09147fe0e, type: 3}
+  gridEntityTypeName: SoftBalloon
+  defaultSprite: {fileID: 21300000, guid: 7c68210abc545d243b04871c4aae9198, type: 3}
+  onDestroyParticle: {fileID: 4978614817292425221, guid: 8ec97fadcb7b77e4bbfe088b7dde75fa, type: 3}
+  onDestroyAudio: {fileID: 8300000, guid: a7637a8f775d5be44b81f7e6f5f5ded0, type: 3}
+  entityIncludedInShuffle: 0
+  immuneToDestroyTypes: 
+  _nearbyMatchesNeededForPop: 1
+  balloonLiveStages:
+  - {fileID: 21300000, guid: 7c68210abc545d243b04871c4aae9198, type: 3}

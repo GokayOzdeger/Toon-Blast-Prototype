@@ -5,34 +5,28 @@ using UnityEngine;
 public class LevelController
 {
     public LevelConfig Config { get; private set; }
-    public LevelSceneReferences LevelSceneReferences { get; private set; }
+    public LevelSettings Settings { get; private set; }
+    public LevelReferences References { get; private set; }
 
     public LevelStates LevelState { get; private set; } = LevelStates.InProgress;
 
     // Level Components
-    public GridController GridController { get; private set; }
-    public GridEntitySpawnController GridEntitySpawnController { get; private set; }
-    public ShuffleController ShuffleController { get; private set; }
-    public GridGoalsController GridGoalController { get; private set; }
-    public MovesController MovesController { get; private set; }
 
-    public LevelController(LevelConfig config, LevelSceneReferences levelSceneReferences)
+    public TileManager TileManager { get; private set; }
+
+    public LevelController(LevelReferences references, LevelSettings settings, LevelConfig config)
     {
+        this.References = references;
+        this.Settings = settings;
         this.Config = config;
-        this.LevelSceneReferences = levelSceneReferences;
         CreateLevelControllers();
     }
 
     private void CreateLevelControllers()
     {
-        GridController = new GridController(Config.GridControllerSettings, LevelSceneReferences.GridControllerSceneReferences);
-        GridController.OnGridInterractable.AddListener(SaveLevelState);
+        TileManager = new TileManager(References.TileManagerReferences, Settings.TileManagerSettings, Config.TileManagerConfig);
 
-        GridEntitySpawnController = new GridEntitySpawnController(GridController, Config.GridEntitySpawnerSettings, LevelSceneReferences.GridEntitySpawnerSceneReferences);
-        ShuffleController = new ShuffleController(GridController, LevelSceneReferences.ShuffleControllerSceneReferences);
-        GridGoalController = new GridGoalsController(Config.GridGoalsControllerSettings, LevelSceneReferences.GridGoalsControllerReferences);
-        MovesController = new MovesController(GridController, GridEntitySpawnController, Config.MovesControllerSettings, LevelSceneReferences.MovesControllerReferences);
-        GridController.StartGrid(ShuffleController, GridEntitySpawnController, GridGoalController);
+        TileManager.SetupTileManager();
     }
 
     public void LevelFailed()
@@ -40,7 +34,7 @@ public class LevelController
         if (LevelState != LevelStates.InProgress) return;
         LevelState = LevelStates.Failed;
         CreateLevelResultFlyingText("Level Failed");
-        GridController.GridDestroyOnLevelFailed();
+
         LevelSaveData.Data.ClearSavedLevelState();
     }
 
@@ -49,7 +43,7 @@ public class LevelController
         if (LevelState != LevelStates.InProgress) return;
         LevelState = LevelStates.Cleared;
         CreateLevelResultFlyingText("Level Cleared");
-        GridController.GridDestroyOnLevelClear();
+
         
         LevelSaveData.Data.ClearSavedLevelState();
         GameManagerSaveData.Data.ProgressLevel();
@@ -71,7 +65,6 @@ public class LevelController
     private void LevelEnded()
     {
         // clear leftovers from old scene
-        GridGoalController.ClearUIElementsOnLevelEnd();
 
         GameManager.Instance.CreateCurrentLevel();
     }
