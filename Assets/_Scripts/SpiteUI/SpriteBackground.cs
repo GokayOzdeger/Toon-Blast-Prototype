@@ -2,26 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpriteUIElement : MonoBehaviour
+public class SpriteBackground : MonoBehaviour
 {
     [SerializeField] private ScaleMode scaleMode;
-    [SerializeField] private ScreenReference screenReference;
     [SerializeField] private bool inSafeArea;
-    private Vector3 defaultScale;
+    private SpriteRenderer renderer;
 
     void Start()
     {
-        defaultScale = transform.localScale;
-        CalculatePosition();
-        //CalculateScale();
-        Debug.Log(Screen.safeArea.width);
-        Debug.Log(Screen.safeArea.height);
+        renderer = GetComponent<SpriteRenderer>();
+        CalculateScale();
     }
-
-    private void CalculatePosition()
-    {
-
-    }   
 
     private void CalculateScale()
     {
@@ -31,7 +22,7 @@ public class SpriteUIElement : MonoBehaviour
         else screenResolution = new Vector2(Screen.width, Screen.height);
 
         float scaleMultiplier = CalculateScaleMultiplier(screenResolution, scaleMode);
-        transform.localScale = defaultScale * scaleMultiplier;
+        transform.localScale = transform.localScale * scaleMultiplier;
     }
 
     private float CalculateScaleMultiplier(Vector2 current, ScaleMode mode)
@@ -46,9 +37,10 @@ public class SpriteUIElement : MonoBehaviour
                 multiplier = GetHeightScaleMultiplier(current);
                 break;
             case ScaleMode.ScaleForSmallest:
-                float multiplierForWidth = GetWidthScaleMultiplier(current);
-                float multiplierForHeight = GetHeightScaleMultiplier(current);
-                multiplier = Mathf.Min(multiplierForWidth, multiplierForHeight);
+                multiplier = Mathf.Min(GetWidthScaleMultiplier(current), GetHeightScaleMultiplier(current));
+                break;
+            case ScaleMode.ScaleForBiggest:
+                multiplier = Mathf.Max(GetWidthScaleMultiplier(current), GetHeightScaleMultiplier(current));
                 break;
             default:
                 multiplier = 1;
@@ -60,16 +52,16 @@ public class SpriteUIElement : MonoBehaviour
     private float GetWidthScaleMultiplier(Vector2 current)
     {
         float multiplier;
-        if (inSafeArea) multiplier = current.x / screenReference.SafeArea.x;
-        else multiplier = current.x / screenReference.ScreenResolution.x;
+        if (inSafeArea) multiplier = current.x / renderer.bounds.size.x;
+        else multiplier = current.x / renderer.bounds.size.x;
         return multiplier;
     }
 
     private float GetHeightScaleMultiplier(Vector2 current)
     {
         float multiplier;
-        if (inSafeArea) multiplier = current.y / screenReference.SafeArea.y;
-        else multiplier = current.y / screenReference.ScreenResolution.y;
+        if (inSafeArea) multiplier = current.y / renderer.bounds.size.y;
+        else multiplier = current.y / renderer.bounds.size.y;
         return multiplier;
     }
 
@@ -77,6 +69,7 @@ public class SpriteUIElement : MonoBehaviour
     {
         ScaleForWidth,
         ScaleForHeight,
-        ScaleForSmallest
+        ScaleForSmallest,
+        ScaleForBiggest,
     }
 }

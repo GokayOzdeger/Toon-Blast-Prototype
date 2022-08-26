@@ -3,7 +3,9 @@ using UnityEngine;
 [System.Serializable]
 public class LevelSettings 
 {
-    [SerializeField] private TileManagerSettings tileManagerSettings;
+    [SerializeField][Group] private TileControllerSettings tileManagerSettings;
+    [SerializeField][Group] private WordControllerSettings wordControllerSettings;
 
-    public TileManagerSettings TileManagerSettings => tileManagerSettings;
+    public TileControllerSettings TileManagerSettings => tileManagerSettings;
+    public WordControllerSettings WordControllerSettings => wordControllerSettings;
 } 

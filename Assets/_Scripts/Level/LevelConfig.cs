@@ -7,15 +7,12 @@ public class LevelConfig : ScriptableObject
 {
     [BHeader("Level Configs")]
     [SerializeField] private string levelTitle;
-    [SerializeField][Group] private TileManagerConfig tileManagerConfig;
-
-    public TileManagerConfig TileManagerConfig => tileManagerConfig;
-
-
-    [BHeader("Editor & Caches")]
-    [SerializeField] private string[] possibleWordsInLevel;
+    [SerializeField][Group] private TileControllerConfig tileManagerConfig;
+    [SerializeField][Group] private WordControllerConfig wordControllerConfig;
 
     public string LevelTitle => levelTitle;
+    public TileControllerConfig TileManagerConfig => tileManagerConfig;
+    public WordControllerConfig WordControllerConfig => wordControllerConfig;
 
 
     #region EDITOR

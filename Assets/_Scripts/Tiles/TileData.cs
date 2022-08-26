@@ -15,10 +15,8 @@ public class TileData
     public string Character => character;
     public int[] Children => children;
 
-#if UNITY_EDITOR
-    public void SetPositionEditor(Vector3 newPosition)
+    public void SetPosition(Vector3 newPosition)
     {
         position = newPosition;
     }
-#endif
 }

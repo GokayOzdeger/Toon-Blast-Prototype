@@ -4,8 +4,10 @@
 [System.Serializable]
 public class LevelReferences
 {
-    [SerializeField] private TileManagerReferences tileManagerReferences;
+    [SerializeField][Group] private TileControllerReferences tileManagerReferences;
+    [SerializeField][Group] private WordControllerReferences wordControllerReferences;
 
-    public TileManagerReferences TileManagerReferences => tileManagerReferences;
+    public TileControllerReferences TileManagerReferences => tileManagerReferences;
+    public WordControllerReferences WordControllerReferences => wordControllerReferences;
 }
 

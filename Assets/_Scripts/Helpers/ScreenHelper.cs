@@ -9,13 +9,13 @@ public static class ScreenHelper
         return new Vector2(Screen.width * percentage.x/100, Screen.height * percentage.y/100);
     }
 
-    public static float GetWidthPercentage(Vector2 percentage)
+    public static float GetWidthPercentage(float percentage)
     {
-        return Screen.width * percentage.x/100;
+        return Screen.width * percentage/100;
     }
 
-    public static float GetHeightPercentage(Vector2 percentage)
+    public static float GetHeightPercentage(float percentage)
     {
-        return Screen.height * percentage.y/100;
+        return Screen.height * percentage/100;
     }
 }

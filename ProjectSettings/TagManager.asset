@@ -44,9 +44,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: GameArea
-    uniqueID: 2077272875
-    locked: 0
   - name: UnderUI
     uniqueID: 4140409521
     locked: 0
@@ -55,4 +52,7 @@ TagManager:
     locked: 0
   - name: OverUI
     uniqueID: 1393226067
+    locked: 0
+  - name: GameArea
+    uniqueID: 2077272875
     locked: 0
