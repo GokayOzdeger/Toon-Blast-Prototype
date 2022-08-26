@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class WordController
     private string _currentWord = "";
     private List<string> submittedWords = new List<string>();
     private List<Vector3> letterPositions = new List<Vector3>();
+    private List<ITile> tilesInWordFormer = new List<ITile>();
 
     public WordController(WordControllerReferences references, WordControllerSettings settings, WordControllerConfig config)
     {
@@ -33,8 +35,11 @@ public class WordController
     {
         if (_nextLetterIndex == Settings.maxLetterCount) return;
         _currentWord += tile.TileData.Character;
-        Vector2 positionToMoveTo = letterPositions[_nextLetterIndex];
-        TweenHelper.CurvingMoveTo(tile.Monitor.transform, new Vector3(positionToMoveTo.x, positionToMoveTo.y, tile.TileData.Position.z), OnLetterReachedWordArea, .3f);
+        tilesInWordFormer.Add(tile);
+
+        Vector2 positionToMoveTo2D = letterPositions[_nextLetterIndex];
+        Vector3 positionToMoveTo3D = new Vector3(positionToMoveTo2D.x, positionToMoveTo2D.y, tile.TileData.Position.z);
+        tile.LeaveTileArea(positionToMoveTo3D, OnLetterReachedWordArea);
         _nextLetterIndex++;
     }
 
@@ -45,8 +50,6 @@ public class WordController
 
         // cache letter positions
         Vector3 wordFormingAreaPosition = References.wordFormingAreaRect.position;
-        Debug.Log(References.wordFormingAreaRect.position);
-        Debug.Log("wordFormingPos: "+wordFormingAreaPosition.y);
         float currentLetterX = 0;
         for (int i = 0; i < Settings.maxLetterCount; i++)
         {
@@ -58,16 +61,22 @@ public class WordController
     private void CheckWordFilled()
     {
         if (_nextLetterIndex != Settings.maxLetterCount) return;
-
-        // return all letters to board
+        ResetWord();
     }
 
     private void OnLetterReachedWordArea()
     {
-        if (!IsWordValid()) 
+        if (!IsWordValid())
         {
+            SetSubmitButtonState(false);
             CheckWordFilled();
         }
+        else SetSubmitButtonState(true);
+    }
+
+    private void SetSubmitButtonState(bool active)
+    {
+        References.submitWordButton.interactable = active;
     }
 
     private void OnClickSubmitWord()
@@ -95,6 +104,10 @@ public class WordController
 
     private void ResetWord()
     {
+        foreach (ITile tile in tilesInWordFormer) tile.ReturnToTileArea();
+        foreach (ITile tile in tilesInWordFormer) tile.UpdateMonitor();
+        tilesInWordFormer.Clear();
+
         _currentWord = "";
         _nextLetterIndex = 0;
     }

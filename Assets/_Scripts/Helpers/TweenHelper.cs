@@ -21,7 +21,7 @@ public class TweenHelper : MonoBehaviour
     }
 
     public static Tween CurvingMoveTo(Transform transform, Vector2 targetPoint, Action onComplete = null, float duration = .5f, 
-        float curveAmountMultiplier = .2f, Ease sidewaysEase = Ease.InOutCubic, Ease forwardEase = Ease.InOutBack)
+        float curveAmountMultiplier = .2f, Ease sidewaysEase = Ease.InOutCubic, Ease forwardEase = Ease.InOutCubic)
     {
         float distanceToTarget = Vector2.Distance((Vector2)transform.position, targetPoint);
         Vector2 moveDir = (targetPoint - (Vector2)transform.position).normalized;
