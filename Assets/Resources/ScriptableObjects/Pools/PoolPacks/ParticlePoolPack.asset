@@ -14,27 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pools:
   - pooledObjects: []
-    prefab: {fileID: 4978614817292425221, guid: 8ec97fadcb7b77e4bbfe088b7dde75fa, type: 3}
-    startingParent: {fileID: 0}
-    startingQuantity: 0
-  - pooledObjects: []
     prefab: {fileID: 7218581546105527683, guid: 2f27c087957ed804ab709482003f8c3a, type: 3}
-    startingParent: {fileID: 0}
-    startingQuantity: 0
-  - pooledObjects: []
-    prefab: {fileID: 8390066025328471164, guid: 77f2da094f66113429ea25545eaac38a, type: 3}
-    startingParent: {fileID: 0}
-    startingQuantity: 0
-  - pooledObjects: []
-    prefab: {fileID: 6506318762500221075, guid: 0c6b151306fd3664391e6ae7e45532fa, type: 3}
-    startingParent: {fileID: 0}
-    startingQuantity: 0
-  - pooledObjects: []
-    prefab: {fileID: 9019399418969879188, guid: a93639d8bce626e4ab117037c7f9841d, type: 3}
-    startingParent: {fileID: 0}
-    startingQuantity: 0
-  - pooledObjects: []
-    prefab: {fileID: 3708698795385311052, guid: ee86c5ce6c01b5d41b9de2ba678316a0, type: 3}
     startingParent: {fileID: 0}
     startingQuantity: 0
   - pooledObjects: []
