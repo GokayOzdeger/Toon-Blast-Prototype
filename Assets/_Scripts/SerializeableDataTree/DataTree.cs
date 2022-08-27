@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using UnityEngine;
 
-public class LinkedTree<TData>
+public class LinkedTree<TData> where TData : ISerializable
 {
     public TreeNode<TData> Root => _root;
     private TreeNode<TData> _root;
@@ -20,8 +21,9 @@ public class LinkedTree<TData>
 }
 
 
-public class TreeNode<TData>
+public class TreeNode<TData> where TData : ISerializable
 {
+    public int Id { get; set; }
     public HashSet<TreeNode<TData>> ChildNodes { get; private set; } = new HashSet<TreeNode<TData>>();
     public TreeNode<TData> ParentNode { get; set; }
 
@@ -61,7 +63,30 @@ public class TreeNode<TData>
     }
 }
 
-public class TreeReader<TData>
+[System.Serializable]
+public class TreeNodeSerialized<TData> where TData : ISerializable
+{
+    public int id;
+    public int[] childIds;
+    public int parentId;
+    public TData data;
+
+    public TreeNodeSerialized(TreeNode<TData> _node)
+    {
+        data = _node.Data;
+        id = _node.Id;
+        parentId = _node.ParentNode.Id;
+        childIds = new int[_node.ChildNodes.Count];
+        int counter = 0;
+        foreach(var node in _node.ChildNodes)
+        {
+            childIds[counter] = node.Id;
+            counter++;
+        }
+    }
+}
+
+public class TreeReader<TData> where TData : ISerializable
 {
     public TreeNode<TData> CurrentNode { get; set; }
     public int ChildCount => CurrentNode.ChildNodes.Count;
