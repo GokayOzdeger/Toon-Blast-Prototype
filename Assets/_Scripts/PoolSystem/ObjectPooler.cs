@@ -13,7 +13,7 @@ namespace Utilities
         private PoolProfile poolProfile;
         public List<Pool> extraPools = new List<Pool>();
 
-        [ShowOnly] public List<Pool> allPools = new List<Pool>();
+        public List<Pool> allPools = new List<Pool>();
 
         #endregion
 

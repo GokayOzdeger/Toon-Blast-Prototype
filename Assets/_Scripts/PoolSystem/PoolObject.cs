@@ -24,7 +24,8 @@ namespace Utilities
         
         public virtual void GoToPool(float delay)
         {
-            Invoke(nameof(GoToPool), delay);
+            if (delay == 0) GoToPool();
+            else Invoke(nameof(GoToPool), delay);
         }
 
         public virtual void GoToPool()

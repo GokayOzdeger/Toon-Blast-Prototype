@@ -20,6 +20,13 @@ public class TweenHelper : MonoBehaviour
         return tween;
     }
 
+    public static Tween Jump(Transform transform, Action onComplete = null, float jumpPower = 30, float duration = .25f)
+    {
+        Tween tween = transform.DOJump(transform.position,jumpPower, 1, duration).SetEase(Ease.Linear);
+        if (onComplete != null) tween.onComplete += () => onComplete();
+        return tween;
+    }
+
     public static Tween CurvingMoveTo(Transform transform, Vector2 targetPoint, Action onComplete = null, float duration = .5f, 
         float curveAmountMultiplier = .2f, Ease sidewaysEase = Ease.InOutCubic, Ease forwardEase = Ease.InOutCubic)
     {
@@ -67,6 +74,13 @@ public class TweenHelper : MonoBehaviour
     {
         Tween tween = target.DOPunchScale(target.localScale * scaleMultiplier, duration);
         if(onComplete != null) tween.onComplete += () => onComplete();
+        return tween;
+    }
+
+    public static Tween ShrinkDisappear(Transform target, Action onComplete, float duration = .3f)
+    {
+        Tween tween = target.DOScale(Vector3.zero, duration).SetEase(Ease.InBack);
+        if (onComplete != null) tween.onComplete += () => onComplete();
         return tween;
     }
     

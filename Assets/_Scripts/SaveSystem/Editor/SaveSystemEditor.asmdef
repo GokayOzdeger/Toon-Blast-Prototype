@@ -1,13 +1,14 @@
 {
-    "name": "Utilities",
+    "name": "SaveSystemEditor",
     "rootNamespace": "",
     "references": [
-        "GUID:6055be8ebefd69e48b49212b09b47b2f",
-        "GUID:96be28574e7d1894eadaed6b30e5fff0"
+        "GUID:6d5059b8bf7519d4cba739ab86814688"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
-    "allowUnsafeCode": true,
+    "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,

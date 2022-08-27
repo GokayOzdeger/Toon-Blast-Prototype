@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c56d85e6fa892934884837bce931d6e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scaleMode: 1
+  scaleMode: 3
   inSafeArea: 0
 --- !u!212 &134115263
 SpriteRenderer:
@@ -554,6 +554,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7200803990104003710, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
   m_PrefabInstance: {fileID: 7200803989173244191}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1562426286 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2236988170773336168, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
+  m_PrefabInstance: {fileID: 1874593892422404382}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1666083823 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1874593893978874609, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
@@ -645,6 +656,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1874593892601301183, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874593893783793273, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874593893783793273, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874593893783793273, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874593893783793273, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874593893783793273, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874593893783793273, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1874593893978874606, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
       propertyPath: m_Camera
       value: 
@@ -743,6 +782,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
+--- !u!225 &1874593892422404383 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 4863499594925655569, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
+  m_PrefabInstance: {fileID: 1874593892422404382}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7200803989173244191
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -759,12 +803,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: levelSettings.scoreControllerSettings.wordScoreText
+      value: 'Word Score:'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
       propertyPath: levelSettings.wordControllerSettings.maxLetterCount
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: levelSettings.scoreControllerSettings.totalScoreText
+      value: 'Total Score:'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
       propertyPath: levelSettings.tileManagerSettings.tileSizeMultiplier
-      value: 0.35
+      value: 0.335
       objectReference: {fileID: 0}
     - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
       propertyPath: levelSceneReferences.tileManagerReferences.tilePrefab
@@ -798,6 +850,14 @@ PrefabInstance:
       propertyPath: levelSceneReferences.movesControllerReferences.movesLeftText
       value: 
       objectReference: {fileID: 359285153}
+    - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: levelSceneReferences.scoreControllerReferences.wordScoreText
+      value: 
+      objectReference: {fileID: 359285153}
+    - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: levelSceneReferences.scoreControllerReferences.totalScoreText
+      value: 
+      objectReference: {fileID: 1562426286}
     - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
       propertyPath: levelSettings.tileManagerSettings.percentageOfTileAreaByWidth
       value: 85
@@ -836,7 +896,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
       propertyPath: levelSettings.tileManagerSettings.percentageOfTileAreaOnScreen.x
-      value: 60
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
       propertyPath: levelSettings.tileManagerSettings.percentageOfTileAreaOnScreen.y
@@ -846,6 +906,10 @@ PrefabInstance:
       propertyPath: levelSceneReferences.wordControllerReferences.wordFormingAreaRect
       value: 
       objectReference: {fileID: 2131681259}
+    - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
+      propertyPath: levelSceneReferences.scoreControllerReferences.wordScoreCanvasGroup
+      value: 
+      objectReference: {fileID: 1874593892422404383}
     - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
       propertyPath: levelSceneReferences.wordControllerReferences.wordFormingAreaPrefab
       value: 

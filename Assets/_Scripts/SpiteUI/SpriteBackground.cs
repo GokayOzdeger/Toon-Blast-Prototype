@@ -6,11 +6,11 @@ public class SpriteBackground : MonoBehaviour
 {
     [SerializeField] private ScaleMode scaleMode;
     [SerializeField] private bool inSafeArea;
-    private SpriteRenderer renderer;
+    private SpriteRenderer spriteRenderer;
 
     void Start()
     {
-        renderer = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         CalculateScale();
     }
 
@@ -52,16 +52,16 @@ public class SpriteBackground : MonoBehaviour
     private float GetWidthScaleMultiplier(Vector2 current)
     {
         float multiplier;
-        if (inSafeArea) multiplier = current.x / renderer.bounds.size.x;
-        else multiplier = current.x / renderer.bounds.size.x;
+        if (inSafeArea) multiplier = current.x / spriteRenderer.bounds.size.x;
+        else multiplier = current.x / spriteRenderer.bounds.size.x;
         return multiplier;
     }
 
     private float GetHeightScaleMultiplier(Vector2 current)
     {
         float multiplier;
-        if (inSafeArea) multiplier = current.y / renderer.bounds.size.y;
-        else multiplier = current.y / renderer.bounds.size.y;
+        if (inSafeArea) multiplier = current.y / spriteRenderer.bounds.size.y;
+        else multiplier = current.y / spriteRenderer.bounds.size.y;
         return multiplier;
     }
 
