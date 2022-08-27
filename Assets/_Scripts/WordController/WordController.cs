@@ -6,10 +6,12 @@ using UnityEngine.UI;
 
 public class WordController
 {
+    public bool WordIsFull => _nextLetterIndex == Settings.maxLetterCount;
     private WordControllerReferences References { get; set; }
     private WordControllerSettings Settings { get; set; }
     private WordControllerConfig Config { get; set; }
 
+    private int _tilesInMovement = 0;
     private int _nextLetterIndex = 0;
     private string _currentWord = "";
     private List<string> submittedWords = new List<string>();
@@ -28,6 +30,7 @@ public class WordController
 
     public void SetupWordController(TileController tileController)
     {
+        SetSubmitButtonState(false);
         ResizeWordFormingArea(tileController);
     }
 
@@ -40,6 +43,7 @@ public class WordController
         Vector2 positionToMoveTo2D = letterPositions[_nextLetterIndex];
         Vector3 positionToMoveTo3D = new Vector3(positionToMoveTo2D.x, positionToMoveTo2D.y, tile.TileData.Position.z);
         tile.LeaveTileArea(positionToMoveTo3D, OnLetterReachedWordArea);
+        _tilesInMovement++;
         _nextLetterIndex++;
     }
 
@@ -60,12 +64,15 @@ public class WordController
 
     private void CheckWordFilled()
     {
+        if (_tilesInMovement != 0) return;
         if (_nextLetterIndex != Settings.maxLetterCount) return;
+        ReturnTiles();
         ResetWord();
     }
 
     private void OnLetterReachedWordArea()
     {
+        _tilesInMovement--;
         if (!IsWordValid())
         {
             SetSubmitButtonState(false);
@@ -91,7 +98,7 @@ public class WordController
 
     private bool IsWordValid()
     {
-        if (!Config.possibleWords.Contains(_currentWord)) return false;
+        if (!Config.possibleWords.Contains(_currentWord.ToLower())) return false;
         if (submittedWords.Contains(_currentWord)) return false;
         return true;
     }
@@ -99,17 +106,28 @@ public class WordController
     private void SubmitWord()
     {
         submittedWords.Add(_currentWord);
+        RemoveTiles();
         ResetWord();
     }
 
     private void ResetWord()
     {
-        foreach (ITile tile in tilesInWordFormer) tile.ReturnToTileArea();
-        foreach (ITile tile in tilesInWordFormer) tile.UpdateMonitor();
         tilesInWordFormer.Clear();
 
         _currentWord = "";
         _nextLetterIndex = 0;
+    }
+
+    private void RemoveTiles()
+    {
+        foreach (ITile tile in tilesInWordFormer) TweenHelper.PunchScale(tile.Monitor.transform);
+        foreach (ITile tile in tilesInWordFormer) tile.GoToPool(.2f);
+    }
+
+    private void ReturnTiles()
+    {
+        foreach (ITile tile in tilesInWordFormer) tile.ReturnToTileArea();
+        foreach (ITile tile in tilesInWordFormer) tile.UpdateMonitor();
     }
 }
 

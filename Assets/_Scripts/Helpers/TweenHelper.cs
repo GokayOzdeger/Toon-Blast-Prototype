@@ -65,7 +65,7 @@ public class TweenHelper : MonoBehaviour
 
     public static Tween PunchScale(Transform target, Action onComplete = null, float scaleMultiplier = .3f, float duration = .2f)
     {
-        Tween tween = target.DOPunchScale(new Vector3(scaleMultiplier, scaleMultiplier, scaleMultiplier), duration);
+        Tween tween = target.DOPunchScale(target.localScale * scaleMultiplier, duration);
         if(onComplete != null) tween.onComplete += () => onComplete();
         return tween;
     }

@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c56d85e6fa892934884837bce931d6e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scaleMode: 3
+  scaleMode: 1
   inSafeArea: 0
 --- !u!212 &134115263
 SpriteRenderer:
@@ -731,6 +731,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1874593893978874607, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874593893978874609, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
+      propertyPath: m_MatchWidthOrHeight
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1874593893978874611, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}

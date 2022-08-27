@@ -18,7 +18,7 @@ public class LetterTile : ITile
 
         set
         {
-            if (_activeTween != null) _activeTween.Complete();
+            if (_activeTween != null) _activeTween.Complete(true);
             _activeTween = value;
         }
     }
@@ -59,10 +59,9 @@ public class LetterTile : ITile
 
     public void OnClick()
     {
-        Debug.Log("Clickable? : " + Clickable);
-
+        if (LevelController.Instance.WordController.WordIsFull) return;
         if (!Clickable) return;
-        if (Locks != 0) OnClickFailed();
+        if (Locks != 0) return;
         else OnClickSuccess();
     }
 
@@ -70,11 +69,6 @@ public class LetterTile : ITile
     {
         Clickable = false;
         LevelController.Instance.WordController.AddTileToWord(this);
-    }
-
-    private void OnClickFailed()
-    {
-        ActiveTween = TweenHelper.Shake(Monitor.transform, null, 10, .1f);
     }
 
     public void UnlockChildren()
@@ -89,19 +83,26 @@ public class LetterTile : ITile
 
     public void ReturnToTileArea()
     {
-        ActiveTween = TweenHelper.CurvingMoveTo(Monitor.transform, TileData.Position, OnReturnedToTileArea);
+        Sequence tween = DOTween.Sequence();
+        tween.Append(TweenHelper.Shake(Monitor.transform, null, 20, .25f));
+        tween.Append(TweenHelper.CurvingMoveTo(Monitor.transform, TileData.Position, OnReturnedToTileArea));
+        ActiveTween = tween;
         LockChildren();
     }
 
     private void OnReturnedToTileArea()
     {
         Clickable = true;
-        Debug.Log(Clickable);
     }
 
     public void LeaveTileArea(Vector3 moveTo, Action onComplete)
     {
         ActiveTween = TweenHelper.CurvingMoveTo(Monitor.transform, moveTo, onComplete, .3f);
         UnlockChildren();
+    }
+
+    public void GoToPool(float delay)
+    {
+        Monitor.SendToPool(delay);
     }
 }

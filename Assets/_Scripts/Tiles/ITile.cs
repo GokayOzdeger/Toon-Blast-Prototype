@@ -15,5 +15,6 @@ public interface ITile
     public void LockTile();
     public void UnlockTile();
     public void UpdateMonitor();
+    public void GoToPool(float delay);
     public void SetPixelSize(float size);
 }

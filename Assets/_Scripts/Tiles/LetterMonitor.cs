@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utilities;
 
-public class LetterMonitor : MonoBehaviour
+public class LetterMonitor : MonoBehaviour, IPoolable
 {
+    [SerializeField] private PoolObject poolObject;
     [SerializeField] private SpriteRenderer tileImageRenderer;
     [SerializeField] private TMPro.TMP_Text characterText;
 
@@ -27,5 +29,20 @@ public class LetterMonitor : MonoBehaviour
     public void SetPixelSize(float size)
     {
         transform.localScale =  Vector3.one * size;
+    }
+
+    public void SendToPool(float delay)
+    {
+        poolObject.GoToPool(delay);
+    }
+
+    public void OnGoToPool()
+    {
+        Tile = null;
+    }
+
+    public void OnPoolSpawn()
+    {
+        //
     }
 }
