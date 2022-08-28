@@ -37,44 +37,44 @@ public class AutoSolver
 
     private void CreateWordTree(TreeNode<ITile> currentNode, List<ITile> tilesLeft, Stack<ITile> usedTiles, Stack<int> cursorLocations, int brachLength = -1)
     {
-        if (brachLength == 5) 
-        {
-            usedTiles.Pop();
-            currentNode.Data.LockChildren();
-            return; 
-        }
+        //if (brachLength == 5) 
+        //{
+        //    usedTiles.Pop();
+        //    currentNode.Data.LockChildren();
+        //    return; 
+        //}
         
-        int cursorLocation = 0;
-        if (cursorLocations.Count > 0) cursorLocation = cursorLocations.Peek();
-        if (currentNode.Data != null)
-        {
-            if (MoveCursorTo(GetWordFromTreeNode(currentNode), ref cursorLocation))
-            {
-                cursorLocations.Push(cursorLocation);
-            }
-            else
-            {
-                usedTiles.Pop();
-                currentNode.Data.LockChildren();
-                return;
-            }
-        }
+        //int cursorLocation = 0;
+        //if (cursorLocations.Count > 0) cursorLocation = cursorLocations.Peek();
+        //if (currentNode.Data != null)
+        //{
+        //    if (MoveCursorTo(GetWordFromTreeNode(currentNode), ref cursorLocation))
+        //    {
+        //        cursorLocations.Push(cursorLocation);
+        //    }
+        //    else
+        //    {
+        //        usedTiles.Pop();
+        //        currentNode.Data.LockChildren();
+        //        return;
+        //    }
+        //}
 
-        foreach (ITile tile in tilesLeft)
-        {
-            if (tile.Locks != 0) continue;
-            if (usedTiles.Contains(tile)) continue;
-            if (currentNode.HasChild(tile)) continue;
-            tile.UnlockChildren();
-            TreeNode<ITile> newNode = currentNode.AddChild(tile);
-            usedTiles.Push(tile);
-            CreateWordTree(newNode, tilesLeft, usedTiles, cursorLocations, brachLength + 1);
-        }
+        //foreach (ITile tile in tilesLeft)
+        //{
+        //    if (tile.Locks != 0) continue;
+        //    if (usedTiles.Contains(tile)) continue;
+        //    if (currentNode.HasChild(tile)) continue;
+        //    tile.UnlockChildren();
+        //    TreeNode<ITile> newNode = currentNode.AddChild(tile);
+        //    usedTiles.Push(tile);
+        //    CreateWordTree(newNode, tilesLeft, usedTiles, cursorLocations, brachLength + 1);
+        //}
         
-        if (usedTiles.Count > 0) usedTiles.Pop();
+        //if (usedTiles.Count > 0) usedTiles.Pop();
         
-        if (currentNode.Data != null) currentNode.Data.LockChildren();
-        if(cursorLocations.Count > 0) cursorLocations.Pop();
+        //if (currentNode.Data != null) currentNode.Data.LockChildren();
+        //if(cursorLocations.Count > 0) cursorLocations.Pop();
     }
 
     private bool MoveCursorTo(string word, ref int cursor)

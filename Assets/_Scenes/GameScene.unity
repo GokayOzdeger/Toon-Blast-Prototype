@@ -646,15 +646,15 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6247875513861668281, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
   m_PrefabInstance: {fileID: 1874593892422404382}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2137764292 stripped
+--- !u!114 &2137764296 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4951295253208151573, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2975183088499686067, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
   m_PrefabInstance: {fileID: 1874593892422404382}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 83446b53f3be6e04b95ef7635f5bc553, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1874593892422404382
@@ -664,34 +664,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1874593892601301183, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1874593893783793273, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1874593893783793273, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 1874593893783793273, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1874593893783793273, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1874593893783793273, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1874593893783793273, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1874593893978874606, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
       propertyPath: m_Camera
       value: 
@@ -780,10 +752,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1874593893978874609, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
-      propertyPath: m_MatchWidthOrHeight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1874593893978874611, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
       propertyPath: m_Name
       value: InGameCanvas
@@ -837,7 +805,7 @@ PrefabInstance:
     - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
       propertyPath: levelSceneReferences.wordControllerReferences.undoButton
       value: 
-      objectReference: {fileID: 2137764292}
+      objectReference: {fileID: 2137764296}
     - target: {fileID: 7200803990104003709, guid: 91be33aad4183014aaaf7b8e379e5fd6, type: 3}
       propertyPath: levelSceneReferences.tileManagerReferences.tileAreaCenter
       value: 

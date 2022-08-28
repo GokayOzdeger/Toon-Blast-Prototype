@@ -15,6 +15,7 @@ public class TileController
 
     private Rect TileAreaRect;
     private Rect TileDataRect;
+    private WordController _wordController;
 
     public TileController(TileControllerReferences references, TileControllerSettings settings, TileControllerConfig config)
     {
@@ -23,8 +24,9 @@ public class TileController
         Config = config;
     }
 
-    public void SetupTileManager()
+    public void SetupTileManager( WordController wordController)
     {
+        _wordController = wordController;
         CalculateTileArea();
         CalculateTilePositionsAccordingToScreenSize();
         SpawnTiles();
@@ -51,7 +53,7 @@ public class TileController
             // create tile GO and assiign generated lettertile
             GameObject tileGO = ObjectPooler.Instance.Spawn(References.tilePrefab.name, tilePositionForCurrentScreen);
             LetterMonitor monitor = tileGO.GetComponent<LetterMonitor>();
-            LetterTile letter = new LetterTile(this, monitor, tileData);
+            LetterTile letter = new LetterTile(this, _wordController, monitor, tileData);
             letter.SetPixelSize(TileSize);
             AllTiles.Add(letter);
         }
@@ -61,7 +63,7 @@ public class TileController
     {
         foreach (TileData tileData in Config.TileDatas)
         {
-            LetterTile letter = new LetterTile(this, null, tileData);
+            LetterTile letter = new LetterTile(this, _wordController,null, tileData);
             AllTiles.Add(letter);
         }
     }

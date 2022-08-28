@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelController : PocoSingleton<LevelController>
+public class LevelController
 {
     public LevelConfig Config { get; private set; }
     public LevelSettings Settings { get; private set; }
@@ -18,7 +18,6 @@ public class LevelController : PocoSingleton<LevelController>
 
     public LevelController(LevelReferences references, LevelSettings settings, LevelConfig config)
     {
-        Instance = this;
         this.References = references;
         this.Settings = settings;
         this.Config = config;
@@ -31,9 +30,9 @@ public class LevelController : PocoSingleton<LevelController>
         WordController = new WordController(References.WordControllerReferences, Settings.WordControllerSettings, Config.WordControllerConfig);
         ScoreController = new ScoreController(References.ScoreControllerReferences, Settings.ScoreControllerSettings);
 
-        TileController.SetupTileManager();
-        WordController.SetupWordController(TileController);
         ScoreController.SetupScoreController();
+        TileController.SetupTileManager(WordController);
+        WordController.SetupWordController(TileController, ScoreController);
     }
 
     public void LevelFailed()
