@@ -42,9 +42,9 @@ public class WordController
 
         Vector2 positionToMoveTo2D = letterPositions[_nextLetterIndex];
         Vector3 positionToMoveTo3D = new Vector3(positionToMoveTo2D.x, positionToMoveTo2D.y, tile.TileData.Position.z);
-        tile.LeaveTileArea(positionToMoveTo3D, OnLetterReachedWordArea);
         _tilesInMovement++;
         _nextLetterIndex++;
+        tile.LeaveTileArea(positionToMoveTo3D, OnLetterMovementCompleted);
     }
 
     private void ResizeWordFormingArea(TileController tileController)
@@ -70,18 +70,19 @@ public class WordController
         ResetWord();
     }
 
-    private void OnLetterReachedWordArea()
+    private void OnLetterMovementCompleted()
     {
         _tilesInMovement--;
         if (!IsWordValid())
         {
             SetSubmitButtonState(false);
             CheckWordFilled();
+            LevelController.Instance.ScoreController.DisplayScoreForWord("");
         }
         else
         {
-            LevelController.Instance.ScoreController.DisplayScoreForWord(_currentWord);
             SetSubmitButtonState(true);
+            LevelController.Instance.ScoreController.DisplayScoreForWord(_currentWord);
         }
     }
 
@@ -97,14 +98,30 @@ public class WordController
 
     private void OnClickUndoButton()
     {
-        
+        UndoLastLetter();
     }
 
-    private bool IsWordValid()
+    public bool IsWordValid()
     {
+        Debug.Log(_currentWord);
         if (!Config.possibleWords.Contains(_currentWord.ToLower())) return false;
         if (submittedWords.Contains(_currentWord)) return false;
         return true;
+    }
+
+    private void UndoLastLetter()
+    {
+        if (_nextLetterIndex == 0) return;
+        int lastIndex = tilesInWordFormer.Count - 1;
+        ITile tileToUndo = tilesInWordFormer[lastIndex];
+
+        tilesInWordFormer.RemoveAt(lastIndex);
+        _currentWord = _currentWord.Remove(lastIndex);
+        _nextLetterIndex--;
+        _tilesInMovement++;
+
+        tileToUndo.ReturnToTileArea(OnLetterMovementCompleted);
+        tileToUndo.UpdateMonitor();
     }
 
     private void SubmitWord()
@@ -127,7 +144,7 @@ public class WordController
 
     private void RemoveTiles()
     {
-        float tileSize = LevelController.Instance.TileManager.TileSize;
+        float tileSize = LevelController.Instance.TileController.TileSize;
         for (int i = tilesInWordFormer.Count-1; i >= 0; i--)
         {
             float currentExtraDelay = ((tilesInWordFormer.Count - i) * .05f);
@@ -140,7 +157,7 @@ public class WordController
 
     private void ReturnTiles()
     {
-        foreach (ITile tile in tilesInWordFormer) tile.ReturnToTileArea();
+        foreach (ITile tile in tilesInWordFormer) tile.ReturnToTileArea(null);
         foreach (ITile tile in tilesInWordFormer) tile.UpdateMonitor();
     }
 }

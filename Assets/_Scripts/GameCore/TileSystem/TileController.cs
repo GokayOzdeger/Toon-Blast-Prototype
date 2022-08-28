@@ -6,7 +6,7 @@ using Utilities;
 
 public class TileController 
 {
-    private List<ITile> AllTiles = new List<ITile>();
+    public List<ITile> AllTiles { get; private set; } = new List<ITile>();
     private TileControllerReferences References { get; set; }
     private TileControllerSettings Settings { get; set; }
     private TileControllerConfig Config { get; set; }
@@ -31,6 +31,12 @@ public class TileController
         LockChildrenTiles();
     }
 
+    public void SetupTileManagerAutoSolver()
+    {
+        SpawnTilesAutoSolver();
+        LockChildrenTiles();
+    }
+
     private void SpawnTiles()
     {
         foreach (TileData tileData in Config.TileDatas)
@@ -45,8 +51,17 @@ public class TileController
             // create tile GO and assiign generated lettertile
             GameObject tileGO = ObjectPooler.Instance.Spawn(References.tilePrefab.name, tilePositionForCurrentScreen);
             LetterMonitor monitor = tileGO.GetComponent<LetterMonitor>();
-            LetterTile letter = new LetterTile(monitor, tileData);
+            LetterTile letter = new LetterTile(this, monitor, tileData);
             letter.SetPixelSize(TileSize);
+            AllTiles.Add(letter);
+        }
+    }
+
+    private void SpawnTilesAutoSolver()
+    {
+        foreach (TileData tileData in Config.TileDatas)
+        {
+            LetterTile letter = new LetterTile(this, null, tileData);
             AllTiles.Add(letter);
         }
     }
@@ -96,9 +111,9 @@ public class TileController
     {
         foreach(ITile tile in AllTiles)
         {
-            foreach(int childrenId in tile.TileData.Children)
+            foreach(ITile childTile in tile.ChildrenTiles)
             {
-                GetTileWithId(childrenId).LockTile();
+                childTile.LockTile();
             }
         }
     }

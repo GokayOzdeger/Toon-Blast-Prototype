@@ -26,7 +26,7 @@ public class ScoreController
     
     public void DisplayScoreForWord(string word)
     {
-        if (word == "") return;
+        if (word == "") { HideWordScore(); return; }
         ShowWordScore();
         _currentWordScore = 0;
         foreach (char character in word) _currentWordScore += GetWordScore(character);

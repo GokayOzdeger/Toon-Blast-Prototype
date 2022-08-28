@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using UnityEngine;
 
-public class LinkedTree<TData> where TData : ISerializable
+public class LinkedTree<TData> 
 {
     public TreeNode<TData> Root => _root;
     private TreeNode<TData> _root;
@@ -21,7 +21,7 @@ public class LinkedTree<TData> where TData : ISerializable
 }
 
 
-public class TreeNode<TData> where TData : ISerializable
+public class TreeNode<TData>
 {
     public int Id { get; set; }
     public HashSet<TreeNode<TData>> ChildNodes { get; private set; } = new HashSet<TreeNode<TData>>();
@@ -40,6 +40,12 @@ public class TreeNode<TData> where TData : ISerializable
         _data = data;
     }
 
+    public bool HasChild(TData data)
+    {
+        foreach (TreeNode<TData> node in ChildNodes) if (node.Data.Equals(data)) return true;
+        return false;
+    }
+
     public void RemoveChild(TreeNode<TData> node)
     {
         ChildNodes.Remove(node);
@@ -50,10 +56,19 @@ public class TreeNode<TData> where TData : ISerializable
         ChildNodes.RemoveWhere((node)=> node.Data.Equals(data));
     }
 
-    public void AddChild(TreeNode<TData> node)
+    public TreeNode<TData> AddChild(TreeNode<TData> node)
     {
         node.ParentNode = this;
         ChildNodes.Add(node);
+        return node;
+    }
+
+    public TreeNode<TData> AddChild(TData data)
+    {
+        TreeNode<TData> node = new TreeNode<TData>(data);
+        node.ParentNode = this;
+        ChildNodes.Add(node);
+        return node;
     }
 
     public void Clear()
@@ -64,7 +79,7 @@ public class TreeNode<TData> where TData : ISerializable
 }
 
 [System.Serializable]
-public class TreeNodeSerialized<TData> where TData : ISerializable
+public class TreeNodeSerialized<TData>
 {
     public int id;
     public int[] childIds;
@@ -86,7 +101,7 @@ public class TreeNodeSerialized<TData> where TData : ISerializable
     }
 }
 
-public class TreeReader<TData> where TData : ISerializable
+public class TreeReader<TData> where TData : struct
 {
     public TreeNode<TData> CurrentNode { get; set; }
     public int ChildCount => CurrentNode.ChildNodes.Count;

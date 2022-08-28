@@ -8,12 +8,15 @@ public interface ITile
     public LetterMonitor Monitor { get; }
     public TileData TileData { get; }
     public int Locks { get; set; }
+    public ITile[] ChildrenTiles { get; }
 
-    public void ReturnToTileArea();
+    public void ReturnToTileArea(Action onComplete);
     public void LeaveTileArea(Vector3 moveTo, Action onComplete);
     public void OnClick();
     public void LockTile();
     public void UnlockTile();
+    public void LockChildren();
+    public void UnlockChildren();
     public void UpdateMonitor();
     public void GoToPool();
     public void GoToPool(float delay);

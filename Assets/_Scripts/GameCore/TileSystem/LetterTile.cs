@@ -7,10 +7,11 @@ using UnityEngine.Events;
 
 public class LetterTile : ITile
 {
+    private TileController _tileController;
     private LetterMonitor _monitor;
     private TileData _tileData;
     private Tween _activeTween;
-
+    private ITile[] _childrenTiles;
 
     public Tween ActiveTween
     {
@@ -25,10 +26,28 @@ public class LetterTile : ITile
     public int Locks { get; set; } = 0;
     public LetterMonitor Monitor => _monitor;
     public TileData TileData => _tileData;
+
+    public ITile[] ChildrenTiles
+    {
+        get
+        {
+            if(_childrenTiles == null)
+            {
+                _childrenTiles = new ITile[TileData.Children.Length];
+                for (int i = 0; i < TileData.Children.Length; i++)
+                {
+                    _childrenTiles[i] = _tileController.GetTileWithId(TileData.Children[i]);
+                }
+            }
+            return _childrenTiles;
+        }
+    }
+
     public bool Clickable { get; private set; } = true;
 
-    public LetterTile(LetterMonitor monitor, TileData data)
+    public LetterTile(TileController tileController, LetterMonitor monitor, TileData data)
     {
+        _tileController = tileController;
         _monitor = monitor;
         _tileData = data;
         UpdateMonitor();
@@ -48,6 +67,7 @@ public class LetterTile : ITile
 
     public void SetPixelSize(float size)
     {
+        if (Monitor == null) return;
         Monitor.SetPixelSize(size);
     }
 
@@ -73,20 +93,26 @@ public class LetterTile : ITile
 
     public void UnlockChildren()
     {
-        foreach (int childId in TileData.Children) LevelController.Instance.TileManager.GetTileWithId(childId).UnlockTile();
+        foreach (ITile tile in ChildrenTiles) tile.UnlockTile();
     }
 
-    private void LockChildren()
+    public void LockChildren()
     {
-        foreach(int childId in TileData.Children) LevelController.Instance.TileManager.GetTileWithId(childId).LockTile();
+        foreach(ITile tile in ChildrenTiles) tile.LockTile();
     }
 
-    public void ReturnToTileArea()
+    public void ReturnToTileArea(Action onComplete)
     {
-        Sequence tween = DOTween.Sequence();
-        tween.Append(TweenHelper.Shake(Monitor.transform, null, 20, .25f));
-        tween.Append(TweenHelper.CurvingMoveTo(Monitor.transform, TileData.Position, OnReturnedToTileArea));
-        ActiveTween = tween;
+        if (Monitor)
+        {
+            Sequence tween = DOTween.Sequence();
+            tween.Append(TweenHelper.Shake(Monitor.transform, null, 20, .15f));
+            tween.Append(TweenHelper.CurvingMoveTo(Monitor.transform, TileData.Position));
+            tween.onComplete = () => { if(onComplete != null) onComplete(); OnReturnedToTileArea(); };
+            ActiveTween = tween;
+        }
+        else OnReturnedToTileArea(); // movements are instant when not using a monitor
+
         LockChildren();
     }
 
@@ -97,7 +123,12 @@ public class LetterTile : ITile
 
     public void LeaveTileArea(Vector3 moveTo, Action onComplete)
     {
-        ActiveTween = TweenHelper.CurvingMoveTo(Monitor.transform, moveTo, onComplete, .3f);
+        if (Monitor)
+        {
+            ActiveTween = TweenHelper.CurvingMoveTo(Monitor.transform, moveTo, onComplete, .3f);
+        }
+        else onComplete(); // movements are instant when not using a monitor
+
         UnlockChildren();
     }
 

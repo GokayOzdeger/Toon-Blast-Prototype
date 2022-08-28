@@ -12,7 +12,7 @@ public class LevelController : PocoSingleton<LevelController>
 
     // Level Components
 
-    public TileController TileManager { get; private set; }
+    public TileController TileController { get; private set; }
     public WordController WordController { get; private set; }
     public ScoreController ScoreController { get; private set; }
 
@@ -27,12 +27,12 @@ public class LevelController : PocoSingleton<LevelController>
 
     private void CreateLevelControllers()
     {
-        TileManager = new TileController(References.TileManagerReferences, Settings.TileManagerSettings, Config.TileManagerConfig);
+        TileController = new TileController(References.TileManagerReferences, Settings.TileManagerSettings, Config.TileManagerConfig);
         WordController = new WordController(References.WordControllerReferences, Settings.WordControllerSettings, Config.WordControllerConfig);
         ScoreController = new ScoreController(References.ScoreControllerReferences, Settings.ScoreControllerSettings);
 
-        TileManager.SetupTileManager();
-        WordController.SetupWordController(TileManager);
+        TileController.SetupTileManager();
+        WordController.SetupWordController(TileController);
         ScoreController.SetupScoreController();
     }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "ScriptableObjects/Level Config")]
@@ -33,6 +34,17 @@ public class LevelConfig : ScriptableObject
         LevelJson jsonRead = JsonUtility.FromJson<LevelJson>(json.text);
         levelTitle = jsonRead.title;
         tileManagerConfig.SaveTileDataEditor(jsonRead.tiles);
+    }
+
+    [EasyButtons.Button("Run Auto Solver")]
+    private void AutoSolve(TextAsset allWordsTextAsset)
+    {
+        Debug.Log("Started Auto Solver...");
+
+        string content = allWordsTextAsset.text;
+        string[] allWords = content.Split("\n");
+        AutoSolver solver = new AutoSolver(TileManagerConfig, allWords);
+        solver.StartAutoSolver();
     }
 
     private class LevelJson
