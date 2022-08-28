@@ -112,7 +112,6 @@ public class WordController
 
     public bool IsWordValid()
     {
-        Debug.Log(_currentWord);
         if (!Config.possibleWords.Contains(_currentWord.ToLower())) return false;
         if (_submittedWords.Contains(_currentWord)) return false;
         return true;
