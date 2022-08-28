@@ -8,6 +8,7 @@ using UnityEngine.Events;
 public class LetterTile : ITile
 {
     private TileController _tileController;
+    private WordController _wordController;
     private LetterMonitor _monitor;
     private TileData _tileData;
     private Tween _activeTween;
@@ -24,6 +25,7 @@ public class LetterTile : ITile
         }
     }
     public int Locks { get; set; } = 0;
+    public bool Clickable => Locks == 0 && InTileArea;
     public LetterMonitor Monitor => _monitor;
     public TileData TileData => _tileData;
 
@@ -43,10 +45,11 @@ public class LetterTile : ITile
         }
     }
 
-    public bool Clickable { get; private set; } = true;
+    public bool InTileArea { get; private set; } = true;
 
-    public LetterTile(TileController tileController, LetterMonitor monitor, TileData data)
+    public LetterTile(TileController tileController, WordController wordController, LetterMonitor monitor, TileData data)
     {
+        _wordController = wordController;
         _tileController = tileController;
         _monitor = monitor;
         _tileData = data;
@@ -55,12 +58,14 @@ public class LetterTile : ITile
 
     public void LockTile()
     {
+        if (!InTileArea) return;
         Locks++;
         if (Locks == 1) UpdateMonitor();
     }
 
     public void UnlockTile()
     {
+        if (!InTileArea) return;
         Locks--;
         if (Locks == 0) UpdateMonitor();
     }
@@ -79,16 +84,15 @@ public class LetterTile : ITile
 
     public void OnClick()
     {
-        if (LevelController.Instance.WordController.WordIsFull) return;
+        if (_wordController.WordIsFull) return;
         if (!Clickable) return;
-        if (Locks != 0) return;
         else OnClickSuccess();
     }
 
     private void OnClickSuccess()
     {
-        Clickable = false;
-        LevelController.Instance.WordController.AddTileToWord(this);
+        InTileArea = false;
+        _wordController.AddTileToWord(this);
     }
 
     public void UnlockChildren()
@@ -112,13 +116,11 @@ public class LetterTile : ITile
             ActiveTween = tween;
         }
         else OnReturnedToTileArea(); // movements are instant when not using a monitor
-
-        LockChildren();
     }
 
     private void OnReturnedToTileArea()
     {
-        Clickable = true;
+        InTileArea = true;
     }
 
     public void LeaveTileArea(Vector3 moveTo, Action onComplete)
@@ -134,11 +136,11 @@ public class LetterTile : ITile
 
     public void GoToPool()
     {
-        Monitor.SendToPool(0);
+        Monitor?.SendToPool(0);
     }
 
     public void GoToPool(float delay)
     {
-        Monitor.SendToPool(delay);
+        Monitor?.SendToPool(delay);
     }
 }

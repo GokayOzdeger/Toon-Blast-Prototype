@@ -8,6 +8,7 @@ public interface ITile
     public LetterMonitor Monitor { get; }
     public TileData TileData { get; }
     public int Locks { get; set; }
+    public bool Clickable { get; }
     public ITile[] ChildrenTiles { get; }
 
     public void ReturnToTileArea(Action onComplete);

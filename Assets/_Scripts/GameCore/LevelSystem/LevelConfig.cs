@@ -37,13 +37,13 @@ public class LevelConfig : ScriptableObject
     }
 
     [EasyButtons.Button("Run Auto Solver")]
-    private void AutoSolve(TextAsset allWordsTextAsset)
+    public void AutoSolve()
     {
         Debug.Log("Started Auto Solver...");
-
+        TextAsset allWordsTextAsset = Resources.Load<TextAsset>("allWords");
         string content = allWordsTextAsset.text;
-        string[] allWords = content.Split("\n");
-        AutoSolver solver = new AutoSolver(TileManagerConfig, allWords);
+        string[] allWords = content.Split("\r\n");
+        AutoSolver solver = new AutoSolver(allWords, TileManagerConfig, WordControllerConfig);
         solver.StartAutoSolver();
     }
 

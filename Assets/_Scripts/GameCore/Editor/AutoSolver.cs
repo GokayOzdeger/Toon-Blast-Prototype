@@ -8,111 +8,145 @@ using UnityEngine;
 public class AutoSolver 
 { 
     private TileController tileController;
+    private WordController wordController;
     private string[] allWords;
 
-    public AutoSolver(TileControllerConfig tileControllerConfig, string[] _allWords)
+    public AutoSolver(string[] _allWords, TileControllerConfig tileControllerConfig, WordControllerConfig wordControllerConfig)
     {
         allWords = _allWords;
         Debug.Log(allWords.Length);
+
         TileControllerSettings tileControllerSettings = new TileControllerSettings();        
+        WordControllerSettings wordControllerSettings = new WordControllerSettings();
+        wordControllerSettings.maxLetterCount = 3;
+        
         tileController = new TileController(null, tileControllerSettings, tileControllerConfig);
+        wordController = new WordController(null, wordControllerSettings, wordControllerConfig);
 
         SetupControllers();
     }
 
     private void SetupControllers()
     {
-        tileController.SetupTileManagerAutoSolver();
+        wordController.SetupWordControllerAutoPlayer(tileController);
+        tileController.SetupTileManagerAutoSolver(wordController);
     }
 
     public void StartAutoSolver()
     {
         Debug.Log("Hello");
         LinkedTree<ITile> LetterTree = new LinkedTree<ITile>();
+        LinkedTree<string> WordTree = new LinkedTree<string>();
         
-        Stack<ITile> usedTiles = new Stack<ITile>();
+        //Stack<ITile> usedTiles = new Stack<ITile>();
         Stack<int> cursorLocations = new Stack<int>();
-        CreateWordTree(LetterTree.Root, tileController.AllTiles, usedTiles, cursorLocations);
+        StartWordSearch(WordTree.Root, LetterTree.Root, tileController.AllTiles, cursorLocations);
     }
 
-    private void CreateWordTree(TreeNode<ITile> currentNode, List<ITile> tilesLeft, Stack<ITile> usedTiles, Stack<int> cursorLocations, int brachLength = -1)
+    private void StartWordSearch(TreeNode<string> wordTreeNode, TreeNode<ITile> letterTreeNode, List<ITile> tilesLeft, Stack<int> cursorLocations)
     {
-        if (brachLength == 5) 
-        {
-            usedTiles.Pop();
-            currentNode.Data.LockChildren();
-            return; 
-        }
-        
-        int cursorLocation = 0;
-        if (cursorLocations.Count > 0) cursorLocation = cursorLocations.Peek();
-        if (currentNode.Data != null)
-        {
-            if (MoveCursorTo(GetWordFromTreeNode(currentNode), ref cursorLocation))
-            {
-                cursorLocations.Push(cursorLocation);
-            }
-            else
-            {
-                usedTiles.Pop();
-                currentNode.Data.LockChildren();
-                return;
-            }
-        }
-
+        cursorLocations.Push(0);
+        tilesLeft = new List<ITile>(tilesLeft);
         foreach (ITile tile in tilesLeft)
         {
             if (tile.Locks != 0) continue;
-            if (usedTiles.Contains(tile)) continue;
-            if (currentNode.HasChild(tile)) continue;
-            tile.UnlockChildren();
-            TreeNode<ITile> newNode = currentNode.AddChild(tile);
-            usedTiles.Push(tile);
-            CreateWordTree(newNode, tilesLeft, usedTiles, cursorLocations, brachLength + 1);
+            if (letterTreeNode.HasChild(tile)) continue;
+            TreeNode<ITile> newNode = letterTreeNode.AddChild(tile);
+            CreateWordTree(wordTreeNode, newNode, tileController.AllTiles, cursorLocations, 0);
         }
-        
-        if (usedTiles.Count > 0) usedTiles.Pop();
-        
-        if (currentNode.Data != null) currentNode.Data.LockChildren();
-        if(cursorLocations.Count > 0) cursorLocations.Pop();
     }
 
-    private bool MoveCursorTo(string word, ref int cursor)
+    private void StartWordSearchRecursive(TreeNode<string> wordTreeNode, TreeNode<ITile> letterTreeNode, List<ITile> tilesLeft, Stack<int> cursorLocations)
     {
+        wordController.SubmitWord();
+        cursorLocations.Push(0);
+
+        tilesLeft = new List<ITile>(tilesLeft);
+        foreach (ITile tile in tilesLeft)
+        {
+            if (tile.Locks != 0) continue;
+            if (letterTreeNode.HasChild(tile)) continue;
+            TreeNode<ITile> newNode = letterTreeNode.AddChild(tile);
+            CreateWordTree(wordTreeNode, newNode, tileController.AllTiles, cursorLocations, 0);
+        }
+        wordController.UndoLastSubmit();
+        cursorLocations.Pop();
+    }
+
+    private void CreateWordTree(TreeNode<string> wordTreeNode, TreeNode<ITile> letterTreeNode, List<ITile> tilesLeft, Stack<int> cursorLocations, int brachLength)
+    {
+        if (brachLength+1 == wordController.MaxWordLength) return;
+
+
+        letterTreeNode.Data.OnClick();
+
+        // check if word formed so far exists in allWorlds
+        int cursorLocation = cursorLocations.Peek();
+        FindWordResult result = MoveCursorTo(wordController.CurrentWord, wordController.MaxWordLength, ref cursorLocation);
+        switch (result)
+        {
+            case FindWordResult.WordInvalid:
+                wordController.UndoLastLetter();
+                return;
+            case FindWordResult.WordPossible:
+                cursorLocations.Push(cursorLocation);
+                break;
+            case FindWordResult.WordFound:
+                cursorLocations.Push(cursorLocation);
+                TreeNode<string> newWordTreeNode = new TreeNode<string>(wordController.CurrentWord);
+                Debug.Log("Next Word...");
+                StartWordSearchRecursive(newWordTreeNode, letterTreeNode, tileController.AllTiles, cursorLocations);
+                break;
+            default:
+                break;
+        }
+
+        tilesLeft = new List<ITile>(tilesLeft);
+        foreach (ITile tile in tilesLeft)
+        {
+            if (!tile.Clickable) continue;
+            if (letterTreeNode.HasChild(tile)) continue;
+            TreeNode<ITile> newLetterTreeNode = letterTreeNode.AddChild(tile);
+            CreateWordTree(wordTreeNode, newLetterTreeNode, tileController.AllTiles, cursorLocations, brachLength + 1);
+        }
+
+        wordController.UndoLastLetter();
+        cursorLocations.Pop();
+    }
+
+    private FindWordResult MoveCursorTo(string word, int maxLetters, ref int cursor)
+    {
+        string wordLower = word.ToLowerInvariant();
         for (int i = cursor; i < allWords.Length; i++)
         {
-            int compareResult = string.Compare(word, allWords[i]);
+            if (allWords[i].Length > maxLetters) continue;
+            //Debug.Log(wordLower + " / " + allWords[i]);
+            int compareResult = string.Compare(wordLower, allWords[i]);
             if (compareResult == 1) continue;
             else if (compareResult == -1)
             {
-                if (allWords[i].StartsWith(word, System.StringComparison.OrdinalIgnoreCase))
+                if (allWords[i].StartsWith(wordLower, System.StringComparison.OrdinalIgnoreCase))
                 {
                     cursor = i;
-                    return true;
+                    return FindWordResult.WordPossible;
                 }
-                else return false;
+                else return FindWordResult.WordInvalid;
             }
             else
             {
+                Debug.Log("MATCH: "+wordLower);
                 cursor = i;
-                return true;
+                return FindWordResult.WordFound;
             }
         }
-        return false;
+        return FindWordResult.WordInvalid;
     }
 
-    private string GetWordFromTreeNode(TreeNode<ITile> node)
+    private enum FindWordResult
     {
-        string word = "";
-        TreeNode<ITile> currentNode = node;
-        while(currentNode != null)
-        {
-            if (currentNode.Data == null) break;
-            word = currentNode.Data.TileData.Character + word;
-            currentNode = currentNode.ParentNode;
-        }
-        Debug.Log(word);
-        return word;
+        WordInvalid,
+        WordPossible,
+        WordFound,
     }
 }
 #endif
