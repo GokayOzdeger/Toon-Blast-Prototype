@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class LevelController
 {
+    // Dependencies
+
     public LevelConfig Config { get; private set; }
     public LevelSettings Settings { get; private set; }
     public LevelReferences References { get; private set; }
-
-    public LevelStates LevelState { get; private set; } = LevelStates.InProgress;
 
     // Level Components
 
@@ -37,21 +37,11 @@ public class LevelController
 
     public void LevelFailed()
     {
-        if (LevelState != LevelStates.InProgress) return;
-        LevelState = LevelStates.Failed;
-        CreateLevelResultFlyingText("Level Failed");
-
         LevelSaveData.Data.ClearSavedLevelState();
     }
 
-    public void LevelCleared()
+    public void LevelCompleted()
     {
-        if (LevelState != LevelStates.InProgress) return;
-        LevelState = LevelStates.Cleared;
-        CreateLevelResultFlyingText("Level Cleared");
-
-        
-        LevelSaveData.Data.ClearSavedLevelState();
         GameManagerSaveData.Data.ProgressLevel();
     }
 
@@ -59,26 +49,11 @@ public class LevelController
     {
         LevelSaveData.Data.SaveLevelState(this);
     }
-
-    private void CreateLevelResultFlyingText(string levelResult)
-    {
-        Vector2 flyingTextStartPos = UIEffectsManager.Instance.GetReferencePointByName("TopCenterOutside");
-        Vector2 flyingTextWaitingPos = UIEffectsManager.Instance.GetReferencePointByName("ScreenCenter");
-        Vector2 flyingTextEndPos = UIEffectsManager.Instance.GetReferencePointByName("RightCenterOutside");
-        UIEffectsManager.Instance.CreatePassingByFlyingText(levelResult, 120, flyingTextStartPos, flyingTextWaitingPos, flyingTextEndPos, UIEffectsManager.CanvasLayer.OverGridUnderUI, 2.5f, 1, LevelEnded);
-    }
     
     private void LevelEnded()
     {
         // clear leftovers from old scene
-
-        GameManager.Instance.CreateCurrentLevel();
-    }
-
-    public enum LevelStates
-    {
-        InProgress,
-        Cleared,
-        Failed
+        if (ScoreController.IsNewHighScore) GameManager.Instance.ChangeGameState(References.HighScoreGameState);
+        else GameManager.Instance.ChangeGameState(References.LevelSelectGameState);
     }
 }

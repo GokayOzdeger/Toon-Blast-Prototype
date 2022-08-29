@@ -98,6 +98,7 @@ public class LetterTile : ITile
 
     public void ReturnToTileArea(Action onComplete)
     {
+        LockChildren();
         if (Monitor)
         {
             CompleteLastTween();
@@ -122,6 +123,7 @@ public class LetterTile : ITile
 
     public void LeaveTileArea(Vector3 moveTo, Action onComplete)
     {
+        UnlockChildren();
         if (Monitor)
         {
             CompleteLastTween();

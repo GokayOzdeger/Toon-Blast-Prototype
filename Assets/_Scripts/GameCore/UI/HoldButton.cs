@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -14,13 +15,14 @@ public class HoldButton : Button
     private bool HoveringButton { get; set; }
     private bool HoldingButton { get; set; }
 
-    private float timeSinceStartedHolding;
-    private bool registeredHold;
-    private Graphic[] graphicsInChildren;
+    private float _timeSinceStartedHolding;
+    private bool _registeredHold;
+    private Graphic[] _graphicsInChildren;
+    private Tween _activeTween;
 
     protected override void Awake()
     {
-        graphicsInChildren = GetComponentsInChildren<Graphic>(true);
+        _graphicsInChildren = GetComponentsInChildren<Graphic>(true);
         base.Awake();
     }
 
@@ -30,7 +32,7 @@ public class HoldButton : Button
 
         Color tintColor = GetStateTrasitionColor(state);
 
-        foreach (Graphic graphic in graphicsInChildren)
+        foreach (Graphic graphic in _graphicsInChildren)
         {
             StartColorTween(graphic, tintColor, true);
         }
@@ -63,19 +65,38 @@ public class HoldButton : Button
         graphic.CrossFadeColor(targetColor, instant ? 0f : colors.fadeDuration, true, true);
     }
 
+    private void CompleteLastTween()
+    {
+        if (_activeTween == null) return;
+        _activeTween.Complete(true);
+    }
+
+    public override void OnPointerClick(PointerEventData eventData)
+    {
+        // remove default behaviour of button
+    }
+
     public override void OnPointerDown(PointerEventData eventData)
     {
-        registeredHold = false;
-        timeSinceStartedHolding = 0;
+        _registeredHold = false;
+        _timeSinceStartedHolding = 0;
         HoldingButton = true;
     }
 
     public override void OnPointerUp(PointerEventData eventData)
     {
         HoldingButton = false;
+        if (!interactable) return;
         if (!HoveringButton) return;
-        if (registeredHold) return;    
+        if (_registeredHold) return;
+        AnimateClick();
         onClick.Invoke();
+    }
+
+    private void AnimateClick()
+    {
+        CompleteLastTween();
+        _activeTween = TweenHelper.PunchScale(transform);
     }
 
     public override void OnPointerEnter(PointerEventData eventData)
@@ -90,11 +111,12 @@ public class HoldButton : Button
 
     public void Update()
     {
-        if (!HoldingButton || !HoveringButton) return;
-        timeSinceStartedHolding += Time.deltaTime;
-        if(timeSinceStartedHolding> HoldRegisterDuration)
+        if (!HoldingButton || !HoveringButton || _registeredHold || !interactable) return;
+        _timeSinceStartedHolding += Time.deltaTime;
+        if(_timeSinceStartedHolding> HoldRegisterDuration)
         {
-            registeredHold = true;
+            AnimateClick();
+            _registeredHold = true;
             onHold.Invoke();
         }
     }

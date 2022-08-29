@@ -8,6 +8,7 @@ public class ScoreController
 {
     public ScoreControllerReferences References { get; set; }
     public ScoreControllerSettings Settings { get; set; }
+    public bool IsNewHighScore => _currentTotalScore > 0;
 
     private int _currentWordScore;
     private int _currentTotalScore;
@@ -28,8 +29,9 @@ public class ScoreController
     {
         if (word == "") { HideWordScore(); return; }
         ShowWordScore();
-        _currentWordScore = 0;
-        foreach (char character in word) _currentWordScore += GetWordScore(character);
+        int _currentRawWordScore = 0;
+        foreach (char character in word) _currentRawWordScore += GetWordScore(character);
+        _currentWordScore = _currentRawWordScore * word.Length * 10;
         References.wordScoreText.text = Settings.wordScoreText + " " + _currentWordScore.ToString();
     }
     public void UpdateTotalScoreDisplay()

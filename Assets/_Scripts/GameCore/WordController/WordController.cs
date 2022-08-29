@@ -73,6 +73,11 @@ public class WordController
     private void OnTileMovementCompleted()
     {
         _tilesInMovement--;
+        CheckWordIsSubmitable();
+    }
+
+    private void CheckWordIsSubmitable()
+    {
         if (!IsWordValid())
         {
             SetSubmitButtonState(false);
@@ -128,9 +133,10 @@ public class WordController
         _nextLetterIndex--;
         _tilesInMovement++;
 
-        tileToUndo.ReturnToTileArea(OnTileMovementCompleted);
+        tileToUndo.ReturnToTileArea(null);
         tileToUndo.UpdateMonitor();
         UpdateUndoButtonState();
+        CheckWordIsSubmitable();
     }
 
     private void SubmitWord()
@@ -153,9 +159,6 @@ public class WordController
 
     private void RemoveTiles()
     {
-        // unlock children tiles of all used tiles
-        foreach (ITile tile in tilesInWordFormer) tile.UnlockChildren();
-
         float tileSize = _tileController.TileSize;
         for (int i = tilesInWordFormer.Count-1; i >= 0; i--)
         {
@@ -172,6 +175,7 @@ public class WordController
         foreach (ITile tile in tilesInWordFormer) tile.ReturnToTileArea(null);
         ResetWord();
         UpdateUndoButtonState();
+        CheckWordIsSubmitable();
     }
 }
 

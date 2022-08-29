@@ -16,6 +16,7 @@ public interface ITile
     public void OnClick();
     public void LockTile();
     public void UnlockTile();
+    public void LockChildren();
     public void UnlockChildren();
     public void UpdateMonitor();
     public void GoToPool();

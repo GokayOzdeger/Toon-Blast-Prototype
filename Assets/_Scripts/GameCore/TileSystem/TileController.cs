@@ -111,13 +111,7 @@ public class TileController
 
     private void LockChildrenTiles()
     {
-        foreach(ITile tile in AllTiles)
-        {
-            foreach(ITile childTile in tile.ChildrenTiles)
-            {
-                childTile.LockTile();
-            }
-        }
+        foreach(ITile tile in AllTiles) tile.LockChildren();
     }
 }
 

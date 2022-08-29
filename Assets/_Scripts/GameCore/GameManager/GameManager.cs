@@ -3,65 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utilities;
 using SaveSystem;
+using UnityEngine.Events;
+
 public class GameManager : AutoSingleton<GameManager>
 {
-    [SerializeField] LevelConfig[] levelList;
-    [Group][SerializeField] LevelSettings levelSettings;
-    [Group][SerializeField] LevelReferences levelSceneReferences;
-    
-    public LevelController CurrentLevel { get; private set; }
+    [SerializeField] private GameState startingGameState;
 
-    public LevelConfig CurrentLevelConfig
-    {
-        get
-        {
-            if(GameManagerSaveData.Data.CurrentLevelIndex == levelList.Length)
-            {
-                Debug.Log("All Levels Completed Restarting");
-                GameManagerSaveData.Data.ResetLevelIndex();
-            }
-            return levelList[GameManagerSaveData.Data.CurrentLevelIndex];
-        }
-    }
-    private LevelConfig chosenLevelConfig;
+    public GameState GameState { get; private set; }
+    public UnityEvent<GameState> OnGameStateChanged { get; private set; } = new UnityEvent<GameState>();
+
 
     private void Start()
     {
-        CreateCurrentLevel();   
+        ChangeGameState(startingGameState); 
     }
 
-    public void CreateCurrentLevel()
+    public void ChangeGameState(GameState newState)
     {
-        CurrentLevel = new LevelController(levelSceneReferences, levelSettings, CurrentLevelConfig);
+        GameState = newState;
+        OnGameStateChanged.Invoke(newState);
     }
-
 
 
 #if UNITY_EDITOR
-    
-    [EasyButtons.Button(Mode = EasyButtons.ButtonMode.EnabledInPlayMode)]
-    private void WinLevel()
-    {
-        CurrentLevel.LevelCleared();
-    }
-
-    [EasyButtons.Button(Mode = EasyButtons.ButtonMode.EnabledInPlayMode)]
-    private void LoseLevel()
-    {
-        CurrentLevel.LevelFailed();
-    }
 
     [EasyButtons.Button(Mode = EasyButtons.ButtonMode.DisabledInPlayMode)]
     private void DeleteAllSaves()
     {
         SaveHandler.DeleteAll();
     }
-    
-    private void OnDrawGizmos()
-    {
-        //
-    }
-
 
 #endif
 }
