@@ -28,7 +28,7 @@ public class TileController
     {
         _wordController = wordController;
         CalculateTileArea();
-        CalculateTilePositionsAccordingToScreenSize();
+        CalculateTileDistanceMultiplier();
         SpawnTiles();
         LockChildrenTiles();
     }
@@ -74,7 +74,7 @@ public class TileController
         return null;
     }
 
-    private void CalculateTilePositionsAccordingToScreenSize()
+    private void CalculateTileDistanceMultiplier()
     {
         CalculateRectOfTileData();
         float heightDistanceMultiplier = TileAreaRect.height / TileDataRect.height;

@@ -10,8 +10,7 @@ public class LetterMonitor : MonoBehaviour, IPoolable
     [SerializeField] private PoolObject poolObject;
     [SerializeField] private SpriteRenderer tileImageRenderer;
     [SerializeField] private TMPro.TMP_Text characterText;
-    [BHeader("Settings")]
-    [SerializeField] private float holdDurationForUndoAll;
+
     private ITile Tile { get; set; }
 
     public void OnMouseUpAsButton()

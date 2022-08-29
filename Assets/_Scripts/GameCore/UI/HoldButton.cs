@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
+using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -14,6 +16,52 @@ public class HoldButton : Button
 
     private float timeSinceStartedHolding;
     private bool registeredHold;
+    private Graphic[] graphicsInChildren;
+
+    protected override void Awake()
+    {
+        graphicsInChildren = GetComponentsInChildren<Graphic>(true);
+        base.Awake();
+    }
+
+    protected override void DoStateTransition(SelectionState state, bool instant)
+    {
+        base.DoStateTransition(state, instant);
+
+        Color tintColor = GetStateTrasitionColor(state);
+
+        foreach (Graphic graphic in graphicsInChildren)
+        {
+            StartColorTween(graphic, tintColor, true);
+        }
+    }
+
+    private Color GetStateTrasitionColor(SelectionState state)
+    {
+        switch (state)
+        {
+            case SelectionState.Normal:
+                return colors.normalColor;
+            case SelectionState.Highlighted:
+                return colors.highlightedColor;
+            case SelectionState.Pressed:
+                return colors.pressedColor;
+            case SelectionState.Selected:
+                return colors.selectedColor;
+            case SelectionState.Disabled:
+                return colors.disabledColor;
+            default:
+                return Color.black;
+        }
+    }
+
+    private void StartColorTween(Graphic graphic, Color targetColor, bool instant)
+    {
+        if (graphic == null)
+            return;
+
+        graphic.CrossFadeColor(targetColor, instant ? 0f : colors.fadeDuration, true, true);
+    }
 
     public override void OnPointerDown(PointerEventData eventData)
     {
