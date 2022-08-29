@@ -84,6 +84,16 @@ public class TweenHelper : MonoBehaviour
         if (onComplete != null) tween.onComplete += () => onComplete();
         return tween;
     }
+
+    public static Tween Spin(Transform target, Action onComplete, float duration = .3f, bool infinite = false)
+    {
+        Sequence sequence = DOTween.Sequence();
+        sequence.Join(target.DOBlendableRotateBy(new Vector3(0,0,-180), duration, RotateMode.FastBeyond360).SetEase(Ease.InOutCubic));
+        sequence.Insert(0, target.DOBlendableRotateBy(new Vector3(0, 0, -180), duration, RotateMode.FastBeyond360).SetEase(Ease.Linear));
+        if (infinite) sequence.SetLoops(-1);
+        if (onComplete != null) sequence.onComplete += () => onComplete();
+        return sequence;
+    }
     
 
 }

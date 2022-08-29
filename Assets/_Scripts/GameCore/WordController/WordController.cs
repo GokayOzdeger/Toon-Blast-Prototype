@@ -28,7 +28,7 @@ public class WordController
 
         References.submitWordButton.onClick.AddListener(OnClickSubmitWord);
         References.undoButton.onClick.AddListener(OnClickUndoButton);
-        references.undoButton.onHold.AddListener(OnHoldUndoButton);
+        references.undoButton.OnHold.AddListener(OnHoldUndoButton);
     }
 
     public void SetupWordController(TileController tileController, ScoreController scoreController)

@@ -10,11 +10,20 @@ using UnityEngine.UI;
 
 public class HoldButton : Button
 {
-    public UnityEvent onHold = new UnityEvent();
+    private UnityEvent _onHold = new UnityEvent();
+    public UnityEvent OnHold
+    {
+        get 
+        {
+            _canBeHold = true;
+            return _onHold;
+        }
+    }
     public float HoldRegisterDuration { get; set; } = .3f;
     private bool HoveringButton { get; set; }
     private bool HoldingButton { get; set; }
 
+    private bool _canBeHold = false;
     private float _timeSinceStartedHolding;
     private bool _registeredHold;
     private Graphic[] _graphicsInChildren;
@@ -111,13 +120,13 @@ public class HoldButton : Button
 
     public void Update()
     {
-        if (!HoldingButton || !HoveringButton || _registeredHold || !interactable) return;
+        if (!HoldingButton || !HoveringButton || _registeredHold || !interactable || !_canBeHold) return;
         _timeSinceStartedHolding += Time.deltaTime;
         if(_timeSinceStartedHolding> HoldRegisterDuration)
         {
             AnimateClick();
             _registeredHold = true;
-            onHold.Invoke();
+            _onHold.Invoke();
         }
     }
 

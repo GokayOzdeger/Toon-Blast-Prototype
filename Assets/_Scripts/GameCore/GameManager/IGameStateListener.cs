@@ -20,7 +20,6 @@ public abstract class MonoGameStateListener : MonoBehaviour
 
     public virtual void OnGameStateChanged(GameState newState)
     {
-        Debug.Log("New State: " + newState.name);
         if(!StateActive.HasValue)
         {
             if (newState == state) OnEnterState();

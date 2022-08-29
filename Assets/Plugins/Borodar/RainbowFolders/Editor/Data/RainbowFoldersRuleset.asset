@@ -17,13 +17,13 @@ MonoBehaviour:
     Key: Animations
     Ordinal: 0
     Priority: 0
-    IconType: 2010
+    IconType: 2510
     SmallIcon: {fileID: 0}
     LargeIcon: {fileID: 0}
     IsIconRecursive: 0
-    BackgroundType: 0
+    BackgroundType: 120
     BackgroundTexture: {fileID: 0}
-    IsBackgroundRecursive: 0
+    IsBackgroundRecursive: 1
     IsHidden: 0
   - Type: 0
     Key: Audio
@@ -418,6 +418,18 @@ MonoBehaviour:
     LargeIcon: {fileID: 0}
     IsIconRecursive: 0
     BackgroundType: 30
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 1
+    IsHidden: 0
+  - Type: 1
+    Key: Assets/_Animations
+    Ordinal: 34
+    Priority: 0
+    IconType: 2510
+    SmallIcon: {fileID: 0}
+    LargeIcon: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 120
     BackgroundTexture: {fileID: 0}
     IsBackgroundRecursive: 1
     IsHidden: 0
