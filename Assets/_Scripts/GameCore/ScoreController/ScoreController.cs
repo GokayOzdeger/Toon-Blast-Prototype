@@ -91,6 +91,7 @@ public class ScoreControllerSettings
         {'L',1 },
         {'S',1 },
         {'U',1 },
+        {'I',1 },
         {'D',2 },
         {'G',2 },
         {'B',3 },

@@ -12,139 +12,92 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56931079d0bc888499bedc4fe66e7bef, type: 3}
   m_Name: Level 3
   m_EditorClassIdentifier: 
-  gridControllerSettings:
-    rowCount: 10
-    collumnCount: 10
-    maxEntitiesPerRow: 10
-    maxEntitiesPerCollumn: 10
-    gridFrameWidthAdd: 20
-    gridFrameBottomAdd: 16
-    gridFrameTopAdd: 26
-  gridEntitySpawnerSettings:
-    gridStartLayout:
-      rows:
-      - row:
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 11400000, guid: 540eade90e6cd8143b92d701976e47d8, type: 2}
-        - {fileID: 11400000, guid: 540eade90e6cd8143b92d701976e47d8, type: 2}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-      - row:
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 11400000, guid: 540eade90e6cd8143b92d701976e47d8, type: 2}
-        - {fileID: 11400000, guid: 540eade90e6cd8143b92d701976e47d8, type: 2}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-      - row:
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-      - row:
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-      - row:
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-      - row:
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 0}
-        - {fileID: 0}
-      - row:
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 0}
-        - {fileID: 0}
-      - row:
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 0}
-      - row:
-        - {fileID: 0}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 0}
-      - row:
-        - {fileID: 0}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 11400000, guid: 419dae0865770a44fa3e3bbc962e30c6, type: 2}
-        - {fileID: 0}
-    entityTypes:
-    - {fileID: 11400000, guid: 13aaf49889056f84e8ff0fa91ba3f284, type: 2}
-    - {fileID: 11400000, guid: f15001bb2e484b94ab3fc54dc93cd279, type: 2}
-    - {fileID: 11400000, guid: 841d8ed8f448fbb43b9fef754a714d48, type: 2}
-    - {fileID: 11400000, guid: 319c644cdc1abc34db28782897426d92, type: 2}
-    - {fileID: 11400000, guid: bdc70d9deda57ba4db97895bc119d53c, type: 2}
-    spawnHeight: 500
-  goalsControllerSettings:
-    uiGoalPrefab: {fileID: 233327313712590955, guid: 1cad3eb0494fb0b42a6a15134de99372, type: 3}
-    goalCollectAudio: {fileID: 8300000, guid: 24998a1cb6fb5984db1bc4033b216cc1, type: 3}
-    gridGoals:
-    - entityType: {fileID: 11400000, guid: 540eade90e6cd8143b92d701976e47d8, type: 2}
-      goalAmount: 4
-  movesController:
-    moveCount: 60
+  levelTitle: WILD ANIMALS
+  tileManagerConfig:
+    tileDatas:
+    - id: 0
+      position: {x: 78.21333, y: -92.1251, z: 99.64}
+      character: R
+      children: 
+    - id: 1
+      position: {x: 39.106667, y: -92.1251, z: 88.64}
+      character: E
+      children: 00000000
+    - id: 2
+      position: {x: -39.106667, y: -92.1251, z: 88.64}
+      character: R
+      children: 03000000
+    - id: 3
+      position: {x: -78.21333, y: -92.1251, z: 99.64}
+      character: R
+      children: 
+    - id: 4
+      position: {x: 0, y: -92.1251, z: 77.64}
+      character: G
+      children: 0200000001000000
+    - id: 5
+      position: {x: -78.21333, y: 25.1949, z: 99.76}
+      character: E
+      children: 
+    - id: 6
+      position: {x: -39.106667, y: 25.1949, z: 88.76}
+      character: U
+      children: 05000000
+    - id: 7
+      position: {x: 78.21333, y: 25.1949, z: 99.76}
+      character: O
+      children: 
+    - id: 8
+      position: {x: 39.106667, y: 25.1949, z: 88.76}
+      character: A
+      children: 07000000
+    - id: 9
+      position: {x: 0, y: 25.1949, z: 77.76}
+      character: I
+      children: 0600000008000000
+    - id: 10
+      position: {x: -78.21333, y: -209.4451, z: 99.52}
+      character: D
+      children: 
+    - id: 11
+      position: {x: 39.106667, y: 220.72824, z: 99.96}
+      character: B
+      children: 
+    - id: 12
+      position: {x: 39.106667, y: 181.62157, z: 88.92}
+      character: M
+      children: 0b00000011000000
+    - id: 13
+      position: {x: -39.106667, y: 142.51491, z: 99.88}
+      character: A
+      children: 
+    - id: 14
+      position: {x: 0, y: 181.62157, z: 77.92}
+      character: T
+      children: 100000000d000000120000000b0000000c00000011000000
+    - id: 15
+      position: {x: -78.21333, y: -219.22177, z: 88.51}
+      character: E
+      children: 0a000000
+    - id: 16
+      position: {x: -39.106667, y: 220.72824, z: 99.96}
+      character: B
+      children: 
+    - id: 17
+      position: {x: 39.106667, y: 142.51491, z: 99.88}
+      character: A
+      children: 
+    - id: 18
+      position: {x: -39.106667, y: 181.62157, z: 88.92}
+      character: P
+      children: 100000000d000000
+    - id: 19
+      position: {x: 78.21333, y: -209.4451, z: 99.52}
+      character: E
+      children: 
+    - id: 20
+      position: {x: 78.21333, y: -219.22177, z: 88.51}
+      character: R
+      children: 13000000
+  wordControllerConfig:
+    possibleWords: []

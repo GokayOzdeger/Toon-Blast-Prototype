@@ -176,30 +176,30 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 17dcb64f369003c4e9b4dd1cbc001460, type: 2}
   levelSettings:
     tileManagerSettings:
-      percentageOfTileAreaOnScreen: {x: 0, y: 0}
-      tileSizeMultiplier: 0
+      percentageOfTileAreaOnScreen: {x: 30, y: 35}
+      tileSizeMultiplier: 0.335
       tileAreaOffset: {x: 0, y: 0}
     wordControllerSettings:
-      wordFormingAreaExtents: {x: 0, y: 0}
+      wordFormingAreaExtents: {x: 20, y: 15}
       maxLetterCount: 7
     scoreControllerSettings:
-      totalScoreText: 
-      wordScoreText: 
+      totalScoreText: Total Score
+      wordScoreText: Word Score
   levelSceneReferences:
-    highScoreGameState: {fileID: 0}
-    levelSelectGameState: {fileID: 0}
+    highScoreGameState: {fileID: 11400000, guid: 1846576caece98d418ef89df959a383c, type: 2}
+    levelSelectGameState: {fileID: 11400000, guid: ec8d36dbdf04fa944883e7a563415181, type: 2}
     tileManagerReferences:
-      tilePrefab: {fileID: 0}
-      tileAreaCenter: {fileID: 0}
+      tilePrefab: {fileID: 8357882950893323063, guid: 1a267c33e285fee4fbcfb798432135c0, type: 3}
+      tileAreaCenter: {fileID: 533816644}
     wordControllerReferences:
-      canvasScaler: {fileID: 0}
-      wordFormingAreaRect: {fileID: 0}
-      submitWordButton: {fileID: 0}
-      undoButton: {fileID: 0}
+      canvasScaler: {fileID: 1666083823}
+      wordFormingAreaRect: {fileID: 2131681259}
+      submitWordButton: {fileID: 2018202409}
+      undoButton: {fileID: 2137764296}
     scoreControllerReferences:
-      wordScoreCanvasGroup: {fileID: 0}
-      wordScoreText: {fileID: 0}
-      totalScoreText: {fileID: 0}
+      wordScoreCanvasGroup: {fileID: 1874593892422404383}
+      wordScoreText: {fileID: 359285153}
+      totalScoreText: {fileID: 1562426286}
 --- !u!1 &184862582
 GameObject:
   m_ObjectHideFlags: 0
