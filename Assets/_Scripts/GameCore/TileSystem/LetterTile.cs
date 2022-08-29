@@ -83,7 +83,8 @@ public class LetterTile : ITile
     private void OnClickSuccess()
     {
         Clickable = false;
-        _wordController.AddTileToWord(this);
+        if(Monitor != null) _wordController.AddTileToWord(this);
+        else _wordController.AddTileToWordAutoSolver(this);
     }
 
     public void UnlockChildren()

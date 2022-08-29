@@ -10,11 +10,11 @@ public class TileController
     private TileControllerReferences References { get; set; }
     private TileControllerSettings Settings { get; set; }
     private TileControllerConfig Config { get; set; }
-    public float TileSize => TileDistanceMultiplier * Settings.tileSizeMultiplier * TileDataRect.width;
+    public float TileSize => TileDistanceMultiplier * Settings.tileSizeMultiplier * _tileDataRect.width;
     public float TileDistanceMultiplier { get; private set; }
-
-    private Rect TileAreaRect;
-    private Rect TileDataRect;
+    
+    private Rect _tileAreaRect;
+    private Rect _tileDataRect;
     private WordController _wordController;
 
     public TileController(TileControllerReferences references, TileControllerSettings settings, TileControllerConfig config)
@@ -27,14 +27,17 @@ public class TileController
     public void SetupTileController( WordController wordController)
     {
         _wordController = wordController;
+
         CalculateTileArea();
         CalculateTileDistanceMultiplier();
+        
         SpawnTiles();
         LockChildrenTiles();
     }
 
-    public void SetupTileManagerAutoSolver()
+    public void SetupTileControllerAutoSolver(WordController wordController)
     {
+        _wordController = wordController;
         SpawnTilesAutoSolver();
         LockChildrenTiles();
     }
@@ -44,10 +47,10 @@ public class TileController
         foreach (TileData tileData in Config.TileDatas)
         {
             // calculate and update new screen position for tile
-            Vector2 tilePositionAsOffset = (Vector2)tileData.Position - TileDataRect.center;
+            Vector2 tilePositionAsOffset = (Vector2)tileData.Position - _tileDataRect.center;
             tilePositionAsOffset *= TileDistanceMultiplier;
             tilePositionAsOffset += Settings.tileAreaOffset;
-            Vector3 tilePositionForCurrentScreen = (Vector3)TileAreaRect.center + new Vector3(tilePositionAsOffset.x, tilePositionAsOffset.y, tileData.Position.z);
+            Vector3 tilePositionForCurrentScreen = (Vector3)_tileAreaRect.center + new Vector3(tilePositionAsOffset.x, tilePositionAsOffset.y, tileData.Position.z);
             tileData.SetPosition(tilePositionForCurrentScreen);
 
             // create tile GO and assiign generated lettertile
@@ -70,21 +73,37 @@ public class TileController
 
     public ITile GetTileWithId(int id)
     {
-        foreach (ITile tile in AllTiles) if (tile.TileData.Id == id) return tile;
+        foreach (ITile tile in AllTiles) 
+            if (tile.TileData.Id == id) 
+                return tile;
         return null;
+    }
+
+    public void RemoveTile(int tileId)
+    {
+        int tileToRemoveIndex = -1;
+        for (int i = 0; i < AllTiles.Count; i++)
+            if (AllTiles[i].TileData.Id == tileId)
+                tileToRemoveIndex = i;
+        if (tileToRemoveIndex == -1)
+        {
+            Debug.LogError("Cant find tile with Id !");
+            return;
+        }
+        AllTiles.RemoveAt(tileToRemoveIndex);
     }
 
     private void CalculateTileDistanceMultiplier()
     {
         CalculateRectOfTileData();
-        float heightDistanceMultiplier = TileAreaRect.height / TileDataRect.height;
-        float widthDistanceMultiplier = TileAreaRect.width / TileDataRect.width;
+        float heightDistanceMultiplier = _tileAreaRect.height / _tileDataRect.height;
+        float widthDistanceMultiplier = _tileAreaRect.width / _tileDataRect.width;
         TileDistanceMultiplier = Mathf.Min(heightDistanceMultiplier, widthDistanceMultiplier);
     }
 
     private void CalculateRectOfTileData()
     {
-        TileDataRect = new Rect();
+        _tileDataRect = new Rect();
         
         float highestX = Mathf.NegativeInfinity;
         float highestY = Mathf.NegativeInfinity;
@@ -98,15 +117,15 @@ public class TileController
             if (tile.Position.y < smallestY) smallestY = tile.Position.y;
             else if (tile.Position.y > highestY) highestY = tile.Position.y;
         }
-        TileDataRect.size = new Vector2(highestX - smallestX, highestY - smallestY);
-        TileDataRect.center = new Vector2((highestX+smallestX)/2, (highestY + smallestY) / 2);
+        _tileDataRect.size = new Vector2(highestX - smallestX, highestY - smallestY);
+        _tileDataRect.center = new Vector2((highestX+smallestX)/2, (highestY + smallestY) / 2);
     }
 
     private void CalculateTileArea()
     {
-        TileAreaRect = new Rect();
-        TileAreaRect.size = ScreenHelper.GetScreenPercentage(Settings.percentageOfTileAreaOnScreen);
-        TileAreaRect.center = References.tileAreaCenter.position;
+        _tileAreaRect = new Rect();
+        _tileAreaRect.size = ScreenHelper.GetScreenPercentage(Settings.percentageOfTileAreaOnScreen);
+        _tileAreaRect.center = References.tileAreaCenter.position;
     }
 
     private void LockChildrenTiles()

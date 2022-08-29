@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class WordController
 {
     public bool WordIsFull => _nextLetterIndex == Settings.maxLetterCount;
+    public int MaxWordLength => Settings.maxLetterCount;
+    public string CurrentWord { get; private set; } = "";
     private WordControllerReferences References { get; set; }
     private WordControllerSettings Settings { get; set; }
     private WordControllerConfig Config { get; set; }
@@ -15,17 +17,19 @@ public class WordController
     private ScoreController _scoreController;
     private int _tilesInMovement = 0;
     private int _nextLetterIndex = 0;
-    private string _currentWord = "";
     private List<string> _submittedWords = new List<string>();
     private List<Vector3> _letterPositions = new List<Vector3>();
-    private List<ITile> tilesInWordFormer = new List<ITile>();
+    private List<ITile> _tilesInWordFormer = new List<ITile>();
+    private List<string> _possibleWords = new List<string>();
 
     public WordController(WordControllerReferences references, WordControllerSettings settings, WordControllerConfig config)
     {
         References = references;
         Settings = settings;
         Config = config;
-
+        
+        _possibleWords = new List<string>(Config.possibleWords);
+        
         References.submitWordButton.onClick.AddListener(OnClickSubmitWord);
         References.undoButton.onClick.AddListener(OnClickUndoButton);
         references.undoButton.OnHold.AddListener(OnHoldUndoButton);
@@ -39,12 +43,17 @@ public class WordController
         UpdateUndoButtonState();
         ResizeWordFormingArea();
     }
+    
+    public void SetupWordControllerAutoSolver(TileController tileController)
+    {
+        _tileController = tileController;
+    }
 
     public void AddTileToWord(ITile tile)
     {
         if (_nextLetterIndex == Settings.maxLetterCount) return;
-        _currentWord += tile.TileData.Character;
-        tilesInWordFormer.Add(tile);
+        CurrentWord += tile.TileData.Character.ToLowerInvariant();
+        _tilesInWordFormer.Add(tile);
 
         Vector2 positionToMoveTo2D = _letterPositions[_nextLetterIndex];
         Vector3 positionToMoveTo3D = new Vector3(positionToMoveTo2D.x, positionToMoveTo2D.y, tile.TileData.Position.z);
@@ -53,6 +62,16 @@ public class WordController
         _nextLetterIndex++;
         tile.LeaveTileArea(positionToMoveTo3D, OnTileMovementCompleted);
         UpdateUndoButtonState();
+    }
+    
+    public void AddTileToWordAutoSolver(ITile tile)
+    {
+        if (_nextLetterIndex == Settings.maxLetterCount) return;
+        CurrentWord += tile.TileData.Character.ToLowerInvariant();
+        _tilesInWordFormer.Add(tile);
+        
+        _nextLetterIndex++;
+        tile.LeaveTileArea(Vector3.zero, null);
     }
 
     private void ResizeWordFormingArea()
@@ -86,7 +105,7 @@ public class WordController
         else
         {
             SetSubmitButtonState(true);
-            _scoreController.DisplayScoreForWord(_currentWord);
+            _scoreController.DisplayScoreForWord(CurrentWord);
         }
     }
 
@@ -97,7 +116,7 @@ public class WordController
 
     private void UpdateUndoButtonState()
     {
-        References.undoButton.interactable = (tilesInWordFormer.Count > 0);
+        References.undoButton.interactable = (_tilesInWordFormer.Count > 0);
     }
 
     private void OnClickSubmitWord()
@@ -117,19 +136,18 @@ public class WordController
 
     public bool IsWordValid()
     {
-        if (!Config.possibleWords.Contains(_currentWord.ToLowerInvariant())) return false;
-        if (_submittedWords.Contains(_currentWord)) return false;
+        if (!_possibleWords.Contains(CurrentWord)) return false;
         return true;
     }
 
     private void UndoLastLetter()
     {
         if (_nextLetterIndex == 0) return;
-        int lastIndex = tilesInWordFormer.Count - 1;
-        ITile tileToUndo = tilesInWordFormer[lastIndex];
+        int lastIndex = _tilesInWordFormer.Count - 1;
+        ITile tileToUndo = _tilesInWordFormer[lastIndex];
 
-        tilesInWordFormer.RemoveAt(lastIndex);
-        _currentWord = _currentWord.Remove(lastIndex);
+        _tilesInWordFormer.RemoveAt(lastIndex);
+        CurrentWord = CurrentWord.Remove(lastIndex);
         _nextLetterIndex--;
         _tilesInMovement++;
 
@@ -139,40 +157,74 @@ public class WordController
         CheckWordIsSubmitable();
     }
 
+    public void UndoAutoSolver()
+    {
+        if (_nextLetterIndex == 0) return;
+        int lastIndex = _tilesInWordFormer.Count - 1;
+        ITile tileToUndo = _tilesInWordFormer[lastIndex];
+
+        _tilesInWordFormer.RemoveAt(lastIndex);
+        CurrentWord = CurrentWord.Remove(lastIndex);
+        _nextLetterIndex--;
+        _tilesInMovement++;
+
+        tileToUndo.ReturnToTileArea(null);
+    }
+
     private void SubmitWord()
     {
         _scoreController.WordSubmitted();
-        _submittedWords.Add(_currentWord);
+        _submittedWords.Add(CurrentWord);
+        _possibleWords.Remove(CurrentWord);
         RemoveTiles();
+        ResetWord();
+    }
+
+    public void SubmitWordAutoSolver()
+    {
+        //_scoreController.WordSubmitted();
+        _submittedWords.Add(CurrentWord);
+        _possibleWords.Remove(CurrentWord);
+        RemoveTilesFromTileController();
         ResetWord();
     }
 
     private void ResetWord()
     {
-        tilesInWordFormer.Clear();
+        _tilesInWordFormer.Clear();
 
-        _currentWord = "";
+        CurrentWord = "";
         _nextLetterIndex = 0;
         SetSubmitButtonState(false);
-        _scoreController.DisplayScoreForWord(_currentWord);
+        _scoreController.DisplayScoreForWord(CurrentWord);
     }
 
     private void RemoveTiles()
     {
+        RemoveTilesFromTileController();
+
+        // send tiles to pool after animating
         float tileSize = _tileController.TileSize;
-        for (int i = tilesInWordFormer.Count-1; i >= 0; i--)
+        for (int i = _tilesInWordFormer.Count-1; i >= 0; i--)
         {
-            float currentExtraDelay = ((tilesInWordFormer.Count - i) * .05f);
+            float currentExtraDelay = ((_tilesInWordFormer.Count - i) * .05f);
             Sequence tween = DOTween.Sequence();
             tween.AppendInterval(currentExtraDelay);
-            tween.Append(TweenHelper.Jump(tilesInWordFormer[i].Monitor.transform, null, tileSize/2, .25f));
-            tween.Append(TweenHelper.ShrinkDisappear(tilesInWordFormer[i].Monitor.transform, tilesInWordFormer[i].GoToPool, .2f+ currentExtraDelay));
+            tween.Append(TweenHelper.Jump(_tilesInWordFormer[i].Monitor.transform, null, tileSize/2, .25f));
+            tween.Append(TweenHelper.ShrinkDisappear(_tilesInWordFormer[i].Monitor.transform, _tilesInWordFormer[i].GoToPool, .2f+ currentExtraDelay));
         }
+    }
+
+    private void RemoveTilesFromTileController()
+    {
+        // remove tiles from tile controller
+        foreach (ITile tile in _tilesInWordFormer)
+            _tileController.RemoveTile(tile.TileData.Id);
     }
 
     private void UndoAllTiles()
     {
-        foreach (ITile tile in tilesInWordFormer) tile.ReturnToTileArea(null);
+        foreach (ITile tile in _tilesInWordFormer) tile.ReturnToTileArea(null);
         ResetWord();
         UpdateUndoButtonState();
         CheckWordIsSubmitable();
