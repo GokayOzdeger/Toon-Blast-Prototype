@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 5743041604998964574}
   - component: {fileID: 5717228042759134537}
   - component: {fileID: 1774035948161506894}
+  - component: {fileID: 2834434648982177920}
+  - component: {fileID: 5163056296215209737}
   m_Layer: 5
   m_Name: LevelSelectionElement
   m_TagString: Untagged
@@ -79,6 +81,36 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 3
+--- !u!114 &2834434648982177920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229127702866617718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4c99a4c304718947b26d7ccf4151619, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelNameText: {fileID: 279690700247775416}
+  highscoreText: {fileID: 5812972594579543856}
+  playButton: {fileID: 6905724417601504708}
+--- !u!114 &5163056296215209737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229127702866617718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ca3dbec91bd2864bb5a857684b60158, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolAfterDelay: 0
+  resetScaleAfterPool: 0
+  delay: 0
 --- !u!1 &1679507606884979641
 GameObject:
   m_ObjectHideFlags: 0

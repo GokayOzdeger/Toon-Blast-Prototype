@@ -2,30 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelManager : MonoGameStateListener
+public class LevelManager : SingletonGameStateListener<LevelManager>
 {
     [SerializeField] private LevelConfig[] levelList;
     [Group][SerializeField] private LevelSettings levelSettings;
     [Group][SerializeField] private LevelReferences levelSceneReferences;
 
     public LevelController CurrentLevelController { get; private set; }
-    public LevelConfig CurrentLevelConfig
-    {
-        get
-        {
-            if (GameManagerSaveData.Data.CurrentLevelIndex == levelList.Length)
-            {
-                Debug.Log("All Levels Completed Restarting");
-                GameManagerSaveData.Data.ResetLevelIndex();
-            }
-            return levelList[GameManagerSaveData.Data.CurrentLevelIndex];
-        }
-    }
-    private LevelConfig chosenLevelConfig;
+    public LevelConfig[] LevelList => levelList;
+    public LevelConfig ChosenLevelConfig { get; private set; }
 
     public override void OnEnterState()
     {
-        CreateCurrentLevel();
+        CurrentLevelController = new LevelController(levelSceneReferences, levelSettings, ChosenLevelConfig);
     }
 
     public override void OnExitState()
@@ -33,9 +22,10 @@ public class LevelManager : MonoGameStateListener
         //
     }
 
-    public void CreateCurrentLevel()
+    public void CreateLevel(LevelConfig config)
     {
-        CurrentLevelController = new LevelController(levelSceneReferences, levelSettings, CurrentLevelConfig);
+        ChosenLevelConfig = config;
+        GameManager.Instance.ChangeGameState(state);
     }
 
     #region EDITOR
