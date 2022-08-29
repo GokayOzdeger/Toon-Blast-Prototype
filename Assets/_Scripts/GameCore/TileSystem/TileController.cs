@@ -24,7 +24,7 @@ public class TileController
         Config = config;
     }
 
-    public void SetupTileManager( WordController wordController)
+    public void SetupTileController( WordController wordController)
     {
         _wordController = wordController;
         CalculateTileArea();

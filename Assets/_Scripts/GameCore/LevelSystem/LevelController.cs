@@ -31,7 +31,7 @@ public class LevelController
         ScoreController = new ScoreController(References.ScoreControllerReferences, Settings.ScoreControllerSettings);
 
         ScoreController.SetupScoreController();
-        TileController.SetupTileManager(WordController);
+        TileController.SetupTileController(WordController);
         WordController.SetupWordController(TileController, ScoreController);
     }
 
