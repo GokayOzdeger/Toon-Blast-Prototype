@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,13 +6,14 @@ using Utilities;
 
 public class LetterMonitor : MonoBehaviour, IPoolable
 {
+    [BHeader("References")] 
     [SerializeField] private PoolObject poolObject;
     [SerializeField] private SpriteRenderer tileImageRenderer;
     [SerializeField] private TMPro.TMP_Text characterText;
 
     private ITile Tile { get; set; }
 
-    public void OnMouseUp()
+    public void OnMouseUpAsButton()
     {
         Tile.OnClick();
     }
@@ -22,8 +24,8 @@ public class LetterMonitor : MonoBehaviour, IPoolable
 
         // update visiual elements
         characterText.text = tile.TileData.Character;
-        if (tile.Locks == 0) tileImageRenderer.color = Color.white;
-        else tileImageRenderer.color = Color.gray;
+        if (tile.Locks == 0) SetTileUnlocked();
+        else SetTileLocked();
     }
 
     public void SetPixelSize(float size)
@@ -44,5 +46,16 @@ public class LetterMonitor : MonoBehaviour, IPoolable
     public void OnPoolSpawn()
     {
         //
+    }
+
+    private void SetTileLocked()
+    {
+        tileImageRenderer.color = Color.gray;
+    }
+
+    private void SetTileUnlocked()
+    {
+        tileImageRenderer.color = Color.white;
+        TweenHelper.PunchScale(tileImageRenderer.transform);
     }
 }

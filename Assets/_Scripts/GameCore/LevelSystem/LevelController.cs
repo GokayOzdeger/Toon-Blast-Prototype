@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelController : PocoSingleton<LevelController>
+public class LevelController
 {
     public LevelConfig Config { get; private set; }
     public LevelSettings Settings { get; private set; }
@@ -18,7 +18,6 @@ public class LevelController : PocoSingleton<LevelController>
 
     public LevelController(LevelReferences references, LevelSettings settings, LevelConfig config)
     {
-        Instance = this;
         this.References = references;
         this.Settings = settings;
         this.Config = config;
@@ -27,15 +26,13 @@ public class LevelController : PocoSingleton<LevelController>
 
     private void CreateLevelControllers()
     {
-        Config.AutoSolve();
-
         TileController = new TileController(References.TileManagerReferences, Settings.TileManagerSettings, Config.TileManagerConfig);
         WordController = new WordController(References.WordControllerReferences, Settings.WordControllerSettings, Config.WordControllerConfig);
         ScoreController = new ScoreController(References.ScoreControllerReferences, Settings.ScoreControllerSettings);
 
+        ScoreController.SetupScoreController();
         TileController.SetupTileManager(WordController);
         WordController.SetupWordController(TileController, ScoreController);
-        ScoreController.SetupScoreController();
     }
 
     public void LevelFailed()
@@ -53,7 +50,7 @@ public class LevelController : PocoSingleton<LevelController>
         LevelState = LevelStates.Cleared;
         CreateLevelResultFlyingText("Level Cleared");
 
-
+        
         LevelSaveData.Data.ClearSavedLevelState();
         GameManagerSaveData.Data.ProgressLevel();
     }
@@ -70,7 +67,7 @@ public class LevelController : PocoSingleton<LevelController>
         Vector2 flyingTextEndPos = UIEffectsManager.Instance.GetReferencePointByName("RightCenterOutside");
         UIEffectsManager.Instance.CreatePassingByFlyingText(levelResult, 120, flyingTextStartPos, flyingTextWaitingPos, flyingTextEndPos, UIEffectsManager.CanvasLayer.OverGridUnderUI, 2.5f, 1, LevelEnded);
     }
-
+    
     private void LevelEnded()
     {
         // clear leftovers from old scene

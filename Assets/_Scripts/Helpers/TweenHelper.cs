@@ -33,9 +33,10 @@ public class TweenHelper : MonoBehaviour
         float distanceToTarget = Vector2.Distance((Vector2)transform.position, targetPoint);
         Vector2 moveDir = (targetPoint - (Vector2)transform.position).normalized;
         Vector2 moveDirNormal = new Vector2(-moveDir.y, moveDir.x);
+        int curveTowards = transform.position.x - targetPoint.x > 0 ? 1 : -1;
         Sequence sequence = DOTween.Sequence();
-        sequence.Join(transform.DOBlendableMoveBy(moveDirNormal * distanceToTarget * curveAmountMultiplier, duration / 2).SetEase(sidewaysEase));
-        sequence.Append(transform.DOBlendableMoveBy(-moveDirNormal * distanceToTarget * curveAmountMultiplier, duration / 2).SetEase(sidewaysEase));
+        sequence.Join(transform.DOBlendableMoveBy(curveTowards * moveDirNormal * distanceToTarget * curveAmountMultiplier, duration / 2).SetEase(sidewaysEase));
+        sequence.Append(transform.DOBlendableMoveBy(-curveTowards * moveDirNormal * distanceToTarget * curveAmountMultiplier, duration / 2).SetEase(sidewaysEase));
         sequence.Insert(0, transform.DOBlendableMoveBy(targetPoint - (Vector2)transform.position, duration).SetEase(forwardEase));
         if (onComplete != null) sequence.onComplete += () => onComplete();
         return sequence;
