@@ -5,6 +5,7 @@ using UnityEngine;
 
 public interface ITile
 {
+    public bool UsingMonitor { get; set; }
     public LetterMonitor Monitor { get; }
     public TileData TileData { get; }
     public int Locks { get; set; }

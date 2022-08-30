@@ -18,6 +18,7 @@ public class WordController
     private TileController _tileController;
     private ScoreController _scoreController;
     private WordSearchController _wordSearchController;
+    private WordFinder _wordFinder;
     private int _tilesInMovement = 0;
     private int _nextLetterIndex = 0;
 
@@ -41,6 +42,7 @@ public class WordController
     public void StartWordController(TileController tileController, ScoreController scoreController)
     {
         _wordSearchController = new WordSearchController(Settings.maxLetterCount);
+        _wordFinder = new WordFinder(tileController, this);
         _tileController = tileController;
         _scoreController = scoreController;
         SetSubmitButtonState(false);
@@ -51,6 +53,7 @@ public class WordController
     public void LoadWordController(TileController tileController, ScoreController scoreController, List<string> submittedWords)
     {
         _wordSearchController = new WordSearchController(Settings.maxLetterCount);
+        _wordFinder = new WordFinder(tileController, this);
         _tileController = tileController;
         _scoreController = scoreController;
         SubmittedWords = new List<string>(submittedWords);
@@ -88,6 +91,11 @@ public class WordController
 
         _nextLetterIndex++;
         tile.LeaveTileArea(Vector3.zero, null);
+    }
+
+    public bool CheckHasPossibleWord()
+    {
+        return _wordFinder.CheckPossibleWordExists();
     }
 
     private void ResizeWordFormingArea()

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WordSearchController
 {
-    private static string[] _allWords;
+    public static string[] AllWords;
     private Stack<int> _cursorLocations = new Stack<int>();
 
     private int _maxWordLength;
@@ -13,32 +13,32 @@ public class WordSearchController
     {
         _maxWordLength = maxWordLength;
         _cursorLocations.Push(0);
-        if (_allWords == null) LoadAllWordsFromText();
+        if (AllWords == null) LoadAllWordsFromText();
     }
 
     private void LoadAllWordsFromText()
     {
         TextAsset allWordsTextAsset = Resources.Load<TextAsset>("allWords");
         string content = allWordsTextAsset.text;
-        _allWords = content.Split("\r\n");
+        AllWords = content.Split("\r\n");
     }
 
     public bool IsWordMatchFound(string word)
     {
-        return _allWords[_cursorLocations.Peek()] == word;
+        return AllWords[_cursorLocations.Peek()] == word;
     }
     public void MoveCursorForwards(string word)
     {
         int cursor = _cursorLocations.Peek();
-        for (int i = cursor; i < _allWords.Length; i++)
+        for (int i = cursor; i < AllWords.Length; i++)
         {
-            if (_allWords[i].Length > _maxWordLength) continue;
-            int compareResult = string.Compare(word, _allWords[i]);
+            if (AllWords[i].Length > _maxWordLength) continue;
+            int compareResult = string.Compare(word, AllWords[i]);
             if (compareResult == 1) continue;
             _cursorLocations.Push(i);
             return;
         }
-        _cursorLocations.Push(_allWords.Length - 1);
+        _cursorLocations.Push(AllWords.Length - 1);
     }
 
     public void RemoveCursors(int countToRemove)

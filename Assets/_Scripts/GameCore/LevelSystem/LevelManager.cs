@@ -38,6 +38,13 @@ public class LevelManager : SingletonGameStateListener<LevelManager>
 #if UNITY_EDITOR
 
     [EasyButtons.Button(Mode = EasyButtons.ButtonMode.EnabledInPlayMode)]
+    private void FindWord()
+    {
+        bool wordFound = CurrentLevelController.WordController.CheckHasPossibleWord();
+        Debug.Log("Word Exists: " + wordFound);
+    }
+
+    [EasyButtons.Button(Mode = EasyButtons.ButtonMode.EnabledInPlayMode)]
     private void WinLevel()
     {
         CurrentLevelController.LevelCompleted();

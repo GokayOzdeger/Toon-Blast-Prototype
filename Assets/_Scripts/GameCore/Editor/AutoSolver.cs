@@ -7,8 +7,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 public class AutoSolver 
 {
-    private const int MAXIMUM_NUMBER_OF_WORD_ITERATIONS = 1000;
-    private const int MIN_LETTER_COUNT = 3;
+    private const int MAXIMUM_NUMBER_OF_ITERATIONS = 1000000;
 
     private string[] allWords;
     private TileController _tileController;
@@ -25,6 +24,7 @@ public class AutoSolver
     public AutoSolver(string[] _allWords, TileControllerConfig tileControllerConfig, WordControllerConfig wordControllerConfig)
     {
         allWords = _allWords;
+        _cursorLocations.Push(0);
         Debug.Log(allWords.Length);
 
         TileControllerSettings tileControllerSettings = new TileControllerSettings();        
@@ -53,15 +53,13 @@ public class AutoSolver
 
     private void StartWordSearch(TreeNode<string> wordTreeNode, TreeNode<ITile> letterTreeNode)
     {
-        _cursorLocations.Push(0);
-
         foreach (ITile tile in _tileController.AllTiles)
         {
             if (!IsTileLegal(letterTreeNode, tile)) continue;
             TreeNode<ITile> newNode = letterTreeNode.AddChild(tile);
             CreateWordTree(wordTreeNode, newNode);
         }
-        if (_calculationIterationsDone == MAXIMUM_NUMBER_OF_WORD_ITERATIONS)
+        if (_calculationIterationsDone == MAXIMUM_NUMBER_OF_ITERATIONS)
         {
             Debug.LogError("Too Many Calls Made !");
             return;
@@ -70,8 +68,8 @@ public class AutoSolver
 
     private void StartWordSearchRecursive(TreeNode<string> wordTreeNode, TreeNode<ITile> letterTreeNode)
     {
-        if (_calculationIterationsDone == MAXIMUM_NUMBER_OF_WORD_ITERATIONS) return;
-        _calculationIterationsDone++;
+        if (_calculationIterationsDone == MAXIMUM_NUMBER_OF_ITERATIONS) return;
+
         if (_submittedWords.Contains(_wordController.CurrentWord))
         {
             return;
@@ -111,9 +109,10 @@ public class AutoSolver
 
     private void CreateWordTree(TreeNode<string> wordTreeNode, TreeNode<ITile> letterTreeNode)
     {
-        if (_calculationIterationsDone == MAXIMUM_NUMBER_OF_WORD_ITERATIONS) return;
+        if (_calculationIterationsDone == MAXIMUM_NUMBER_OF_ITERATIONS) return;
         if (_wordController.CurrentWord.Length == _wordController.MaxWordLength) return;
 
+        _calculationIterationsDone++;
         letterTreeNode.Data.OnClick();
 
         // check if word formed so far exists in allWorlds
@@ -129,7 +128,8 @@ public class AutoSolver
                 break;
             case FindWordResult.WordFound:
                 _cursorLocations.Push(cursorLocation);
-                TreeNode<string> newWordTreeNode = new TreeNode<string>(_wordController.CurrentWord);
+                if (wordTreeNode.HasChild(_wordController.CurrentWord)) break;
+                TreeNode<string> newWordTreeNode = wordTreeNode.AddChild(_wordController.CurrentWord);
                 StartWordSearchRecursive(newWordTreeNode, letterTreeNode);
                 break;
             default:
@@ -157,15 +157,14 @@ public class AutoSolver
 
     private FindWordResult MoveCursorTo(string word, int maxLetters, ref int cursor)
     {
-        string wordLower = word.ToLowerInvariant();
         for (int i = cursor; i < allWords.Length; i++)
         {
             if (allWords[i].Length > maxLetters) continue;
-            int compareResult = string.Compare(wordLower, allWords[i]);
+            int compareResult = string.Compare(word, allWords[i]);
             if (compareResult == 1) continue;
             else if (compareResult == -1)
             {
-                if (allWords[i].StartsWith(wordLower, System.StringComparison.OrdinalIgnoreCase))
+                if (allWords[i].StartsWith(word, System.StringComparison.OrdinalIgnoreCase))
                 {
                     cursor = i;
                     return FindWordResult.WordPossible;

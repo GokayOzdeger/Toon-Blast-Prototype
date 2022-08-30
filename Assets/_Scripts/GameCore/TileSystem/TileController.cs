@@ -66,7 +66,7 @@ public class TileController
     {
         foreach (TileData tileData in Config.TileDatas)
         {
-            LetterTile letter = new LetterTile(this, _wordController,null, tileData);
+            LetterTile letter = new LetterTile(this, _wordController, null, tileData);
             AllTiles.Add(letter);
         }
     }

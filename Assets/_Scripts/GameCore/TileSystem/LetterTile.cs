@@ -17,16 +17,18 @@ public class LetterTile : ITile
     private Tween _activeTween;
     private ITile[] _childrenTiles;
     private bool _removedFromPlay;
-
-    public int Locks { get; set; } = 0;
+    public bool UsingMonitor { get; set; } = true;
     public LetterMonitor Monitor => _monitor;
     public TileData TileData => _tileData;
-
+    public int Locks { get; set; } = 0;
+    public bool Clickable => Locks == 0 && InTileArea;
+    public bool InTileArea { get; private set; } = true;
+    public bool IsRemovedFromPlay => _removedFromPlay;
     public ITile[] ChildrenTiles
     {
         get
         {
-            if(_childrenTiles == null)
+            if (_childrenTiles == null)
             {
                 _childrenTiles = new ITile[TileData.Children.Length];
                 for (int i = 0; i < TileData.Children.Length; i++)
@@ -37,10 +39,6 @@ public class LetterTile : ITile
             return _childrenTiles;
         }
     }
-    public bool Clickable => Locks == 0 && InTileArea;
-    public bool InTileArea { get; private set; } = true;
-
-    public bool IsRemovedFromPlay => _removedFromPlay;
 
     public LetterTile(TileController tileController, WordController wordController, LetterMonitor monitor, TileData data)
     {
@@ -48,6 +46,8 @@ public class LetterTile : ITile
         _tileController = tileController;
         _monitor = monitor;
         _tileData = data;
+        if (monitor == null) UsingMonitor = false;
+
         UpdateMonitor();
     }
 
@@ -69,13 +69,13 @@ public class LetterTile : ITile
 
     public void SetPixelSize(float size)
     {
-        if (Monitor == null) return;
+        if (!UsingMonitor) return;
         Monitor.SetPixelSize(size);
     }
 
     public void UpdateMonitor()
     {
-        if (Monitor == null) return;
+        if (!UsingMonitor) return;
         Monitor.UpdateMonitor(this);
     }
 
@@ -89,7 +89,7 @@ public class LetterTile : ITile
 
     private void OnClickSuccess()
     {
-        if(Monitor != null) _wordController.AddTileToWord(this);
+        if(UsingMonitor) _wordController.AddTileToWord(this);
         else _wordController.AddTileToWordAutoSolver(this);
     }
 
@@ -106,7 +106,7 @@ public class LetterTile : ITile
     public void ReturnToTileArea(Action onComplete)
     {
         InTileArea = true;
-        if (Monitor)
+        if (UsingMonitor)
         {
             CompleteLastTween();
             Sequence tween = DOTween.Sequence();
@@ -126,7 +126,7 @@ public class LetterTile : ITile
     {
         InTileArea = false;
         UnlockChildren();
-        if (Monitor)
+        if (UsingMonitor)
         {
             CompleteLastTween();
             _activeTween = TweenHelper.CurvingMoveTo(Monitor.transform, moveTo, onComplete, FLY_TO_WORDFORMER_DURATION);
@@ -140,6 +140,7 @@ public class LetterTile : ITile
 
     public void RemoveVisiuals()
     {
-        Monitor?.SendToPool(0);
+        if (!UsingMonitor) return;
+        Monitor.SendToPool(0);
     }
 }
