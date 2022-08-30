@@ -20,7 +20,7 @@ public class LevelManager : SingletonGameStateListener<LevelManager>
 
     public override void OnExitState()
     {
-        //
+        CurrentLevelController = null;
     }
     public void LevelCompleted()
     {

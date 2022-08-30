@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WordFinder : MonoBehaviour
+public class WordFinder
 {
     private const int MAXIMUM_NUMBER_OF_ITERATIONS = 150;
 
