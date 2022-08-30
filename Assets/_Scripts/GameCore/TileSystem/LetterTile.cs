@@ -37,8 +37,7 @@ public class LetterTile : ITile
         }
     }
 
-    public bool Clickable => Locks == 0 && InTileArea;
-    public bool InTileArea { get; private set; } = true;
+    public bool Clickable { get; private set; } = true;
 
     public LetterTile(TileController tileController, WordController wordController, LetterMonitor monitor, TileData data)
     {
@@ -51,14 +50,12 @@ public class LetterTile : ITile
 
     public void LockTile()
     {
-        if (!InTileArea) return;
         Locks++;
         if (Locks == 1) UpdateMonitor();
     }
 
     public void UnlockTile()
     {
-        if (!InTileArea) return;
         Locks--;
         if (Locks == 0) UpdateMonitor();
     }
@@ -79,11 +76,13 @@ public class LetterTile : ITile
     {
         if (_wordController.WordIsFull) return;
         if (!Clickable) return;
+        if (Locks != 0) return;
         else OnClickSuccess();
     }
 
     private void OnClickSuccess()
     {
+        Clickable = false;
         if(Monitor != null) _wordController.AddTileToWord(this);
         else _wordController.AddTileToWordAutoSolver(this);
     }
@@ -100,7 +99,7 @@ public class LetterTile : ITile
 
     public void ReturnToTileArea(Action onComplete)
     {
-        InTileArea = true;
+        LockChildren();
         if (Monitor)
         {
             CompleteLastTween();
@@ -115,7 +114,7 @@ public class LetterTile : ITile
 
     private void OnReturnedToTileArea()
     {
-        //
+        Clickable = true;
     }
 
     private void CompleteLastTween()
@@ -125,13 +124,13 @@ public class LetterTile : ITile
 
     public void LeaveTileArea(Vector3 moveTo, Action onComplete)
     {
-        InTileArea = false;
         UnlockChildren();
         if (Monitor)
         {
             CompleteLastTween();
             _activeTween = TweenHelper.CurvingMoveTo(Monitor.transform, moveTo, onComplete, FLY_TO_WORDFORMER_DURATION);
         }
+        else onComplete(); // movements are instant when not using a monitor
     }
 
     public void GoToPool()

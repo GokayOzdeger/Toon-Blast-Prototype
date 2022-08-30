@@ -35,10 +35,9 @@ public class TileController
         LockChildrenTiles();
     }
 
-    public void SetupTileControllerAutoSolver(WordController wordController, bool passReferencesOnly)
+    public void SetupTileControllerAutoSolver(WordController wordController)
     {
         _wordController = wordController;
-        if(passReferencesOnly) return;
         SpawnTilesAutoSolver();
         LockChildrenTiles();
     }
@@ -132,13 +131,6 @@ public class TileController
     private void LockChildrenTiles()
     {
         foreach(ITile tile in AllTiles) tile.LockChildren();
-    }
-
-    public TileController Clone()
-    {
-        TileController _tileController = new TileController(References, Settings, Config);
-        _tileController.AllTiles = new List<ITile>(AllTiles);
-        return _tileController;
     }
 }
 
