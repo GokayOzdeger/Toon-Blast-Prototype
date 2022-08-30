@@ -32,11 +32,10 @@ namespace SaveSystem
         private static T LoadData(string key)
         {
             key = key.ToLowerInvariant();
-            Debug.Log("Loading Data of Type: " + typeof(T).Name);
+            Debug.Log("Loading Data of Type: " + SaveName(key));
             T loadedData = SaveHandler.Load<T>(SaveName(key));
             if (loadedData == null)
             {
-                Debug.Log("No Data of Type: " + SaveName(key) + " found. Creating default Data");
                 loadedData = new T();
             }
             return loadedData;

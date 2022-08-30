@@ -19,7 +19,6 @@ public class WordFinder
         _wordController = wordController;
         allWords = WordSearchController.AllWords;
         _cursorLocations.Push(0);
-        Debug.Log(allWords.Length);
     }
 
     public bool CheckPossibleWordExists()

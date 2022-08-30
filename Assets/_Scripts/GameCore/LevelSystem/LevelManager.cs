@@ -15,7 +15,8 @@ public class LevelManager : SingletonGameStateListener<LevelManager>
 
     public override void OnEnterState()
     {
-        CurrentLevelController = new LevelController(levelSceneReferences, levelSettings, ChosenLevelConfig);
+        CurrentLevelSaveData levelSaveData = CurrentLevelSaveData.Data;
+        CurrentLevelController = new LevelController(levelSceneReferences, levelSettings, ChosenLevelConfig, levelSaveData);
     }
 
     public override void OnExitState()

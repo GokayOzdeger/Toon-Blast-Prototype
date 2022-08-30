@@ -16,88 +16,86 @@ MonoBehaviour:
   tileManagerConfig:
     tileDatas:
     - id: 0
-      position: {x: 78.21333, y: -92.1251, z: 99.64}
+      position: {x: 32, y: -36, z: 99.64}
       character: R
       children: 
     - id: 1
-      position: {x: 39.106667, y: -92.1251, z: 88.64}
+      position: {x: 28, y: -36, z: 88.64}
       character: E
       children: 00000000
     - id: 2
-      position: {x: -39.106667, y: -92.1251, z: 88.64}
+      position: {x: 20, y: -36, z: 88.64}
       character: R
       children: 03000000
     - id: 3
-      position: {x: -78.21333, y: -92.1251, z: 99.64}
+      position: {x: 16, y: -36, z: 99.64}
       character: R
       children: 
     - id: 4
-      position: {x: 0, y: -92.1251, z: 77.64}
+      position: {x: 24, y: -36, z: 77.64}
       character: G
       children: 0200000001000000
     - id: 5
-      position: {x: -78.21333, y: 25.1949, z: 99.76}
+      position: {x: 16, y: -24, z: 99.76}
       character: E
       children: 
     - id: 6
-      position: {x: -39.106667, y: 25.1949, z: 88.76}
+      position: {x: 20, y: -24, z: 88.76}
       character: U
       children: 05000000
     - id: 7
-      position: {x: 78.21333, y: 25.1949, z: 99.76}
+      position: {x: 32, y: -24, z: 99.76}
       character: O
       children: 
     - id: 8
-      position: {x: 39.106667, y: 25.1949, z: 88.76}
+      position: {x: 28, y: -24, z: 88.76}
       character: A
       children: 07000000
     - id: 9
-      position: {x: 0, y: 25.1949, z: 77.76}
+      position: {x: 24, y: -24, z: 77.76}
       character: I
       children: 0600000008000000
     - id: 10
-      position: {x: -78.21333, y: -209.4451, z: 99.52}
+      position: {x: 16, y: -48, z: 99.52}
       character: D
       children: 
     - id: 11
-      position: {x: 39.106667, y: 220.72824, z: 99.96}
+      position: {x: 28, y: -4, z: 99.96}
       character: B
       children: 
     - id: 12
-      position: {x: 39.106667, y: 181.62157, z: 88.92}
+      position: {x: 28, y: -8, z: 88.92}
       character: M
       children: 0b00000011000000
     - id: 13
-      position: {x: -39.106667, y: 142.51491, z: 99.88}
+      position: {x: 20, y: -12, z: 99.88}
       character: A
       children: 
     - id: 14
-      position: {x: 0, y: 181.62157, z: 77.92}
+      position: {x: 24, y: -8, z: 77.92}
       character: T
       children: 100000000d000000120000000b0000000c00000011000000
     - id: 15
-      position: {x: -78.21333, y: -219.22177, z: 88.51}
+      position: {x: 16, y: -49, z: 88.51}
       character: E
       children: 0a000000
     - id: 16
-      position: {x: -39.106667, y: 220.72824, z: 99.96}
+      position: {x: 20, y: -4, z: 99.96}
       character: B
       children: 
     - id: 17
-      position: {x: 39.106667, y: 142.51491, z: 99.88}
+      position: {x: 28, y: -12, z: 99.88}
       character: A
       children: 
     - id: 18
-      position: {x: -39.106667, y: 181.62157, z: 88.92}
+      position: {x: 20, y: -8, z: 88.92}
       character: P
       children: 100000000d000000
     - id: 19
-      position: {x: 78.21333, y: -209.4451, z: 99.52}
+      position: {x: 32, y: -48, z: 99.52}
       character: E
       children: 
     - id: 20
-      position: {x: 78.21333, y: -219.22177, z: 88.51}
+      position: {x: 32, y: -49, z: 88.51}
       character: R
       children: 13000000
-  wordControllerConfig:
-    possibleWords: []

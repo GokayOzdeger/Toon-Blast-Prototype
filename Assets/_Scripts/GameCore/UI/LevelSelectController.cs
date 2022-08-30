@@ -31,13 +31,11 @@ public class LevelSelectController : MonoGameStateListener
 
     public void RefreshElements()
     {
-        Debug.Log("Refresh elements");
         bool previousLevelCompleted = true;
         for (int i = 0; i < levelSelectElements.Count; i++)
         {
             LevelConfig config = LevelManager.Instance.LevelList[i];
             LevelSaveData saveData = LevelSaveData.Data(config.LevelTitle);
-            Debug.Log($"{saveData.LevelTitle}-{saveData.HighScore}");
             levelSelectElements[i].UpdateElement(saveData, previousLevelCompleted);
             previousLevelCompleted = saveData.IsCompleted;
         } 

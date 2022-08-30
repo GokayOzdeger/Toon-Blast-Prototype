@@ -10,12 +10,13 @@ public class TileController
     private TileControllerReferences References { get; set; }
     private TileControllerSettings Settings { get; set; }
     private TileControllerConfig Config { get; set; }
-    public float TileSize => TileDistanceMultiplier * Settings.tileSizeMultiplier * _tileDataRect.width;
+    public float TileSize => TileDistanceMultiplier * Settings.tileSizeMultiplier;
     public float TileDistanceMultiplier { get; private set; }
     
     private Rect _tileAreaRect;
     private Rect _tileDataRect;
     private WordController _wordController;
+    private float _referencedDataRectLeght;
 
     public TileController(TileControllerReferences references, TileControllerSettings settings, TileControllerConfig config)
     {
@@ -31,25 +32,37 @@ public class TileController
         CalculateTileArea();
         CalculateTileDistanceMultiplier();
         
-        SpawnTiles();
+        SpawnTiles(Config.TileDatas);
         LockChildrenTiles();
     }
 
-    private void SpawnTiles()
+    public void LoadTileController(WordController wordController, List<TileData> tilesLeft)
     {
-        foreach (TileData tileData in Config.TileDatas)
+        _wordController = wordController;
+
+        CalculateTileArea();
+        CalculateTileDistanceMultiplier();
+
+        SpawnTiles(tilesLeft.ToArray());
+        LockChildrenTiles();
+    }
+
+    private void SpawnTiles(TileData[] tilesToSpawn)
+    {
+        foreach (TileData tileData in tilesToSpawn)
         {
             // calculate and update new screen position for tile
-            Vector2 tilePositionAsOffset = (Vector2)tileData.Position - _tileDataRect.center;
+            TileData copiedTileData = tileData.Clone();
+            Vector2 tilePositionAsOffset = (Vector2)copiedTileData.Position - _tileDataRect.center;
             tilePositionAsOffset *= TileDistanceMultiplier;
             tilePositionAsOffset += Settings.tileAreaOffset;
-            Vector3 tilePositionForCurrentScreen = (Vector3)_tileAreaRect.center + new Vector3(tilePositionAsOffset.x, tilePositionAsOffset.y, tileData.Position.z);
-            tileData.SetPosition(tilePositionForCurrentScreen);
+            Vector3 tilePositionForCurrentScreen = (Vector3)_tileAreaRect.center + new Vector3(tilePositionAsOffset.x, tilePositionAsOffset.y, copiedTileData.Position.z);
+            copiedTileData.SetPosition(tilePositionForCurrentScreen);
 
             // create tile GO and assiign generated lettertile
             GameObject tileGO = ObjectPooler.Instance.Spawn(References.tilePrefab.name, tilePositionForCurrentScreen);
             LetterMonitor monitor = tileGO.GetComponent<LetterMonitor>();
-            LetterTile letter = new LetterTile(this, _wordController, monitor, tileData);
+            LetterTile letter = new LetterTile(this, _wordController, monitor, copiedTileData);
             letter.SetPixelSize(TileSize);
             AllTiles.Add(letter);
         }
@@ -79,9 +92,16 @@ public class TileController
     private void CalculateTileDistanceMultiplier()
     {
         CalculateRectOfTileData();
+        float longestDataRectSide = Mathf.Max(_tileDataRect.width, _tileDataRect.height);
         float heightDistanceMultiplier = _tileAreaRect.height / _tileDataRect.height;
         float widthDistanceMultiplier = _tileAreaRect.width / _tileDataRect.width;
+        Debug.Log(_tileAreaRect.height + "/" + _tileDataRect.height);
+        Debug.Log(_tileAreaRect.width + "/" + _tileDataRect.width);
+        Debug.Log("H: " + heightDistanceMultiplier + " / W:" + widthDistanceMultiplier);
         TileDistanceMultiplier = Mathf.Min(heightDistanceMultiplier, widthDistanceMultiplier);
+        float maxTileDistanceMultiplier = ((Screen.width - 100) / _wordController.MaxWordLength) / Settings.tileSizeMultiplier; // Maximum tiledistance multiplier allowed to make wordformer fit to screen
+        if (TileDistanceMultiplier > maxTileDistanceMultiplier) TileDistanceMultiplier = maxTileDistanceMultiplier;
+        Debug.Log("Distance Multiplier: " + TileDistanceMultiplier);
     }
 
     private void CalculateRectOfTileData()

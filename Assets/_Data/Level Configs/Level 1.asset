@@ -16,88 +16,82 @@ MonoBehaviour:
   tileManagerConfig:
     tileDatas:
     - id: 0
-      position: {x: 93.38, y: 0.8000183, z: 99.72}
+      position: {x: 32, y: -28, z: 99.72}
       character: T
       children: 
     - id: 1
-      position: {x: 93.38, y: 94.18, z: 99.8}
+      position: {x: 32, y: -20, z: 99.8}
       character: A
       children: 
     - id: 2
-      position: {x: -93.38, y: 94.18, z: 99.8}
+      position: {x: 16, y: -20, z: 99.8}
       character: I
       children: 
     - id: 3
-      position: {x: -140.06999, y: 140.87001, z: 88.84}
+      position: {x: 12, y: -16, z: 88.84}
       character: A
       children: 020000000c000000
     - id: 4
-      position: {x: 0, y: 234.25002, z: 99.92}
+      position: {x: 24, y: -8, z: 99.92}
       character: T
       children: 
     - id: 5
-      position: {x: 0, y: 187.56001, z: 88.88}
+      position: {x: 24, y: -12, z: 88.88}
       character: A
       children: 04000000
     - id: 6
-      position: {x: -93.38, y: 0.8000183, z: 99.72}
+      position: {x: 16, y: -28, z: 99.72}
       character: H
       children: 
     - id: 7
-      position: {x: -93.38, y: -232.64998, z: 77.52}
+      position: {x: 16, y: -48, z: 77.52}
       character: L
       children: 0d0000000f000000
     - id: 8
-      position: {x: 140.06999, y: 140.87001, z: 88.84}
+      position: {x: 36, y: -16, z: 88.84}
       character: E
       children: 010000000a000000
     - id: 9
-      position: {x: -140.06999, y: 47.49002, z: 88.76}
+      position: {x: 12, y: -24, z: 88.76}
       character: B
       children: 0600000002000000
     - id: 10
-      position: {x: 93.38, y: 187.56001, z: 99.88}
+      position: {x: 32, y: -12, z: 99.88}
       character: D
       children: 
     - id: 11
-      position: {x: 140.06999, y: 47.49002, z: 88.76}
+      position: {x: 36, y: -24, z: 88.76}
       character: T
       children: 0000000001000000
     - id: 12
-      position: {x: -93.38, y: 187.56001, z: 99.88}
+      position: {x: 16, y: -12, z: 99.88}
       character: C
       children: 
     - id: 13
-      position: {x: -93.38, y: -209.305, z: 99.54}
+      position: {x: 16, y: -46, z: 99.54}
       character: P
       children: 
     - id: 14
-      position: {x: 93.38, y: -209.305, z: 99.54}
+      position: {x: 32, y: -46, z: 99.54}
       character: A
       children: 
     - id: 15
-      position: {x: -93.38, y: -220.97746, z: 88.53}
+      position: {x: 16, y: -47, z: 88.53}
       character: R
       children: 0d000000
     - id: 16
-      position: {x: 93.38, y: -220.97746, z: 88.53}
+      position: {x: 32, y: -47, z: 88.53}
       character: Y
       children: 0e000000
     - id: 17
-      position: {x: -93.38, y: 94.18, z: 77.8}
+      position: {x: 16, y: -20, z: 77.8}
       character: C
       children: 020000000900000003000000
     - id: 18
-      position: {x: 93.38, y: 94.18, z: 77.8}
+      position: {x: 32, y: -20, z: 77.8}
       character: B
       children: 010000000b00000008000000
     - id: 19
-      position: {x: 93.38, y: -232.64998, z: 77.52}
+      position: {x: 32, y: -48, z: 77.52}
       character: E
       children: 0e00000010000000
-  wordControllerConfig:
-    possibleWords:
-    - cable
-    - battery
-    - chip
-    - data

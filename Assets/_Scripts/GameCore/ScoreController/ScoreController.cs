@@ -28,6 +28,14 @@ public class ScoreController
         UpdateTotalScoreDisplay();
     }
 
+    public void LoadScoreController(string levelTitle, int currentTotalScore)
+    {
+        _levelTitle = levelTitle;
+        CurrentTotalScore = currentTotalScore;
+        HideWordScore();
+        UpdateTotalScoreDisplay();
+    }
+
     public void ClearScoreController()
     {
         if (IsNewHighScore) References.highScoreText.SetHighScoreText(CurrentTotalScore);

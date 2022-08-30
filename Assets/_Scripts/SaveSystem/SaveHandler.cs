@@ -12,6 +12,7 @@ namespace SaveSystem
         {
             string fileName = GetJsonNameFromKeyName(saveKey);
             string fullPath = Path.Combine(Application.persistentDataPath, SaveFolderName, fileName);
+            Debug.Log(fullPath);
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(fullPath));

@@ -19,4 +19,14 @@ public class TileData
     {
         position = newPosition;
     }
+
+    public TileData Clone()
+    {
+        TileData clone = new TileData();
+        clone.id = id;
+        clone.position = position;
+        clone.character = character;
+        clone.children = children.Clone() as int[];
+        return clone;
+    }
 }

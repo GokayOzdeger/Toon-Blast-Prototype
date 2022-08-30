@@ -16,33 +16,38 @@ public class LevelController
     public WordController WordController { get; private set; }
     public ScoreController ScoreController { get; private set; }
 
-    public LevelController(LevelReferences references, LevelSettings settings, LevelConfig config)
+    public LevelController(LevelReferences references, LevelSettings settings, LevelConfig config, CurrentLevelSaveData savedLevelState)
     {
         this.References = references;
         this.Settings = settings;
         this.Config = config;
-        CreateLevelControllers();
-    }
 
-    private void CreateLevelControllers()
-    {
         TileController = new TileController(References.TileManagerReferences, Settings.TileManagerSettings, Config.TileManagerConfig);
         WordController = new WordController(References.WordControllerReferences, Settings.WordControllerSettings, Config.WordControllerConfig);
         ScoreController = new ScoreController(References.ScoreControllerReferences, Settings.ScoreControllerSettings);
 
+        if (savedLevelState != null && savedLevelState.HasSavedLevel) LoadLevelControllers(savedLevelState);
+        else SetupLevelControllers();
+    }
+
+    private void SetupLevelControllers()
+    {
         ScoreController.SetupScoreController(Config.LevelTitle);
         TileController.SetupTileController(WordController);
         WordController.StartWordController(TileController, ScoreController);
     }
 
-    public void LoadLevelControllers()
+    public void LoadLevelControllers(CurrentLevelSaveData currentLevelSaveData)
     {
-
+        ScoreController.LoadScoreController(Config.LevelTitle, currentLevelSaveData.CurrentTotalScore);
+        TileController.LoadTileController(WordController, currentLevelSaveData.TilesLeft);
+        WordController.LoadWordController(TileController, ScoreController, currentLevelSaveData.SubmittedWords);
     }
 
     public void ClearLevelControllers()
     {
         TileController.ClearTileController();
         WordController.ClearWordController();
+        ScoreController.ClearScoreController();
     }
 }

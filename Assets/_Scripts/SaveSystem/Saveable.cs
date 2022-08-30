@@ -37,7 +37,6 @@ namespace SaveSystem
             T loadedData = SaveHandler.Load<T>(typeof(T).FullName);
             if (loadedData == null)
             {
-                Debug.Log("No Data of Type: " + typeof(T).FullName + " found. Creating default Data");
                 loadedData = new T();
             }
             return loadedData;

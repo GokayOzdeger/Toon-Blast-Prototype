@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class CurrentLevelSaveData : Saveable<CurrentLevelSaveData>
 {
-    public bool HasLevelSaved => TilesLeft != null;
+    public bool HasSavedLevel;
 
     // TileController Save Data
     public List<TileData> TilesLeft;
 
     // WordController Save Data
-    private List<string> SubmittedWords;
+    public List<string> SubmittedWords;
 
     // ScoreController Save Data
     public int CurrentTotalScore;
@@ -21,6 +21,7 @@ public class CurrentLevelSaveData : Saveable<CurrentLevelSaveData>
         SaveTileController(controller.TileController);
         SaveWordController(controller.WordController);
         SaveScoreController(controller.ScoreController);
+        HasSavedLevel = true;
         Save();
     }
 
@@ -46,6 +47,7 @@ public class CurrentLevelSaveData : Saveable<CurrentLevelSaveData>
 
     public void ClearSavedLevelStateData()
     {
+        HasSavedLevel = false;
         TilesLeft = null;
         SubmittedWords = null;
         CurrentTotalScore = 0;

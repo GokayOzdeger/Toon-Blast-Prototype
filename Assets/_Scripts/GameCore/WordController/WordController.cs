@@ -151,6 +151,7 @@ public class WordController
 
     private bool IsWordValid()
     {
+        if (SubmittedWords.Contains(CurrentWord)) return false;
         if (_wordSearchController.IsWordMatchFound(CurrentWord)) return true;
         return false;
     }
