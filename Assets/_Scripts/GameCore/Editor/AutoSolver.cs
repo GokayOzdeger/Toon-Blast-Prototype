@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,8 +8,8 @@ using UnityEngine;
 #if UNITY_EDITOR
 public class AutoSolver 
 { 
-    private TileController tileController;
-    private WordController wordController;
+    private TileController _tileController;
+    private WordController _wordController;
     private string[] allWords;
 
     public AutoSolver(string[] _allWords, TileControllerConfig tileControllerConfig, WordControllerConfig wordControllerConfig)
@@ -18,18 +19,18 @@ public class AutoSolver
 
         TileControllerSettings tileControllerSettings = new TileControllerSettings();        
         WordControllerSettings wordControllerSettings = new WordControllerSettings();
-        wordControllerSettings.maxLetterCount = 3;
+        wordControllerSettings.maxLetterCount = 7;
         
-        tileController = new TileController(null, tileControllerSettings, tileControllerConfig);
-        wordController = new WordController(null, wordControllerSettings, wordControllerConfig);
+        _tileController = new TileController(null, tileControllerSettings, tileControllerConfig);
+        _wordController = new WordController(null, wordControllerSettings, wordControllerConfig);
 
         SetupControllers();
     }
 
     private void SetupControllers()
     {
-        wordController.SetupWordControllerAutoSolver(tileController);
-        tileController.SetupTileControllerAutoSolver(wordController);
+        _wordController.SetupWordControllerAutoSolver(_tileController, false);
+        _tileController.SetupTileControllerAutoSolver(_wordController, false);
     }
 
     public void StartAutoSolver()
@@ -39,39 +40,43 @@ public class AutoSolver
         LinkedTree<string> WordTree = new LinkedTree<string>();
         
         Stack<int> cursorLocations = new Stack<int>();
-        StartWordSearch(WordTree.Root, LetterTree.Root, tileController.AllTiles, cursorLocations);
+        StartWordSearch(WordTree.Root, LetterTree.Root, _tileController, cursorLocations, _wordController);
     }
 
-    private void StartWordSearch(TreeNode<string> wordTreeNode, TreeNode<ITile> letterTreeNode, List<ITile> tilesLeft, Stack<int> cursorLocations)
+    private void StartWordSearch(TreeNode<string> wordTreeNode, TreeNode<ITile> letterTreeNode, TileController tileController, Stack<int> cursorLocations, WordController wordController)
     {
         cursorLocations.Push(0);
-        tilesLeft = new List<ITile>(tilesLeft);
-        foreach (ITile tile in tilesLeft)
+
+        foreach (ITile tile in tileController.AllTiles)
         {
             if (tile.Locks != 0) continue;
             if (letterTreeNode.HasChild(tile)) continue;
             TreeNode<ITile> newNode = letterTreeNode.AddChild(tile);
-            CreateWordTree(wordTreeNode, newNode, tileController.AllTiles, cursorLocations, 0);
+            CreateWordTree(wordTreeNode, newNode, tileController, cursorLocations, 0, wordController);
         }
     }
 
-    private void StartWordSearchRecursive(TreeNode<string> wordTreeNode, TreeNode<ITile> letterTreeNode, List<ITile> tilesLeft, Stack<int> cursorLocations)
+    private void StartWordSearchRecursive(TreeNode<string> wordTreeNode, TreeNode<ITile> letterTreeNode, TileController tileController, Stack<int> cursorLocations, WordController wordController)
     {
+        tileController = tileController.Clone();
+        wordController = wordController.Clone();
+        tileController.SetupTileControllerAutoSolver(wordController, true);
+        wordController.SetupWordControllerAutoSolver(tileController, true);
+        Debug.Log("START NEW PARALEL");
         wordController.SubmitWordAutoSolver();
         cursorLocations.Push(0);
-
-        tilesLeft = new List<ITile>(tilesLeft);
-        foreach (ITile tile in tilesLeft)
+        
+        foreach (ITile tile in tileController.AllTiles)
         {
             if (tile.Locks != 0) continue;
             if (letterTreeNode.HasChild(tile)) continue;
             TreeNode<ITile> newNode = letterTreeNode.AddChild(tile);
-            CreateWordTree(wordTreeNode, newNode, tileController.AllTiles, cursorLocations, 0);
+            CreateWordTree(wordTreeNode, newNode, tileController, cursorLocations, 0, wordController);
         }
         cursorLocations.Pop();
     }
 
-    private void CreateWordTree(TreeNode<string> wordTreeNode, TreeNode<ITile> letterTreeNode, List<ITile> tilesLeft, Stack<int> cursorLocations, int brachLength)
+    private void CreateWordTree(TreeNode<string> wordTreeNode, TreeNode<ITile> letterTreeNode, TileController tileController, Stack<int> cursorLocations, int brachLength, WordController wordController)
     {
         if (brachLength+1 == wordController.MaxWordLength) return;
 
@@ -93,19 +98,18 @@ public class AutoSolver
                 cursorLocations.Push(cursorLocation);
                 TreeNode<string> newWordTreeNode = new TreeNode<string>(wordController.CurrentWord);
                 Debug.Log("Next Word...");
-                StartWordSearchRecursive(newWordTreeNode, letterTreeNode, tileController.AllTiles, cursorLocations);
+                StartWordSearchRecursive(newWordTreeNode, letterTreeNode, tileController, cursorLocations, wordController);
                 break;
             default:
                 break;
         }
-
-        tilesLeft = new List<ITile>(tilesLeft);
-        foreach (ITile tile in tilesLeft)
+        
+        foreach (ITile tile in tileController.AllTiles)
         {
             if (!tile.Clickable) continue;
             if (letterTreeNode.HasChild(tile)) continue;
             TreeNode<ITile> newLetterTreeNode = letterTreeNode.AddChild(tile);
-            CreateWordTree(wordTreeNode, newLetterTreeNode, tileController.AllTiles, cursorLocations, brachLength + 1);
+            CreateWordTree(wordTreeNode, newLetterTreeNode, tileController, cursorLocations, brachLength + 1, wordController);
         }
 
         wordController.UndoAutoSolver();
@@ -118,8 +122,7 @@ public class AutoSolver
         for (int i = cursor; i < allWords.Length; i++)
         {
             if (allWords[i].Length > maxLetters) continue;
-            Debug.Log(wordLower + " / " + allWords[i]);
-            int compareResult = string.Compare(wordLower, allWords[i]);
+            int compareResult = string.Compare(wordLower, allWords[i], StringComparison.InvariantCulture);
             if (compareResult == 1) continue;
             else if (compareResult == -1)
             {

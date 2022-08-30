@@ -22,17 +22,21 @@ public class WordController
     private List<ITile> _tilesInWordFormer = new List<ITile>();
     private List<string> _possibleWords = new List<string>();
 
-    public WordController(WordControllerReferences references, WordControllerSettings settings, WordControllerConfig config)
+    public WordController(WordControllerReferences references, WordControllerSettings settings,
+        WordControllerConfig config)
     {
         References = references;
         Settings = settings;
         Config = config;
-        
+
         _possibleWords = new List<string>(Config.possibleWords);
-        
-        References.submitWordButton.onClick.AddListener(OnClickSubmitWord);
-        References.undoButton.onClick.AddListener(OnClickUndoButton);
-        references.undoButton.OnHold.AddListener(OnHoldUndoButton);
+
+        if (References != null)
+        {
+            References.submitWordButton.onClick.AddListener(OnClickSubmitWord);
+            References.undoButton.onClick.AddListener(OnClickUndoButton);
+            References.undoButton.OnHold.AddListener(OnHoldUndoButton);
+        }
     }
 
     public void SetupWordController(TileController tileController, ScoreController scoreController)
@@ -44,7 +48,7 @@ public class WordController
         ResizeWordFormingArea();
     }
     
-    public void SetupWordControllerAutoSolver(TileController tileController)
+    public void SetupWordControllerAutoSolver(TileController tileController, bool passReferencesOnly)
     {
         _tileController = tileController;
     }
@@ -152,6 +156,7 @@ public class WordController
         _tilesInMovement++;
 
         tileToUndo.ReturnToTileArea(null);
+        tileToUndo.LockChildren();
         tileToUndo.UpdateMonitor();
         UpdateUndoButtonState();
         CheckWordIsSubmitable();
@@ -169,6 +174,7 @@ public class WordController
         _tilesInMovement++;
 
         tileToUndo.ReturnToTileArea(null);
+        tileToUndo.LockChildren();
     }
 
     private void SubmitWord()
@@ -186,7 +192,7 @@ public class WordController
         _submittedWords.Add(CurrentWord);
         _possibleWords.Remove(CurrentWord);
         RemoveTilesFromTileController();
-        ResetWord();
+        ResetWordAutoSolver();
     }
 
     private void ResetWord()
@@ -197,6 +203,14 @@ public class WordController
         _nextLetterIndex = 0;
         SetSubmitButtonState(false);
         _scoreController.DisplayScoreForWord(CurrentWord);
+    }
+
+    private void ResetWordAutoSolver()
+    {
+        _tilesInWordFormer.Clear();
+
+        CurrentWord = "";
+        _nextLetterIndex = 0;
     }
 
     private void RemoveTiles()
@@ -225,9 +239,21 @@ public class WordController
     private void UndoAllTiles()
     {
         foreach (ITile tile in _tilesInWordFormer) tile.ReturnToTileArea(null);
+        foreach (ITile tile in _tilesInWordFormer) tile.LockChildren();
         ResetWord();
         UpdateUndoButtonState();
         CheckWordIsSubmitable();
+    }
+
+    public WordController Clone()
+    {
+        WordController wordController = new WordController(References, Settings, Config);
+        wordController.CurrentWord = CurrentWord;
+        wordController._nextLetterIndex = _nextLetterIndex;
+        wordController._tilesInWordFormer = new List<ITile>(_tilesInWordFormer);
+        wordController._possibleWords = new List<string>(_possibleWords);
+        wordController._submittedWords = new List<string>(_submittedWords);
+        return wordController;
     }
 }
 

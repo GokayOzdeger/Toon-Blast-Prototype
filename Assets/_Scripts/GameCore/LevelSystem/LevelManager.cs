@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,11 @@ public class LevelManager : SingletonGameStateListener<LevelManager>
     public LevelController CurrentLevelController { get; private set; }
     public LevelConfig[] LevelList => levelList;
     public LevelConfig ChosenLevelConfig { get; private set; }
+
+    private void Start()
+    {
+        levelList[0].AutoSolve();
+    }
 
     public override void OnEnterState()
     {
