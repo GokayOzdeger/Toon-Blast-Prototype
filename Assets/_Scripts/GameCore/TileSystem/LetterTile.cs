@@ -75,12 +75,6 @@ public class LetterTile : ITile
         Monitor.UpdateMonitor(this);
     }
 
-    public ITile Clone(TileController tileController, WordController wordController)
-    {
-        LetterTile tile = new LetterTile(tileController, wordController, null, _tileData);
-        return tile;
-    }
-
     public void OnClick()
     {
         if (_wordController.WordIsFull) return;

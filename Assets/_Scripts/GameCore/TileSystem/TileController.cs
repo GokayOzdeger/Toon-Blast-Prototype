@@ -134,14 +134,10 @@ public class TileController
         foreach(ITile tile in AllTiles) tile.LockChildren();
     }
 
-    public TileController CloneWithTiles()
+    public TileController Clone()
     {
         TileController _tileController = new TileController(References, Settings, Config);
-        _tileController.AllTiles = new List<ITile>();
-        foreach (ITile tile in AllTiles)
-        {
-            _tileController.AllTiles.Add((tile.Clone(null, null))); // must not be null
-        }
+        _tileController.AllTiles = new List<ITile>(AllTiles);
         return _tileController;
     }
 }

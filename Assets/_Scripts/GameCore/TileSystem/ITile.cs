@@ -19,7 +19,6 @@ public interface ITile
     public void LockChildren();
     public void UnlockChildren();
     public void UpdateMonitor();
-    public ITile Clone(TileController tileController, WordController wordController);
     public void GoToPool();
     public void GoToPool(float delay);
     public void SetPixelSize(float size);

@@ -58,7 +58,7 @@ public class AutoSolver
 
     private void StartWordSearchRecursive(TreeNode<string> wordTreeNode, TreeNode<ITile> letterTreeNode, TileController tileController, Stack<int> cursorLocations, WordController wordController)
     {
-        tileController = tileController.CloneWithTiles();
+        tileController = tileController.Clone();
         wordController = wordController.Clone();
         tileController.SetupTileControllerAutoSolver(wordController, true);
         wordController.SetupWordControllerAutoSolver(tileController, true);
