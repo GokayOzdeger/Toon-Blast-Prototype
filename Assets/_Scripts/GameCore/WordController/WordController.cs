@@ -27,12 +27,15 @@ public class WordController
         References = references;
         Settings = settings;
         Config = config;
-        
+
         _possibleWords = new List<string>(Config.possibleWords);
-        
-        References.submitWordButton.onClick.AddListener(OnClickSubmitWord);
-        References.undoButton.onClick.AddListener(OnClickUndoButton);
-        references.undoButton.OnHold.AddListener(OnHoldUndoButton);
+
+        if (References != null)
+        {
+            References.submitWordButton.onClick.AddListener(OnClickSubmitWord);
+            References.undoButton.onClick.AddListener(OnClickUndoButton);
+            References.undoButton.OnHold.AddListener(OnHoldUndoButton);
+        }
     }
 
     public void SetupWordController(TileController tileController, ScoreController scoreController)
@@ -152,6 +155,7 @@ public class WordController
         _tilesInMovement++;
 
         tileToUndo.ReturnToTileArea(null);
+        tileToUndo.LockChildren();
         tileToUndo.UpdateMonitor();
         UpdateUndoButtonState();
         CheckWordIsSubmitable();
@@ -169,6 +173,7 @@ public class WordController
         _tilesInMovement++;
 
         tileToUndo.ReturnToTileArea(null);
+        tileToUndo.LockChildren();
     }
 
     private void SubmitWord()
@@ -182,11 +187,9 @@ public class WordController
 
     public void SubmitWordAutoSolver()
     {
-        //_scoreController.WordSubmitted();
-        _submittedWords.Add(CurrentWord);
-        _possibleWords.Remove(CurrentWord);
-        RemoveTilesFromTileController();
-        ResetWord();
+        _tilesInWordFormer.Clear();
+        CurrentWord = "";
+        _nextLetterIndex = 0;
     }
 
     private void ResetWord()
@@ -201,8 +204,6 @@ public class WordController
 
     private void RemoveTiles()
     {
-        RemoveTilesFromTileController();
-
         // send tiles to pool after animating
         float tileSize = _tileController.TileSize;
         for (int i = _tilesInWordFormer.Count-1; i >= 0; i--)
@@ -215,16 +216,10 @@ public class WordController
         }
     }
 
-    private void RemoveTilesFromTileController()
-    {
-        // remove tiles from tile controller
-        foreach (ITile tile in _tilesInWordFormer)
-            _tileController.RemoveTile(tile.TileData.Id);
-    }
-
     private void UndoAllTiles()
     {
         foreach (ITile tile in _tilesInWordFormer) tile.ReturnToTileArea(null);
+        foreach (ITile tile in _tilesInWordFormer) tile.LockChildren();
         ResetWord();
         UpdateUndoButtonState();
         CheckWordIsSubmitable();

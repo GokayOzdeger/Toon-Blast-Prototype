@@ -36,8 +36,8 @@ public class LetterTile : ITile
             return _childrenTiles;
         }
     }
-
-    public bool Clickable { get; private set; } = true;
+    public bool Clickable => Locks == 0 && InTileArea;
+    public bool InTileArea { get; private set; } = true;
 
     public LetterTile(TileController tileController, WordController wordController, LetterMonitor monitor, TileData data)
     {
@@ -50,12 +50,14 @@ public class LetterTile : ITile
 
     public void LockTile()
     {
+        if (!InTileArea) return;
         Locks++;
         if (Locks == 1) UpdateMonitor();
     }
 
     public void UnlockTile()
     {
+        if (!InTileArea) return;
         Locks--;
         if (Locks == 0) UpdateMonitor();
     }
@@ -82,7 +84,6 @@ public class LetterTile : ITile
 
     private void OnClickSuccess()
     {
-        Clickable = false;
         if(Monitor != null) _wordController.AddTileToWord(this);
         else _wordController.AddTileToWordAutoSolver(this);
     }
@@ -99,22 +100,16 @@ public class LetterTile : ITile
 
     public void ReturnToTileArea(Action onComplete)
     {
-        LockChildren();
+        InTileArea = true;
         if (Monitor)
         {
             CompleteLastTween();
             Sequence tween = DOTween.Sequence();
             tween.Append(TweenHelper.Shake(Monitor.transform, null, 20, FLY_TO_TILEAREA_DURATION));
             tween.Append(TweenHelper.CurvingMoveTo(Monitor.transform, TileData.Position));
-            tween.onComplete = () => { if(onComplete != null) onComplete(); OnReturnedToTileArea(); };
+            if (onComplete != null) tween.onComplete = () => { onComplete(); };
             _activeTween = tween;
         }
-        else OnReturnedToTileArea(); // movements are instant when not using a monitor
-    }
-
-    private void OnReturnedToTileArea()
-    {
-        Clickable = true;
     }
 
     private void CompleteLastTween()
@@ -124,6 +119,7 @@ public class LetterTile : ITile
 
     public void LeaveTileArea(Vector3 moveTo, Action onComplete)
     {
+        InTileArea = false;
         UnlockChildren();
         if (Monitor)
         {

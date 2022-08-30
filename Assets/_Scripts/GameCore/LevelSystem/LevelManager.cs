@@ -12,6 +12,11 @@ public class LevelManager : SingletonGameStateListener<LevelManager>
     public LevelConfig[] LevelList => levelList;
     public LevelConfig ChosenLevelConfig { get; private set; }
 
+    private void Start()
+    {
+        levelList[0].AutoSolve();
+    }
+
     public override void OnEnterState()
     {
         CurrentLevelController = new LevelController(levelSceneReferences, levelSettings, ChosenLevelConfig);

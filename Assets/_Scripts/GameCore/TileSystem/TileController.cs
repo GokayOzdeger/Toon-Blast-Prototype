@@ -79,20 +79,6 @@ public class TileController
         return null;
     }
 
-    public void RemoveTile(int tileId)
-    {
-        int tileToRemoveIndex = -1;
-        for (int i = 0; i < AllTiles.Count; i++)
-            if (AllTiles[i].TileData.Id == tileId)
-                tileToRemoveIndex = i;
-        if (tileToRemoveIndex == -1)
-        {
-            Debug.LogError("Cant find tile with Id !");
-            return;
-        }
-        AllTiles.RemoveAt(tileToRemoveIndex);
-    }
-
     private void CalculateTileDistanceMultiplier()
     {
         CalculateRectOfTileData();
