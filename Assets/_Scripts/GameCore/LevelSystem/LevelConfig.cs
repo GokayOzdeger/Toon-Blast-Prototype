@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [CreateAssetMenu(menuName = "ScriptableObjects/Level Config")]
 public class LevelConfig : ScriptableObject
@@ -23,6 +26,7 @@ public class LevelConfig : ScriptableObject
     private void LoadFromJson(TextAsset json)
     {
         Debug.Log("Loading from json...");
+        EditorUtility.SetDirty(this);
         LevelJson jsonRead = JsonUtility.FromJson<LevelJson>(json.text);
         levelTitle = jsonRead.title;
         tileManagerConfig.SaveTileDataEditor(jsonRead.tiles);

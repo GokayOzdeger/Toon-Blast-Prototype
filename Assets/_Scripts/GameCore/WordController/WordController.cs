@@ -60,6 +60,15 @@ public class WordController
         UpdateUndoButtonState();
         ResizeWordFormingArea();
     }
+    public void ClearWordController()
+    {
+        if (References != null)
+        {
+            References.submitWordButton.onClick.RemoveAllListeners();
+            References.undoButton.onClick.RemoveAllListeners();
+            References.undoButton.OnHold.RemoveAllListeners();
+        }
+    }
 
     public void AddTileToWord(ITile tile)
     {

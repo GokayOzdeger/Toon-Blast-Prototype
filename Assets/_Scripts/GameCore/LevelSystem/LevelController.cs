@@ -34,4 +34,15 @@ public class LevelController
         TileController.SetupTileController(WordController);
         WordController.StartWordController(TileController, ScoreController);
     }
+
+    public void LoadLevelControllers()
+    {
+
+    }
+
+    public void ClearLevelControllers()
+    {
+        TileController.ClearTileController();
+        WordController.ClearWordController();
+    }
 }

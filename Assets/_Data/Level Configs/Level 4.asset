@@ -12,8 +12,94 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56931079d0bc888499bedc4fe66e7bef, type: 3}
   m_Name: Level 4
   m_EditorClassIdentifier: 
-  levelTitle: 
-  letterDatas: []
-  possibleWordsInLevel:
-  - hello
-  - world
+  levelTitle: BUGS
+  tileManagerConfig:
+    tileDatas:
+    - id: 0
+      position: {x: 20, y: -3, z: 99.97}
+      character: L
+      children: 
+    - id: 1
+      position: {x: 28, y: -3, z: 99.97}
+      character: E
+      children: 
+    - id: 2
+      position: {x: 20, y: -7, z: 88.93}
+      character: M
+      children: 00000000
+    - id: 3
+      position: {x: 28, y: -7, z: 88.93}
+      character: T
+      children: 01000000
+    - id: 4
+      position: {x: 24, y: -19, z: 99.81}
+      character: E
+      children: 
+    - id: 5
+      position: {x: 20, y: -23, z: 88.77}
+      character: T
+      children: 04000000
+    - id: 6
+      position: {x: 28, y: -23, z: 88.77}
+      character: H
+      children: 04000000
+    - id: 7
+      position: {x: 24, y: -27, z: 77.73}
+      character: N
+      children: 0500000006000000
+    - id: 8
+      position: {x: 20, y: -31, z: 66.69}
+      character: B
+      children: 07000000
+    - id: 9
+      position: {x: 28, y: -31, z: 66.69}
+      character: E
+      children: 07000000
+    - id: 10
+      position: {x: 20, y: -35, z: 55.65}
+      character: A
+      children: 08000000
+    - id: 11
+      position: {x: 28, y: -35, z: 55.65}
+      character: I
+      children: 09000000
+    - id: 12
+      position: {x: 20, y: -49, z: 99.51}
+      character: E
+      children: 
+    - id: 13
+      position: {x: 20, y: -50, z: 88.5}
+      character: O
+      children: 0c000000
+    - id: 14
+      position: {x: 20, y: -51, z: 77.49}
+      character: A
+      children: 0d0000000c000000
+    - id: 15
+      position: {x: 20, y: -52, z: 66.48}
+      character: E
+      children: 0e0000000d0000000c000000
+    - id: 16
+      position: {x: 20, y: -53, z: 55.47}
+      character: S
+      children: 0f0000000e0000000d0000000c000000
+    - id: 17
+      position: {x: 28, y: -49, z: 99.51}
+      character: B
+      children: 
+    - id: 18
+      position: {x: 28, y: -50, z: 88.5}
+      character: M
+      children: 11000000
+    - id: 19
+      position: {x: 28, y: -51, z: 77.49}
+      character: T
+      children: 1100000012000000
+    - id: 20
+      position: {x: 28, y: -52, z: 66.48}
+      character: T
+      children: 130000001100000012000000
+    - id: 21
+      position: {x: 28, y: -53, z: 55.47}
+      character: N
+      children: 13000000140000001100000012000000

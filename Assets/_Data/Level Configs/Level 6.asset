@@ -1,0 +1,113 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56931079d0bc888499bedc4fe66e7bef, type: 3}
+  m_Name: Level 6
+  m_EditorClassIdentifier: 
+  levelTitle: RAINBOW
+  tileManagerConfig:
+    tileDatas:
+    - id: 0
+      position: {x: 12, y: -12, z: 99.88}
+      character: L
+      children: 
+    - id: 1
+      position: {x: 20, y: -12, z: 99.88}
+      character: U
+      children: 
+    - id: 2
+      position: {x: 28, y: -12, z: 99.88}
+      character: R
+      children: 
+    - id: 3
+      position: {x: 36, y: -12, z: 99.88}
+      character: P
+      children: 
+    - id: 4
+      position: {x: 12, y: -16, z: 88.84}
+      character: O
+      children: 00000000
+    - id: 5
+      position: {x: 20, y: -16, z: 88.84}
+      character: E
+      children: 01000000
+    - id: 6
+      position: {x: 28, y: -16, z: 88.84}
+      character: L
+      children: 02000000
+    - id: 7
+      position: {x: 36, y: -16, z: 88.84}
+      character: W
+      children: 03000000
+    - id: 8
+      position: {x: 16, y: -20, z: 77.8}
+      character: R
+      children: 0400000005000000
+    - id: 9
+      position: {x: 24, y: -20, z: 77.8}
+      character: E
+      children: 0500000006000000
+    - id: 10
+      position: {x: 32, y: -20, z: 77.8}
+      character: E
+      children: 0600000007000000
+    - id: 11
+      position: {x: 20, y: -24, z: 66.76}
+      character: L
+      children: 0800000009000000
+    - id: 12
+      position: {x: 28, y: -24, z: 66.76}
+      character: U
+      children: 090000000a000000
+    - id: 13
+      position: {x: 24, y: -28, z: 55.72}
+      character: E
+      children: 0b0000000c000000
+    - id: 14
+      position: {x: 12, y: -41, z: 99.59}
+      character: P
+      children: 
+    - id: 15
+      position: {x: 12, y: -42, z: 88.58}
+      character: Y
+      children: 0e000000
+    - id: 16
+      position: {x: 12, y: -43, z: 77.57}
+      character: G
+      children: 0e0000000f000000
+    - id: 17
+      position: {x: 12, y: -44, z: 66.56}
+      character: B
+      children: 100000000e0000000f000000
+    - id: 18
+      position: {x: 12, y: -45, z: 55.550003}
+      character: R
+      children: 10000000110000000e0000000f000000
+    - id: 19
+      position: {x: 36, y: -41, z: 99.59}
+      character: E
+      children: 
+    - id: 20
+      position: {x: 36, y: -42, z: 88.58}
+      character: L
+      children: 13000000
+    - id: 21
+      position: {x: 36, y: -43, z: 77.57}
+      character: N
+      children: 1300000014000000
+    - id: 22
+      position: {x: 36, y: -44, z: 66.56}
+      character: E
+      children: 150000001300000014000000
+    - id: 23
+      position: {x: 36, y: -45, z: 55.550003}
+      character: D
+      children: 15000000160000001300000014000000

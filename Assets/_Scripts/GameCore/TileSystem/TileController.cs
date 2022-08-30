@@ -66,7 +66,7 @@ public class TileController
         return null;
     }
 
-    public void ClearAllTiles()
+    public void ClearTileController()
     {
         foreach (ITile tile in AllTiles)
         {

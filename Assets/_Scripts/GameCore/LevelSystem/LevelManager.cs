@@ -24,17 +24,19 @@ public class LevelManager : SingletonGameStateListener<LevelManager>
     }
     public void LevelCompleted()
     {
+        GameState nextState;
+        if (CurrentLevelController.ScoreController.IsNewHighScore) nextState = levelSceneReferences.HighScoreGameState;
+        else nextState = levelSceneReferences.LevelSelectGameState;
+
         LevelSaveData.SaveLevelData(CurrentLevelController.Config.LevelTitle, CurrentLevelController.ScoreController.CurrentTotalScore);
-        CurrentLevelSaveData.Data.ClearSavedLevelState();
-        CurrentLevelController.TileController.ClearAllTiles();
-        TransitionToNextGameState();
+        CurrentLevelSaveData.Data.ClearSavedLevelStateData();
+        EndLevelState(nextState);
     }
 
-    private void TransitionToNextGameState()
+    private void EndLevelState(GameState nextState)
     {
-        // clear leftovers from old scene
-        if (CurrentLevelController.ScoreController.IsNewHighScore) GameManager.Instance.ChangeGameState(levelSceneReferences.HighScoreGameState);
-        else GameManager.Instance.ChangeGameState(levelSceneReferences.LevelSelectGameState);
+        CurrentLevelController.ClearLevelControllers();
+        GameManager.Instance.ChangeGameState(nextState);
     }
 
     public void SaveLevelState()
@@ -61,13 +63,13 @@ public class LevelManager : SingletonGameStateListener<LevelManager>
     [EasyButtons.Button(Mode = EasyButtons.ButtonMode.EnabledInPlayMode)]
     private void CompleteLevelNormal()
     {
-        CurrentLevelController.ScoreController.SetCurrentScoreToHighScore();
         LevelCompleted();
     }
 
     [EasyButtons.Button(Mode = EasyButtons.ButtonMode.EnabledInPlayMode)]
     private void CompleteLevelWithHighScore()
     {
+        CurrentLevelController.ScoreController.SetCurrentScoreToHighScore();
         LevelCompleted();
     }
 

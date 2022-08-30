@@ -12,6 +12,90 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56931079d0bc888499bedc4fe66e7bef, type: 3}
   m_Name: Level 2
   m_EditorClassIdentifier: 
-  levelTitle: 
-  letterDatas: []
-  possibleWordsInLevel: []
+  levelTitle: HIDDEN IN THE FOREST
+  tileManagerConfig:
+    tileDatas:
+    - id: 0
+      position: {x: 20, y: -16, z: 99.84}
+      character: E
+      children: 
+    - id: 1
+      position: {x: 28, y: -16, z: 99.84}
+      character: R
+      children: 
+    - id: 2
+      position: {x: 20, y: -24, z: 99.76}
+      character: R
+      children: 
+    - id: 3
+      position: {x: 28, y: -24, z: 99.76}
+      character: I
+      children: 
+    - id: 4
+      position: {x: 12, y: -20, z: 99.8}
+      character: P
+      children: 
+    - id: 5
+      position: {x: 28, y: -44, z: 99.56}
+      character: H
+      children: 
+    - id: 6
+      position: {x: 36, y: -20, z: 99.8}
+      character: V
+      children: 
+    - id: 7
+      position: {x: 24, y: -32, z: 99.68}
+      character: T
+      children: 
+    - id: 8
+      position: {x: 18, y: -26, z: 86.74}
+      character: I
+      children: 070000000400000002000000
+    - id: 9
+      position: {x: 30, y: -26, z: 86.74}
+      character: E
+      children: 070000000600000003000000
+    - id: 10
+      position: {x: 30, y: -14, z: 86.86}
+      character: T
+      children: 0600000001000000
+    - id: 11
+      position: {x: 18, y: -14, z: 86.86}
+      character: C
+      children: 0400000000000000
+    - id: 12
+      position: {x: 16, y: -20, z: 74.8}
+      character: L
+      children: 080000000400000002000000000000000b000000
+    - id: 13
+      position: {x: 24, y: -12, z: 74.88}
+      character: F
+      children: 000000000b000000010000000a000000
+    - id: 14
+      position: {x: 32, y: -20, z: 74.8}
+      character: O
+      children: 060000000900000003000000010000000a000000
+    - id: 15
+      position: {x: 24, y: -29, z: 74.71}
+      character: E
+      children: 0700000008000000020000000900000003000000
+    - id: 16
+      position: {x: 20, y: -44, z: 99.56}
+      character: A
+      children: 
+    - id: 17
+      position: {x: 20, y: -45, z: 88.55}
+      character: N
+      children: 10000000
+    - id: 18
+      position: {x: 20, y: -46, z: 77.54}
+      character: R
+      children: 1000000011000000
+    - id: 19
+      position: {x: 28, y: -45, z: 88.55}
+      character: S
+      children: 05000000
+    - id: 20
+      position: {x: 28, y: -46, z: 77.54}
+      character: W
+      children: 0500000013000000

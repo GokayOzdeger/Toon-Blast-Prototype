@@ -1,0 +1,137 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56931079d0bc888499bedc4fe66e7bef, type: 3}
+  m_Name: Level 13
+  m_EditorClassIdentifier: 
+  levelTitle: ASSASSIN'S TOOLKIT
+  tileManagerConfig:
+    tileDatas:
+    - id: 0
+      position: {x: 9, y: -29, z: 99.78}
+      character: R
+      children: 
+    - id: 1
+      position: {x: 9, y: -39, z: 99.68}
+      character: E
+      children: 
+    - id: 2
+      position: {x: 3, y: -34, z: 88.73}
+      character: M
+      children: 0100000000000000
+    - id: 3
+      position: {x: 15, y: -34, z: 88.73}
+      character: I
+      children: 0100000000000000
+    - id: 4
+      position: {x: 9, y: -29, z: 77.78}
+      character: L
+      children: 030000000200000000000000
+    - id: 5
+      position: {x: 9, y: -39, z: 77.68}
+      character: E
+      children: 030000000200000001000000
+    - id: 6
+      position: {x: 15, y: -34, z: 66.73}
+      character: I
+      children: 0300000005000000010000000400000000000000
+    - id: 7
+      position: {x: 3, y: -34, z: 66.73}
+      character: F
+      children: 0200000005000000010000000400000000000000
+    - id: 8
+      position: {x: 9, y: -39, z: 55.68}
+      character: V
+      children: 030000000600000007000000020000000500000001000000
+    - id: 9
+      position: {x: 9, y: -29, z: 55.78}
+      character: E
+      children: 030000000600000007000000020000000400000000000000
+    - id: 10
+      position: {x: 3, y: -34, z: 44.730003}
+      character: L
+      children: 0700000002000000050000000100000008000000090000000400000000000000
+    - id: 11
+      position: {x: 15, y: -34, z: 44.730003}
+      character: O
+      children: 0300000006000000050000000100000008000000090000000400000000000000
+    - id: 12
+      position: {x: 39, y: -29, z: 99.78}
+      character: E
+      children: 
+    - id: 13
+      position: {x: 39, y: -39, z: 99.68}
+      character: P
+      children: 
+    - id: 14
+      position: {x: 45, y: -34, z: 88.73}
+      character: C
+      children: 0d0000000c000000
+    - id: 15
+      position: {x: 33, y: -34, z: 88.73}
+      character: O
+      children: 0d0000000c000000
+    - id: 16
+      position: {x: 39, y: -29, z: 77.78}
+      character: F
+      children: 0e0000000f0000000c000000
+    - id: 17
+      position: {x: 39, y: -39, z: 77.68}
+      character: E
+      children: 0e0000000f0000000d000000
+    - id: 18
+      position: {x: 33, y: -34, z: 66.73}
+      character: I
+      children: 0f0000000d000000110000000c00000010000000
+    - id: 19
+      position: {x: 45, y: -34, z: 66.73}
+      character: N
+      children: 0e0000000d000000110000000c00000010000000
+    - id: 20
+      position: {x: 39, y: -29, z: 55.78}
+      character: W
+      children: 130000000e000000120000000f0000000c00000010000000
+    - id: 21
+      position: {x: 39, y: -39, z: 55.68}
+      character: O
+      children: 130000000e000000120000000f0000000d00000011000000
+    - id: 22
+      position: {x: 33, y: -34, z: 44.730003}
+      character: R
+      children: 120000000f000000150000000d000000110000000c0000001400000010000000
+    - id: 23
+      position: {x: 45, y: -34, z: 44.730003}
+      character: R
+      children: 130000000e000000150000000d000000110000000c0000001400000010000000
+    - id: 24
+      position: {x: 9, y: -12, z: 99.54}
+      character: T
+      children: 
+    - id: 25
+      position: {x: 9, y: -13, z: 88.53}
+      character: R
+      children: 18000000
+    - id: 26
+      position: {x: 9, y: -14, z: 77.52}
+      character: G
+      children: 1800000019000000
+    - id: 27
+      position: {x: 39, y: -12, z: 99.54}
+      character: S
+      children: 
+    - id: 28
+      position: {x: 39, y: -13, z: 88.53}
+      character: K
+      children: 1b000000
+    - id: 29
+      position: {x: 39, y: -14, z: 77.52}
+      character: A
+      children: 1b0000001c000000

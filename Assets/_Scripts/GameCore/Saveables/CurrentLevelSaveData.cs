@@ -44,7 +44,7 @@ public class CurrentLevelSaveData : Saveable<CurrentLevelSaveData>
         CurrentTotalScore = scoreController.CurrentTotalScore;
     }
 
-    public void ClearSavedLevelState()
+    public void ClearSavedLevelStateData()
     {
         TilesLeft = null;
         SubmittedWords = null;

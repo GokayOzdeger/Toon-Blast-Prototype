@@ -7,7 +7,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 public class AutoSolver 
 {
-    private const int MAXIMUM_NUMBER_OF_ITERATIONS = 1000000;
+    private const int MAXIMUM_NUMBER_OF_ITERATIONS = 20000;
 
     private string[] allWords;
     private TileController _tileController;
