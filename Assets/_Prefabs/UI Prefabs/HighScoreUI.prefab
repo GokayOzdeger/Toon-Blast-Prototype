@@ -471,7 +471,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6218592608300025122}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 0}
@@ -763,6 +763,7 @@ GameObject:
   - component: {fileID: 4648508367807292708}
   - component: {fileID: 4829426247478219846}
   - component: {fileID: 8915446418570027422}
+  - component: {fileID: 4026409825764245797}
   m_Layer: 5
   m_Name: NewHighScoreValueText
   m_TagString: Untagged
@@ -887,3 +888,16 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &4026409825764245797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8421511689822086566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f9c380102aa7e428693be9d3ea0d5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highScoreText: {fileID: 8915446418570027422}

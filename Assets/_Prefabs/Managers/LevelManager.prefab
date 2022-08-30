@@ -92,3 +92,4 @@ MonoBehaviour:
       wordScoreCanvasGroup: {fileID: 0}
       wordScoreText: {fileID: 0}
       totalScoreText: {fileID: 0}
+      highScoreText: {fileID: 0}

@@ -27,6 +27,11 @@ public class ScoreController
         HideWordScore();
         UpdateTotalScoreDisplay();
     }
+
+    public void ClearScoreController()
+    {
+        if (IsNewHighScore) References.highScoreText.SetHighScoreText(CurrentTotalScore);
+    }
     
     public void DisplayScoreForWord(string word)
     {
@@ -84,6 +89,7 @@ public class ScoreControllerReferences
     public CanvasGroup wordScoreCanvasGroup;
     public TMP_Text wordScoreText;
     public TMP_Text totalScoreText;
+    public HighScoreText highScoreText;
 }
 
 [System.Serializable]
