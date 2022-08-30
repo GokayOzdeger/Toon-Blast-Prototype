@@ -607,10 +607,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 963194227}
-    - target: {fileID: 1693632010886354000, guid: 2984e6392074db74283f09193e9c4ede, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6218592608300025122, guid: 2984e6392074db74283f09193e9c4ede, type: 3}
       propertyPath: m_Name
       value: HighScoreUI
