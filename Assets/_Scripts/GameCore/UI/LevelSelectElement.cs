@@ -25,7 +25,12 @@ public class LevelSelectElement : MonoBehaviour
     public void UpdateElement(LevelSaveData data, bool unlocked)
     {
         playButton.interactable = unlocked;
-        highscoreText.text = data.HighScore.ToString();
+
+        string highScoreString;
+        if (data.HighScore == 0) highScoreString = "-";
+        else highScoreString = data.HighScore.ToString();
+        
+        highscoreText.text = highScoreString;
     }
 
     public void OnClickPlay()
