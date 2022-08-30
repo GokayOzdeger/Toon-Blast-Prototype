@@ -126,7 +126,6 @@ public class LetterTile : ITile
             CompleteLastTween();
             _activeTween = TweenHelper.CurvingMoveTo(Monitor.transform, moveTo, onComplete, FLY_TO_WORDFORMER_DURATION);
         }
-        else onComplete(); // movements are instant when not using a monitor
     }
 
     public void GoToPool()
