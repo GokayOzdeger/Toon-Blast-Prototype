@@ -20,6 +20,9 @@ public class LevelManager : SingletonGameStateListener<LevelManager>
 
     public override void OnExitState()
     {
+        if (CurrentLevelController == null) return;
+        CurrentLevelController.ClearLevelControllers();
+        CurrentLevelSaveData.Data.ClearSavedLevelStateData();
         CurrentLevelController = null;
     }
     public void LevelCompleted()
@@ -29,13 +32,11 @@ public class LevelManager : SingletonGameStateListener<LevelManager>
         else nextState = levelSceneReferences.LevelSelectGameState;
 
         LevelSaveData.SaveLevelData(CurrentLevelController.Config.LevelTitle, CurrentLevelController.ScoreController.CurrentTotalScore);
-        CurrentLevelSaveData.Data.ClearSavedLevelStateData();
         EndLevelState(nextState);
     }
 
     private void EndLevelState(GameState nextState)
     {
-        CurrentLevelController.ClearLevelControllers();
         GameManager.Instance.ChangeGameState(nextState);
     }
 

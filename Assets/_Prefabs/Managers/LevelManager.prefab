@@ -1,0 +1,94 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2746816944398288118
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2746816944398288113}
+  - component: {fileID: 2746816944398288112}
+  m_Layer: 0
+  m_Name: LevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2746816944398288113
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2746816944398288118}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 922.4538, y: -456.12238, z: 413.55228}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2746816944398288112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2746816944398288118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff010bbd5d138e94e92d0b6be6d1a671, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: {fileID: 11400000, guid: 07d6d7921a1d0484c88e22946a149e3a, type: 2}
+  levelList:
+  - {fileID: 11400000, guid: 773845dfa745c944d8052605a80b3152, type: 2}
+  - {fileID: 11400000, guid: 764b0d39890b84f41b5b1d5db143220c, type: 2}
+  - {fileID: 11400000, guid: ebe52eaf9e02ddb4fa43a29930cabe3c, type: 2}
+  - {fileID: 11400000, guid: a475f2c7d5368c54a9d84c12b8a17b2d, type: 2}
+  - {fileID: 11400000, guid: 17dcb64f369003c4e9b4dd1cbc001460, type: 2}
+  - {fileID: 11400000, guid: 67994aad4eafee240bb13805b5994317, type: 2}
+  - {fileID: 11400000, guid: 8c91df1556412874fa9ac054e8e066f5, type: 2}
+  - {fileID: 11400000, guid: 32a72370b193f7d42a8f083e36f421fb, type: 2}
+  - {fileID: 11400000, guid: 55cf276e24868cc41976fb1b097e2f40, type: 2}
+  - {fileID: 11400000, guid: 8eda7cfa1dc04494da2f771e32f704a7, type: 2}
+  - {fileID: 11400000, guid: a4eada4593108ab48b23aa54ed7d46c8, type: 2}
+  - {fileID: 11400000, guid: fe25d1cd34b65694eae839777dcb1abe, type: 2}
+  - {fileID: 11400000, guid: bd5a99ed8e68eca4db80300a94d9e529, type: 2}
+  - {fileID: 11400000, guid: 3943f2c1ea89bab4d9e9907ac6a7bcb9, type: 2}
+  - {fileID: 11400000, guid: 5459aa7a9456fd74c8fc87e82bb79a3c, type: 2}
+  - {fileID: 11400000, guid: f4504a11a1cb4f24ca85ec445267fee4, type: 2}
+  - {fileID: 11400000, guid: 7779e1138e3e2e846b3184aee0e65453, type: 2}
+  - {fileID: 11400000, guid: 73748bbf4413c6642963373ca11bb31c, type: 2}
+  - {fileID: 11400000, guid: ea1ea8375bcad234a91c5fadb43633c7, type: 2}
+  - {fileID: 11400000, guid: 4ba3108ef38b16440922c6886f44d420, type: 2}
+  levelSettings:
+    tileManagerSettings:
+      percentageOfTileAreaOnScreen: {x: 30, y: 35}
+      tileSizeMultiplier: 0.335
+      tileAreaOffset: {x: 0, y: 0}
+    wordControllerSettings:
+      wordFormingAreaExtents: {x: 20, y: 15}
+      maxLetterCount: 7
+    scoreControllerSettings:
+      totalScoreText: Total Score
+      wordScoreText: Word Score
+  levelSceneReferences:
+    highScoreGameState: {fileID: 11400000, guid: 1846576caece98d418ef89df959a383c, type: 2}
+    levelSelectGameState: {fileID: 11400000, guid: ec8d36dbdf04fa944883e7a563415181, type: 2}
+    tileManagerReferences:
+      tilePrefab: {fileID: 8357882950893323063, guid: 1a267c33e285fee4fbcfb798432135c0, type: 3}
+      tileAreaCenter: {fileID: 0}
+    wordControllerReferences:
+      canvasScaler: {fileID: 0}
+      wordFormingAreaRect: {fileID: 0}
+      submitWordButton: {fileID: 0}
+      undoButton: {fileID: 0}
+    scoreControllerReferences:
+      wordScoreCanvasGroup: {fileID: 0}
+      wordScoreText: {fileID: 0}
+      totalScoreText: {fileID: 0}
