@@ -9,10 +9,10 @@ public class ScoreController
 {
     public ScoreControllerReferences References { get; set; }
     public ScoreControllerSettings Settings { get; set; }
-    public bool IsNewHighScore => _currentTotalScore > 0;
+    public bool IsNewHighScore => CurrentTotalScore > 0;
+    public int CurrentTotalScore { get; private set; }
 
     private int _currentWordScore;
-    private int _currentTotalScore;
 
     public ScoreController(ScoreControllerReferences references, ScoreControllerSettings settings)
     {
@@ -37,12 +37,12 @@ public class ScoreController
     }
     public void UpdateTotalScoreDisplay()
     {
-        References.totalScoreText.text = Settings.totalScoreText + " " + _currentTotalScore.ToString();
+        References.totalScoreText.text = Settings.totalScoreText + " " + CurrentTotalScore.ToString();
     }
 
     public void WordSubmitted()
     {
-        _currentTotalScore += _currentWordScore;
+        CurrentTotalScore += _currentWordScore;
         HideWordScore();
         UpdateTotalScoreDisplay();
     }

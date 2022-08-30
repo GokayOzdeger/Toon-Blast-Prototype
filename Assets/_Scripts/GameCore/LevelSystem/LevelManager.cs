@@ -12,10 +12,6 @@ public class LevelManager : SingletonGameStateListener<LevelManager>
     public LevelConfig[] LevelList => levelList;
     public LevelConfig ChosenLevelConfig { get; private set; }
 
-    private void Start()
-    {
-        levelList[0].AutoSolve();
-    }
 
     public override void OnEnterState()
     {
@@ -25,6 +21,11 @@ public class LevelManager : SingletonGameStateListener<LevelManager>
     public override void OnExitState()
     {
         //
+    }
+
+    public void SaveLevelState()
+    {
+        LevelSaveData.Data.SaveLevelState(CurrentLevelController);
     }
 
     public void CreateLevel(LevelConfig config)

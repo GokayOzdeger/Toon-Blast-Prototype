@@ -39,7 +39,7 @@ public class AutoSolver
 
     private void SetupControllers()
     {
-        _wordController.SetupWordControllerAutoSolver(_tileController);
+        _wordController.StartWordControllerAutoSolver(_tileController);
         _tileController.SetupTileControllerAutoSolver(_wordController);
     }
 

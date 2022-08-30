@@ -5,28 +5,50 @@ using UnityEngine;
 
 public class LevelSaveData : Saveable<LevelSaveData>
 {
-    public bool HasLevelSaved => SavedGrid != null;
+    public bool HasLevelSaved => TilesLeft != null;
 
-    // GridController Save Data
-    public string[] SavedGrid;
+    // TileController Save Data
+    public List<TileData> TilesLeft;
 
-    // MovesController Save Data
-    public int MovesLeft;
+    // WordController Save Data
+    private List<string> SubmittedWords;
 
-    // GridGoalController Save Data
-    public int[] GoalAmountsLeft;
+    // ScoreController Save Data
+    public int CurrentTotalScore;
 
     public void SaveLevelState(LevelController controller)
     {
-
+        SaveTileController(controller.TileController);
+        SaveWordController(controller.WordController);
+        SaveScoreController(controller.ScoreController);
         Save();
+    }
+
+    private void SaveTileController(TileController tileController)
+    {
+        TilesLeft = new List<TileData>();
+        foreach(ITile tile in tileController.AllTiles)
+        {
+            if (tile.IsRemovedFromPlay) continue;
+            TilesLeft.Add(tile.TileData);
+        }
+    }
+
+    private void SaveWordController(WordController wordController)
+    {
+        SubmittedWords = wordController.SubmittedWords;
+    }
+
+    private void SaveScoreController(ScoreController scoreController)
+    {
+        CurrentTotalScore = scoreController.CurrentTotalScore;
     }
 
     public void ClearSavedLevelState()
     {
-        SavedGrid = null;
-        MovesLeft = 0;
-        GoalAmountsLeft = null;
+        TilesLeft = null;
+        SubmittedWords = null;
+        CurrentTotalScore = 0;
         Save();
     }
 

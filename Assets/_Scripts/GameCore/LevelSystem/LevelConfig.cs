@@ -19,14 +19,6 @@ public class LevelConfig : ScriptableObject
     #region EDITOR
 #if UNITY_EDITOR
 
-    [EasyButtons.Button("Cache Possible Words In Level")]
-    private void FindAllPossibleWords()
-    {
-        TextAsset allWordsRaw = Resources.Load("allWords.txt") as TextAsset;
-        string[] AllWords = allWordsRaw.text.Split('\n');
-        // use auto solver to find all possible words
-    }
-
     [EasyButtons.Button("Load From Json")]
     private void LoadFromJson(TextAsset json)
     {

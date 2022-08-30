@@ -32,7 +32,7 @@ public class LevelController
 
         ScoreController.SetupScoreController();
         TileController.SetupTileController(WordController);
-        WordController.SetupWordController(TileController, ScoreController);
+        WordController.StartWordController(TileController, ScoreController);
     }
 
     public void LevelFailed()

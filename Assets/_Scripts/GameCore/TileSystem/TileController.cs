@@ -73,9 +73,12 @@ public class TileController
 
     public ITile GetTileWithId(int id)
     {
-        foreach (ITile tile in AllTiles) 
-            if (tile.TileData.Id == id) 
+        foreach (ITile tile in AllTiles)
+        {
+            if (tile.IsRemovedFromPlay) continue;
+            if (tile.TileData.Id == id)
                 return tile;
+        }
         return null;
     }
 

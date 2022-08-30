@@ -16,6 +16,7 @@ public class LetterTile : ITile
     private TileData _tileData;
     private Tween _activeTween;
     private ITile[] _childrenTiles;
+    private bool _removedFromPlay;
 
     public int Locks { get; set; } = 0;
     public LetterMonitor Monitor => _monitor;
@@ -39,6 +40,8 @@ public class LetterTile : ITile
     public bool Clickable => Locks == 0 && InTileArea;
     public bool InTileArea { get; private set; } = true;
 
+    public bool IsRemovedFromPlay => _removedFromPlay;
+
     public LetterTile(TileController tileController, WordController wordController, LetterMonitor monitor, TileData data)
     {
         _wordController = wordController;
@@ -50,6 +53,7 @@ public class LetterTile : ITile
 
     public void LockTile()
     {
+        if (IsRemovedFromPlay) return;
         if (!InTileArea) return;
         Locks++;
         if (Locks == 1) UpdateMonitor();
@@ -57,6 +61,7 @@ public class LetterTile : ITile
 
     public void UnlockTile()
     {
+        if (IsRemovedFromPlay) return;
         if (!InTileArea) return;
         Locks--;
         if (Locks == 0) UpdateMonitor();
@@ -128,13 +133,13 @@ public class LetterTile : ITile
         }
     }
 
-    public void GoToPool()
+    public void RemoveFromPlay()
     {
-        Monitor?.SendToPool(0);
+        _removedFromPlay = true;
     }
 
-    public void GoToPool(float delay)
+    public void RemoveVisiuals()
     {
-        Monitor?.SendToPool(delay);
+        Monitor?.SendToPool(0);
     }
 }
