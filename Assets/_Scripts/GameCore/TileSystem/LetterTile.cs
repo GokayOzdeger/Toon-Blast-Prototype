@@ -141,6 +141,7 @@ public class LetterTile : ITile
     public void RemoveVisiuals()
     {
         if (!UsingMonitor) return;
+        CompleteLastTween();
         Monitor.SendToPool(0);
     }
 }

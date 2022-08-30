@@ -9,7 +9,7 @@ namespace SaveSystem
     /// Saveable is a basic save system, each saveable class acts as a signleton.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class Saveable<T> where T : new()
+    public abstract class Saveable<T> where T : class, new()
     {
         private static T _data;
         public static T Data
@@ -32,7 +32,7 @@ namespace SaveSystem
             SaveHandler.Delete(typeof(T).FullName);
         }
 
-        private static T LoadData()
+        private static T LoadData() 
         {
             T loadedData = SaveHandler.Load<T>(typeof(T).FullName);
             if (loadedData == null)

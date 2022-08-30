@@ -7,6 +7,7 @@ public abstract class MonoGameStateListener : MonoBehaviour
 
     protected virtual void Awake()
     {
+        if (state == null) Debug.LogError("StateListener " + gameObject.name+" missing GameState !", gameObject);
         GameManager.Instance.OnGameStateChanged.AddListener(OnGameStateChanged);
     }
 

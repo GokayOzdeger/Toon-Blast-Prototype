@@ -30,30 +30,8 @@ public class LevelController
         WordController = new WordController(References.WordControllerReferences, Settings.WordControllerSettings, Config.WordControllerConfig);
         ScoreController = new ScoreController(References.ScoreControllerReferences, Settings.ScoreControllerSettings);
 
-        ScoreController.SetupScoreController();
+        ScoreController.SetupScoreController(Config.LevelTitle);
         TileController.SetupTileController(WordController);
         WordController.StartWordController(TileController, ScoreController);
-    }
-
-    public void LevelFailed()
-    {
-        LevelSaveData.Data.ClearSavedLevelState();
-    }
-
-    public void LevelCompleted()
-    {
-        GameManagerSaveData.Data.ProgressLevel();
-    }
-
-    private void SaveLevelState()
-    {
-        LevelSaveData.Data.SaveLevelState(this);
-    }
-    
-    private void LevelEnded()
-    {
-        // clear leftovers from old scene
-        if (ScoreController.IsNewHighScore) GameManager.Instance.ChangeGameState(References.HighScoreGameState);
-        else GameManager.Instance.ChangeGameState(References.LevelSelectGameState);
     }
 }

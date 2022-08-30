@@ -222,6 +222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f14e39493b537dc47929795f3c4db694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: {fileID: 11400000, guid: ec8d36dbdf04fa944883e7a563415181, type: 2}
   scrollRectContentRect: {fileID: 39109050031836805}
   listElementPrefab: {fileID: 229127702866617718, guid: 9ac638fb5a7ac8a44ba7c9cd014cdfb8, type: 3}
 --- !u!1 &5026961287674820542

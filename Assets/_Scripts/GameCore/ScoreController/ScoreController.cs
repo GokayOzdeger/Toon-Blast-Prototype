@@ -9,10 +9,11 @@ public class ScoreController
 {
     public ScoreControllerReferences References { get; set; }
     public ScoreControllerSettings Settings { get; set; }
-    public bool IsNewHighScore => CurrentTotalScore > 0;
+    public bool IsNewHighScore => CurrentTotalScore >= LevelSaveData.Data(_levelTitle).HighScore;
     public int CurrentTotalScore { get; private set; }
 
     private int _currentWordScore;
+    private string _levelTitle;
 
     public ScoreController(ScoreControllerReferences references, ScoreControllerSettings settings)
     {
@@ -20,8 +21,9 @@ public class ScoreController
         Settings = settings;
     }
     
-    public void SetupScoreController()
+    public void SetupScoreController(string levelTitle)
     {
+        _levelTitle = levelTitle;
         HideWordScore();
         UpdateTotalScoreDisplay();
     }
@@ -65,6 +67,15 @@ public class ScoreController
         Debug.LogError($"Can't find '{character}' in score list !");
         return 0;
     }
+
+    #region EDITOR
+
+    public void SetCurrentScoreToHighScore()
+    {
+        _currentWordScore = LevelSaveData.Data(_levelTitle).HighScore;
+    }
+
+    #endregion
 }
 
 [System.Serializable]

@@ -31,6 +31,7 @@ public class WordFinder : MonoBehaviour
 
     private bool StartWordSearch(TreeNode<ITile> letterTreeNode)
     {
+        bool foundWord = false;
         SetUsingMonitorToAllTiles(false);
         // cache than undo any moves made (enables editor use when letters are present in wordformer)
         List<ITile> tilesInWordFormer = new List<ITile>(_wordController.TilesInWordFormer);
@@ -41,7 +42,11 @@ public class WordFinder : MonoBehaviour
         {
             if (!IsTileLegal(letterTreeNode, tile)) continue;
             TreeNode<ITile> newNode = letterTreeNode.AddChild(tile);
-            if (SearchWord(newNode) == FindWordResult.WordFound) break;
+            if (SearchWord(newNode) == FindWordResult.WordFound) 
+            {
+                foundWord = true;
+                break;
+            }
         }
 
         // redo any moves made in cache (enables editor use when letters are present in wordformer)
@@ -51,9 +56,9 @@ public class WordFinder : MonoBehaviour
         if (_numberOfIterationsDone == MAXIMUM_NUMBER_OF_ITERATIONS) // fail safe incase runtime word finding takes too long
         {
             Debug.LogError("Too Word Finder Iteratiions Made !");
-            return false;
+            return foundWord;
         }
-        return true;
+        return foundWord;
     }
 
     private FindWordResult SearchWord(TreeNode<ITile> letterTreeNode)

@@ -31,11 +31,11 @@ namespace SaveSystem
             }
         }
 
-        public static T Load<T>(string saveKey)
+        public static T Load<T>(string saveKey) where T : class
         {
             string fileName = GetJsonNameFromKeyName(saveKey);
             string fullPath = Path.Combine(Application.persistentDataPath, SaveFolderName, fileName);
-            T loadedData = default(T);
+            T loadedData = null;
             if (File.Exists(fullPath))
             {
                 try
@@ -53,7 +53,7 @@ namespace SaveSystem
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError("Error loading data: " + e.Message);
+                    Debug.LogError($"Error loading data at {fullPath}, Message: " + e.Message);
                     throw;
                 }
             }

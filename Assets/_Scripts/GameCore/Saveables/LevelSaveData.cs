@@ -3,53 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelSaveData : Saveable<LevelSaveData>
+public class LevelSaveData : SaveableWithKey<LevelSaveData>
 {
-    public bool HasLevelSaved => TilesLeft != null;
+    public bool IsCompleted => HighScore != 0;
 
-    // TileController Save Data
-    public List<TileData> TilesLeft;
+    public string LevelTitle;
+    public int HighScore;
 
-    // WordController Save Data
-    private List<string> SubmittedWords;
-
-    // ScoreController Save Data
-    public int CurrentTotalScore;
-
-    public void SaveLevelState(LevelController controller)
+    public static void SaveLevelData(string levelTitle, int highScore)
     {
-        SaveTileController(controller.TileController);
-        SaveWordController(controller.WordController);
-        SaveScoreController(controller.ScoreController);
-        Save();
+        LevelSaveData data = Data(levelTitle);
+        data.LevelTitle = levelTitle;
+        data.HighScore = highScore;
+        Save(levelTitle);
     }
-
-    private void SaveTileController(TileController tileController)
-    {
-        TilesLeft = new List<TileData>();
-        foreach(ITile tile in tileController.AllTiles)
-        {
-            if (tile.IsRemovedFromPlay) continue;
-            TilesLeft.Add(tile.TileData);
-        }
-    }
-
-    private void SaveWordController(WordController wordController)
-    {
-        SubmittedWords = wordController.SubmittedWords;
-    }
-
-    private void SaveScoreController(ScoreController scoreController)
-    {
-        CurrentTotalScore = scoreController.CurrentTotalScore;
-    }
-
-    public void ClearSavedLevelState()
-    {
-        TilesLeft = null;
-        SubmittedWords = null;
-        CurrentTotalScore = 0;
-        Save();
-    }
-
 }

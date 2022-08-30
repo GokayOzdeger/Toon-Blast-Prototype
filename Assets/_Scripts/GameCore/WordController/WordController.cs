@@ -19,7 +19,6 @@ public class WordController
     private ScoreController _scoreController;
     private WordSearchController _wordSearchController;
     private WordFinder _wordFinder;
-    private int _tilesInMovement = 0;
     private int _nextLetterIndex = 0;
 
     private List<Vector3> _letterPositions = new List<Vector3>();
@@ -62,11 +61,6 @@ public class WordController
         ResizeWordFormingArea();
     }
 
-    public void StartWordControllerAutoSolver(TileController tileController)
-    {
-        _tileController = tileController;
-    }
-
     public void AddTileToWord(ITile tile)
     {
         if (_nextLetterIndex == Settings.maxLetterCount) return;
@@ -77,20 +71,9 @@ public class WordController
         Vector2 positionToMoveTo2D = _letterPositions[_nextLetterIndex];
         Vector3 positionToMoveTo3D = new Vector3(positionToMoveTo2D.x, positionToMoveTo2D.y, tile.TileData.Position.z);
 
-        _tilesInMovement++;
         _nextLetterIndex++;
         tile.LeaveTileArea(positionToMoveTo3D, OnTileMovementCompleted);
         UpdateUndoButtonState();
-    }
-
-    public void AddTileToWordAutoSolver(ITile tile)
-    {
-        if (_nextLetterIndex == Settings.maxLetterCount) return;
-        CurrentWord += tile.TileData.Character.ToLowerInvariant();
-        TilesInWordFormer.Add(tile);
-
-        _nextLetterIndex++;
-        tile.LeaveTileArea(Vector3.zero, null);
     }
 
     public bool CheckHasPossibleWord()
@@ -115,7 +98,6 @@ public class WordController
 
     private void OnTileMovementCompleted()
     {
-        _tilesInMovement--;
         CheckWordIsSubmitable();
     }
 
@@ -167,15 +149,14 @@ public class WordController
     private void UndoLastLetter()
     {
         if (_nextLetterIndex == 0) return;
+        _nextLetterIndex--;
+
         int lastIndex = TilesInWordFormer.Count - 1;
         ITile tileToUndo = TilesInWordFormer[lastIndex];
 
         TilesInWordFormer.RemoveAt(lastIndex);
         CurrentWord = CurrentWord.Remove(lastIndex);
         _wordSearchController.RemoveCursors(1);
-
-        _nextLetterIndex--;
-        _tilesInMovement++;
 
         tileToUndo.ReturnToTileArea(null);
         tileToUndo.LockChildren();
@@ -184,46 +165,13 @@ public class WordController
         CheckWordIsSubmitable();
     }
 
-    public void UndoAutoSolver()
-    {
-        if (_nextLetterIndex == 0) return;
-        int lastIndex = TilesInWordFormer.Count - 1;
-        ITile tileToUndo = TilesInWordFormer[lastIndex];
-
-        TilesInWordFormer.RemoveAt(lastIndex);
-        CurrentWord = CurrentWord.Remove(lastIndex);
-        _nextLetterIndex--;
-        _tilesInMovement++;
-
-        tileToUndo.ReturnToTileArea(null);
-        tileToUndo.LockChildren();
-    }
-
     private void SubmitWord()
     {
         _scoreController.WordSubmitted();
         SubmittedWords.Add(CurrentWord);
         RemoveTiles();
         ResetWord();
-
-        // save game after each submit
-        LevelManager.Instance.SaveLevelState();
-    }
-
-    public void SubmitWordAutoSolver()
-    {
-        _submitInfos.Push(new SubmitInfo(new List<ITile>(TilesInWordFormer), CurrentWord));
-        TilesInWordFormer.Clear();
-        CurrentWord = "";
-        _nextLetterIndex = 0;
-    }
-
-    public void UndoSubmitAutoSolver()
-    {
-        SubmitInfo info = _submitInfos.Pop();
-        TilesInWordFormer = info.tilesUsed;
-        CurrentWord = info.wordSubmitted;
-        _nextLetterIndex = CurrentWord.Length;
+        CheckPossibleWordsLeft();
     }
 
     private void ResetWord()
@@ -251,7 +199,7 @@ public class WordController
             Sequence tween = DOTween.Sequence();
             tween.AppendInterval(currentExtraDelay);
             tween.Append(TweenHelper.Jump(TilesInWordFormer[i].Monitor.transform, null, tileSize / 2, jumpAnimDuration));
-            tween.Append(TweenHelper.ShrinkDisappear(TilesInWordFormer[i].Monitor.transform, TilesInWordFormer[i].RemoveFromPlay, shrinkDuration));
+            tween.Append(TweenHelper.ShrinkDisappear(TilesInWordFormer[i].Monitor.transform, TilesInWordFormer[i].RemoveVisiuals, shrinkDuration));
         }
     }
 
@@ -264,11 +212,77 @@ public class WordController
         CheckWordIsSubmitable();
     }
 
+    private void CheckPossibleWordsLeft()
+    {
+        bool hasPossibleWords;
+        if (_tileController.AllTiles.Count < 2) hasPossibleWords = false;
+        else hasPossibleWords = _wordFinder.CheckPossibleWordExists();
+
+        if (hasPossibleWords)
+        {
+            // save game after submit if game wont end
+            LevelManager.Instance.SaveLevelState();
+            return;
+        }
+
+        LevelManager.Instance.LevelCompleted();
+    }
+
+    #region AUTO SOLVER METHODS
+
+    public void StartWordControllerAutoSolver(TileController tileController)
+    {
+        _tileController = tileController;
+    }
+    
+    public void AddTileToWordAutoSolver(ITile tile)
+    {
+        if (_nextLetterIndex == Settings.maxLetterCount) return;
+        CurrentWord += tile.TileData.Character.ToLowerInvariant();
+        TilesInWordFormer.Add(tile);
+
+        _nextLetterIndex++;
+        tile.LeaveTileArea(Vector3.zero, null);
+    }
+
+    public void SubmitWordAutoSolver()
+    {
+        _submitInfos.Push(new SubmitInfo(new List<ITile>(TilesInWordFormer), CurrentWord));
+        TilesInWordFormer.Clear();
+        CurrentWord = "";
+        _nextLetterIndex = 0;
+    }
+
+    public void UndoSubmitAutoSolver()
+    {
+        SubmitInfo info = _submitInfos.Pop();
+        TilesInWordFormer = info.tilesUsed;
+        CurrentWord = info.wordSubmitted;
+        _nextLetterIndex = CurrentWord.Length;
+    }
+
+    public void UndoAutoSolver()
+    {
+        if (_nextLetterIndex == 0) return;
+        _nextLetterIndex--;
+
+        int lastIndex = TilesInWordFormer.Count - 1;
+        ITile tileToUndo = TilesInWordFormer[lastIndex];
+
+        TilesInWordFormer.RemoveAt(lastIndex);
+        CurrentWord = CurrentWord.Remove(lastIndex);
+
+        tileToUndo.ReturnToTileArea(null);
+        tileToUndo.LockChildren();
+    }
+
+    #endregion
+
     public class SubmitInfo
     {
         public string wordSubmitted;
         public List<ITile> tilesUsed;
-        
+
         public SubmitInfo(List<ITile> tilesUsed, string wordSubmitted)
         {
             this.wordSubmitted = wordSubmitted;

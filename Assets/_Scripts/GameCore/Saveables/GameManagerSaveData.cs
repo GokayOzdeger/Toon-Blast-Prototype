@@ -6,18 +6,19 @@ using UnityEngine;
 
 public class GameManagerSaveData : Saveable<GameManagerSaveData>
 {
-    [SerializeField] private int currentLevelIndex = 0;
-    public int CurrentLevelIndex => currentLevelIndex;
+    [SerializeField] private List<LevelSaveData> levelSaveDatas = new List<LevelSaveData>();
 
-    public void ProgressLevel()
+    public List<LevelSaveData> LevelSaveDatas => levelSaveDatas;
+
+    public void SaveLevelData()
     {
-        currentLevelIndex++;
-        Save();
+
     }
 
-    public void ResetLevelIndex()
+
+    public class LevelSaveData : SaveableWithKey<LevelSaveData>
     {
-        currentLevelIndex = 0;
-        Save();
+        public string levelTitle;
+        public int highScore;
     }
 }

@@ -35,13 +35,6 @@ public class TileController
         LockChildrenTiles();
     }
 
-    public void SetupTileControllerAutoSolver(WordController wordController)
-    {
-        _wordController = wordController;
-        SpawnTilesAutoSolver();
-        LockChildrenTiles();
-    }
-
     private void SpawnTiles()
     {
         foreach (TileData tileData in Config.TileDatas)
@@ -62,15 +55,6 @@ public class TileController
         }
     }
 
-    private void SpawnTilesAutoSolver()
-    {
-        foreach (TileData tileData in Config.TileDatas)
-        {
-            LetterTile letter = new LetterTile(this, _wordController, null, tileData);
-            AllTiles.Add(letter);
-        }
-    }
-
     public ITile GetTileWithId(int id)
     {
         foreach (ITile tile in AllTiles)
@@ -80,6 +64,16 @@ public class TileController
                 return tile;
         }
         return null;
+    }
+
+    public void ClearAllTiles()
+    {
+        foreach (ITile tile in AllTiles)
+        {
+            if (tile.IsRemovedFromPlay) continue;
+            tile.RemoveVisiuals();
+        }
+        AllTiles = null;
     }
 
     private void CalculateTileDistanceMultiplier()
@@ -121,6 +115,26 @@ public class TileController
     {
         foreach(ITile tile in AllTiles) tile.LockChildren();
     }
+
+    #region AUTO SOLVER METHODS
+
+    public void SetupTileControllerAutoSolver(WordController wordController)
+    {
+        _wordController = wordController;
+        SpawnTilesAutoSolver();
+        LockChildrenTiles();
+    }
+
+    private void SpawnTilesAutoSolver()
+    {
+        foreach (TileData tileData in Config.TileDatas)
+        {
+            LetterTile letter = new LetterTile(this, _wordController, null, tileData);
+            AllTiles.Add(letter);
+        }
+    }
+
+    #endregion
 }
 
 [System.Serializable]
