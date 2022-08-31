@@ -50,6 +50,7 @@ public class CurrentLevelSaveData : Saveable<CurrentLevelSaveData>
     public void ClearSavedLevelStateData()
     {
         HasSavedLevel = false;
+        LevelTitle = null;
         TilesLeft = null;
         SubmittedWords = null;
         CurrentTotalScore = 0;
