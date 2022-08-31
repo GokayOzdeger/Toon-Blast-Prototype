@@ -68,9 +68,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4ba3108ef38b16440922c6886f44d420, type: 2}
   levelSettings:
     tileManagerSettings:
-      percentageOfTileAreaOnScreen: {x: 80, y: 40}
+      percentageOfTileAreaOnScreen: {x: 80, y: 34}
       tileSizeMultiplier: 8
-      tileAreaOffset: {x: 0, y: -140}
+      tileAreaOffset: {x: 0, y: -220}
     wordControllerSettings:
       wordFormingAreaExtents: {x: 20, y: 15}
       maxLetterCount: 7
@@ -88,6 +88,7 @@ MonoBehaviour:
       wordFormingAreaRect: {fileID: 0}
       submitWordButton: {fileID: 0}
       undoButton: {fileID: 0}
+      submittedWordsText: {fileID: 0}
     scoreControllerReferences:
       wordScoreCanvasGroup: {fileID: 0}
       wordScoreText: {fileID: 0}

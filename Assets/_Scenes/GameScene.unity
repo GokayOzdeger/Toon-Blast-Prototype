@@ -503,7 +503,7 @@ PrefabInstance:
       objectReference: {fileID: 963194227}
     - target: {fileID: 1874593893978874606, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1874593893978874607, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
       propertyPath: m_Pivot.x
@@ -593,6 +593,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelUI
       objectReference: {fileID: 0}
+    - target: {fileID: 3205760878716972269, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 12.934021
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
 --- !u!225 &1874593892422404383 stripped
@@ -600,6 +604,17 @@ CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 4863499594925655569, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
   m_PrefabInstance: {fileID: 1874593892422404382}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1874593892422404384 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8674815494538189910, guid: b95c0cccbea2d184095ee8393c233cf7, type: 3}
+  m_PrefabInstance: {fileID: 1874593892422404382}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2190161032346697313
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -747,6 +762,10 @@ PrefabInstance:
       propertyPath: levelSceneReferences.wordControllerReferences.submitWordButton
       value: 
       objectReference: {fileID: 2018202409}
+    - target: {fileID: 2746816944398288112, guid: e843d765731d47c4b8b4dc28ed6e71fd, type: 3}
+      propertyPath: levelSceneReferences.wordControllerReferences.submittedWordsText
+      value: 
+      objectReference: {fileID: 1874593892422404384}
     - target: {fileID: 2746816944398288112, guid: e843d765731d47c4b8b4dc28ed6e71fd, type: 3}
       propertyPath: levelSceneReferences.wordControllerReferences.wordFormingAreaRect
       value: 
@@ -1127,6 +1146,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 963194227}
+    - target: {fileID: 8149127824275634124, guid: 98e8b8e073f156545a930e1f3c32a1d3, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8149127824275634125, guid: 98e8b8e073f156545a930e1f3c32a1d3, type: 3}
       propertyPath: m_Pivot.x
       value: 0

@@ -36,14 +36,14 @@ public class TileController
         LockChildrenTiles();
     }
 
-    public void LoadTileController(WordController wordController, List<TileData> tilesLeft)
+    public void LoadTileController(WordController wordController, List<int> tilesLeftIds)
     {
         _wordController = wordController;
 
         CalculateTileArea();
         CalculateTileDistanceMultiplier();
 
-        SpawnTiles(tilesLeft.ToArray());
+        SpawnTiles(GetTileDatasFromId(tilesLeftIds));
         LockChildrenTiles();
     }
 
@@ -89,6 +89,21 @@ public class TileController
         AllTiles = null;
     }
 
+    private TileData[] GetTileDatasFromId(List<int> tileIds)
+    {
+        TileData[] tileDatas = new TileData[tileIds.Count];
+        int arrayIndexToAssign = 0;
+        for (int i = 0; i < Config.TileDatas.Length; i++)
+        {
+            if (tileIds.Contains(Config.TileDatas[i].Id))
+            {
+                tileDatas[arrayIndexToAssign] = Config.TileDatas[i];
+                arrayIndexToAssign++;
+            }
+        }
+        return tileDatas;
+    }
+
     private void CalculateTileDistanceMultiplier()
     {
         CalculateRectOfTileData();
@@ -99,7 +114,7 @@ public class TileController
         Debug.Log(_tileAreaRect.width + "/" + _tileDataRect.width);
         Debug.Log("H: " + heightDistanceMultiplier + " / W:" + widthDistanceMultiplier);
         TileDistanceMultiplier = Mathf.Min(heightDistanceMultiplier, widthDistanceMultiplier);
-        float maxTileDistanceMultiplier = ((Screen.width - 100) / _wordController.MaxWordLength) / Settings.tileSizeMultiplier; // Maximum tiledistance multiplier allowed to make wordformer fit to screen
+        float maxTileDistanceMultiplier = (Screen.width / (_wordController.MaxWordLength+1)) / Settings.tileSizeMultiplier; // Maximum tiledistance multiplier allowed to make wordformer fit to screen
         if (TileDistanceMultiplier > maxTileDistanceMultiplier) TileDistanceMultiplier = maxTileDistanceMultiplier;
         Debug.Log("Distance Multiplier: " + TileDistanceMultiplier);
     }

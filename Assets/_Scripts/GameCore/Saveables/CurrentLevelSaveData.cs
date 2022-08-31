@@ -8,7 +8,7 @@ public class CurrentLevelSaveData : Saveable<CurrentLevelSaveData>
     public bool HasSavedLevel;
 
     // TileController Save Data
-    public List<TileData> TilesLeft;
+    public List<int> TilesLeft;
 
     // WordController Save Data
     public List<string> SubmittedWords;
@@ -27,11 +27,11 @@ public class CurrentLevelSaveData : Saveable<CurrentLevelSaveData>
 
     private void SaveTileController(TileController tileController)
     {
-        TilesLeft = new List<TileData>();
+        TilesLeft = new List<int>();
         foreach(ITile tile in tileController.AllTiles)
         {
             if (tile.IsRemovedFromPlay) continue;
-            TilesLeft.Add(tile.TileData);
+            TilesLeft.Add(tile.TileData.Id);
         }
     }
 
