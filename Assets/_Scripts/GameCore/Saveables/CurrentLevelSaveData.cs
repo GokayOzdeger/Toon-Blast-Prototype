@@ -6,6 +6,7 @@ using UnityEngine;
 public class CurrentLevelSaveData : Saveable<CurrentLevelSaveData>
 {
     public bool HasSavedLevel;
+    public string LevelTitle;
 
     // TileController Save Data
     public List<int> TilesLeft;
@@ -18,6 +19,7 @@ public class CurrentLevelSaveData : Saveable<CurrentLevelSaveData>
 
     public void SaveLevelState(LevelController controller)
     {
+        LevelTitle = controller.Config.LevelTitle;
         SaveTileController(controller.TileController);
         SaveWordController(controller.WordController);
         SaveScoreController(controller.ScoreController);

@@ -109,7 +109,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1874593893978874611}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 0}
@@ -418,6 +418,10 @@ PrefabInstance:
     - target: {fileID: 4807499713478994474, guid: 480face16a2ea0442b40f24be600425e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8415371981305362551, guid: 480face16a2ea0442b40f24be600425e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 12.934021
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 480face16a2ea0442b40f24be600425e, type: 3}

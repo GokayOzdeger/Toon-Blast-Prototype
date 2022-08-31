@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class LevelManager : SingletonGameStateListener<LevelManager>
@@ -12,6 +13,10 @@ public class LevelManager : SingletonGameStateListener<LevelManager>
     public LevelConfig[] LevelList => levelList;
     public LevelConfig ChosenLevelConfig { get; private set; }
 
+    private void Start()
+    {
+        if (CurrentLevelSaveData.Data.HasSavedLevel) LoadLevel();   
+    }
 
     public override void OnEnterState()
     {
@@ -49,6 +54,12 @@ public class LevelManager : SingletonGameStateListener<LevelManager>
     public void CreateLevel(LevelConfig config)
     {
         ChosenLevelConfig = config;
+        GameManager.Instance.ChangeGameState(state);
+    }
+
+    private void LoadLevel()
+    {
+        ChosenLevelConfig = LevelList.First((config) => config.LevelTitle == CurrentLevelSaveData.Data.LevelTitle);
         GameManager.Instance.ChangeGameState(state);
     }
 

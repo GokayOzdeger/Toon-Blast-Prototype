@@ -13,10 +13,10 @@ public class WordSearchController
     {
         _maxWordLength = maxWordLength;
         _cursorLocations.Push(0);
-        if (AllWords == null) LoadAllWordsFromText();
     }
 
-    private void LoadAllWordsFromText()
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    private static void LoadAllWordsFromText()
     {
         TextAsset allWordsTextAsset = Resources.Load<TextAsset>("allWords");
         string content = allWordsTextAsset.text;
@@ -33,7 +33,7 @@ public class WordSearchController
         for (int i = cursor; i < AllWords.Length; i++)
         {
             if (AllWords[i].Length > _maxWordLength) continue;
-            int compareResult = string.Compare(word, AllWords[i]);
+            int compareResult = string.Compare(word, AllWords[i], System.StringComparison.InvariantCulture);
             if (compareResult == 1) continue;
             _cursorLocations.Push(i);
             return;
