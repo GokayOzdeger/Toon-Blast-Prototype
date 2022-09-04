@@ -1,33 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Utilities;
+using EasyButtons;
 using SaveSystem;
+using UnityEngine;
 using UnityEngine.Events;
+using Utilities;
 
 public class GameManager : AutoSingleton<GameManager>
 {
     [SerializeField] private GameState startingGameState;
 
-    public GameState GameState { get; private set; }
-    public UnityEvent<GameState> OnGameStateChanged { get; private set; } = new UnityEvent<GameState>();
+    public UnityEvent<GameState> OnGameStateChanged { get; } = new();
 
 
     private void Start()
     {
-        ChangeGameState(startingGameState); 
+        ChangeGameState(startingGameState);
     }
 
     public void ChangeGameState(GameState newState)
     {
-        GameState = newState;
         OnGameStateChanged.Invoke(newState);
     }
 
 
 #if UNITY_EDITOR
-
-    [EasyButtons.Button(Mode = EasyButtons.ButtonMode.DisabledInPlayMode)]
+    [Button(Mode = ButtonMode.DisabledInPlayMode)]
     private void DeleteAllSaves()
     {
         SaveHandler.DeleteAll();

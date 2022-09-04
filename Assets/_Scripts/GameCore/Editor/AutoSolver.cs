@@ -1,38 +1,39 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using UnityEditor;
 using UnityEngine;
 
 #if UNITY_EDITOR
-public class AutoSolver 
+public class AutoSolver
 {
     private const int MAXIMUM_NUMBER_OF_ITERATIONS = 20000;
+    private readonly Stack<int> _cursorLocations = new();
+    private readonly Stack<ITile> _submittedTiles = new();
 
-    private string[] allWords;
-    private TileController _tileController;
-    private WordController _wordController;
+    private readonly Stack<int> _submittedWordLengths = new();
+    private readonly List<string> _submittedWords = new();
+    private readonly TileController _tileController;
+    private readonly WordController _wordController;
 
-    private Stack<int> _submittedWordLengths = new Stack<int>();
-    private Stack<ITile> _submittedTiles = new Stack<ITile>();
-    private List<string> _submittedWords = new List<string>();
-    private Stack<int> _cursorLocations = new Stack<int>();
-    private int _calculationIterationsDone = 0;
-    private bool _inNewBrach = true;
+    private readonly string[] allWords;
+    private int _calculationIterationsDone;
     private int _currentTargetWordLegth;
+    private bool _inNewBrach = true;
 
-    public AutoSolver(string[] _allWords, TileControllerConfig tileControllerConfig, WordControllerConfig wordControllerConfig)
+    public AutoSolver(string[] allWords, TileControllerConfig tileControllerConfig,
+        WordControllerConfig wordControllerConfig)
     {
-        allWords = _allWords;
+        this.allWords = allWords;
         _cursorLocations.Push(0);
         Debug.Log(allWords.Length);
 
-        TileControllerSettings tileControllerSettings = new TileControllerSettings();        
-        WordControllerSettings wordControllerSettings = new WordControllerSettings();
-        wordControllerSettings.maxLetterCount = 7;
-        
+        var tileControllerSettings = new TileControllerSettings();
+        var wordControllerSettings = new WordControllerSettings
+        {
+            maxLetterCount = 7
+        };
+
         _tileController = new TileController(null, tileControllerSettings, tileControllerConfig);
-        _wordController = new WordController(null, wordControllerSettings, wordControllerConfig);
+        _wordController = new WordController(null, wordControllerSettings);
 
         SetupControllers();
     }
@@ -45,8 +46,8 @@ public class AutoSolver
 
     public void StartAutoSolver()
     {
-        LinkedTree<ITile> LetterTree = new LinkedTree<ITile>();
-        LinkedTree<string> WordTree = new LinkedTree<string>();
+        var LetterTree = new LinkedTree<ITile>();
+        var WordTree = new LinkedTree<string>();
         _currentTargetWordLegth = _wordController.MaxWordLength;
         StartWordSearch(WordTree.Root, LetterTree.Root);
     }
@@ -59,21 +60,15 @@ public class AutoSolver
             TreeNode<ITile> newNode = letterTreeNode.AddChild(tile);
             CreateWordTree(wordTreeNode, newNode);
         }
-        if (_calculationIterationsDone == MAXIMUM_NUMBER_OF_ITERATIONS)
-        {
-            Debug.LogError("Too Many Calls Made !");
-            return;
-        }
+
+        if (_calculationIterationsDone == MAXIMUM_NUMBER_OF_ITERATIONS) Debug.LogError("Too Many Calls Made !");
     }
 
     private void StartWordSearchRecursive(TreeNode<string> wordTreeNode, TreeNode<ITile> letterTreeNode)
     {
         if (_calculationIterationsDone == MAXIMUM_NUMBER_OF_ITERATIONS) return;
 
-        if (_submittedWords.Contains(_wordController.CurrentWord))
-        {
-            return;
-        }
+        if (_submittedWords.Contains(_wordController.CurrentWord)) return;
 
         DoSubmitWord();
         _cursorLocations.Push(0);
@@ -84,6 +79,7 @@ public class AutoSolver
             TreeNode<ITile> newNode = letterTreeNode.AddChild(tile);
             CreateWordTree(wordTreeNode, newNode);
         }
+
         _cursorLocations.Pop();
         UndoSubmitWord();
     }
@@ -99,11 +95,11 @@ public class AutoSolver
 
     private void UndoSubmitWord()
     {
-        if(_inNewBrach) Debug.Log(string.Join(", ", _submittedWords));
+        if (_inNewBrach) Debug.Log(string.Join(", ", _submittedWords));
         _inNewBrach = false;
         _wordController.UndoSubmitAutoSolver();
         int wordLengthToUndo = _submittedWordLengths.Pop();
-        for (int i = 0; i < wordLengthToUndo; i++) _submittedTiles.Pop();
+        for (var i = 0; i < wordLengthToUndo; i++) _submittedTiles.Pop();
         _submittedWords.RemoveAt(_submittedWords.Count - 1);
     }
 
@@ -117,7 +113,8 @@ public class AutoSolver
 
         // check if word formed so far exists in allWorlds
         int cursorLocation = _cursorLocations.Peek();
-        FindWordResult result = MoveCursorTo(_wordController.CurrentWord, _wordController.MaxWordLength, ref cursorLocation);
+        FindWordResult result =
+            MoveCursorTo(_wordController.CurrentWord, _wordController.MaxWordLength, ref cursorLocation);
         switch (result)
         {
             case FindWordResult.WordInvalid:
@@ -131,8 +128,6 @@ public class AutoSolver
                 if (wordTreeNode.HasChild(_wordController.CurrentWord)) break;
                 TreeNode<string> newWordTreeNode = wordTreeNode.AddChild(_wordController.CurrentWord);
                 StartWordSearchRecursive(newWordTreeNode, letterTreeNode);
-                break;
-            default:
                 break;
         }
 
@@ -151,8 +146,7 @@ public class AutoSolver
     {
         if (!tile.Clickable) return false;
         if (_submittedTiles.Contains(tile)) return false;
-        if (treeNode.HasChild(tile)) return false;
-        return true;
+        return !treeNode.HasChild(tile);
     }
 
     private FindWordResult MoveCursorTo(string word, int maxLetters, ref int cursor)
@@ -160,31 +154,28 @@ public class AutoSolver
         for (int i = cursor; i < allWords.Length; i++)
         {
             if (allWords[i].Length > maxLetters) continue;
+            // ReSharper disable once StringCompareIsCultureSpecific.1
             int compareResult = string.Compare(word, allWords[i]);
             if (compareResult == 1) continue;
-            else if (compareResult == -1)
+
+            if (compareResult == -1)
             {
-                if (allWords[i].StartsWith(word, System.StringComparison.OrdinalIgnoreCase))
-                {
-                    cursor = i;
-                    return FindWordResult.WordPossible;
-                }
-                else return FindWordResult.WordInvalid;
+                if (!allWords[i].StartsWith(word, StringComparison.OrdinalIgnoreCase))
+                    return FindWordResult.WordInvalid;
+                cursor = i;
+                return FindWordResult.WordPossible;
             }
-            else
+
+            if (word.Length < _currentTargetWordLegth)
             {
-                if (word.Length < _currentTargetWordLegth)
-                {
-                    cursor = i;
-                    return FindWordResult.WordPossible;
-                }
-                else
-                {
-                    cursor = i;
-                    return FindWordResult.WordFound;
-                }
+                cursor = i;
+                return FindWordResult.WordPossible;
             }
+
+            cursor = i;
+            return FindWordResult.WordFound;
         }
+
         return FindWordResult.WordInvalid;
     }
 
@@ -192,7 +183,7 @@ public class AutoSolver
     {
         WordInvalid,
         WordPossible,
-        WordFound,
+        WordFound
     }
 }
 #endif

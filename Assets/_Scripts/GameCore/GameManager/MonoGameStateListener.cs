@@ -3,17 +3,17 @@
 public abstract class MonoGameStateListener : MonoBehaviour
 {
     [SerializeField] protected GameState state;
-    protected bool? StateActive { get; private set; }
+    private bool? StateActive { get; set; }
 
     protected virtual void Awake()
     {
-        if (state == null) Debug.LogError("StateListener " + gameObject.name+" missing GameState !", gameObject);
+        if (state == null) Debug.LogError("StateListener " + gameObject.name + " missing GameState !", gameObject);
         GameManager.Instance.OnGameStateChanged.AddListener(OnGameStateChanged);
     }
 
-    public virtual void OnGameStateChanged(GameState newState)
+    protected virtual void OnGameStateChanged(GameState newState)
     {
-        if(!StateActive.HasValue)
+        if (!StateActive.HasValue)
         {
             if (newState == state) OnEnterState();
             else OnExitState();
@@ -32,7 +32,7 @@ public abstract class MonoGameStateListener : MonoBehaviour
         }
     }
 
-    public abstract void OnEnterState();
+    protected abstract void OnEnterState();
 
-    public abstract void OnExitState();
+    protected abstract void OnExitState();
 }

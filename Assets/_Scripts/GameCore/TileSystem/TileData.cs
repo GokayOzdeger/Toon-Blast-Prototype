@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-[System.Serializable]
-public class TileData 
+[Serializable]
+public class TileData
 {
     [SerializeField] private int id;
     [SerializeField] private Vector3 position;
@@ -22,7 +21,7 @@ public class TileData
 
     public TileData Clone()
     {
-        TileData clone = new TileData();
+        var clone = new TileData();
         clone.id = id;
         clone.position = position;
         clone.character = character;

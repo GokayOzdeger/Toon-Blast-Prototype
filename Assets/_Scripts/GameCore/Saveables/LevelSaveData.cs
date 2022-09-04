@@ -1,14 +1,11 @@
 using SaveSystem;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class LevelSaveData : SaveableWithKey<LevelSaveData>
 {
-    public bool IsCompleted => HighScore != 0;
+    public int HighScore;
 
     public string LevelTitle;
-    public int HighScore;
+    public bool IsCompleted => HighScore != 0;
 
     public static void SaveLevelData(string levelTitle, int highScore)
     {

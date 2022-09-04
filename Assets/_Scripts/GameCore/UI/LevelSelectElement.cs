@@ -1,13 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LevelSelectElement : MonoBehaviour
 {
-    [BHeader("References")]
-    [SerializeField] private TMP_Text levelNameText;
+    [BHeader("References")] [SerializeField]
+    private TMP_Text levelNameText;
+
     [SerializeField] private TMP_Text highscoreText;
     [SerializeField] private Button playButton;
 
@@ -29,7 +28,7 @@ public class LevelSelectElement : MonoBehaviour
         string highScoreString;
         if (data.HighScore == 0) highScoreString = "-";
         else highScoreString = data.HighScore.ToString();
-        
+
         highscoreText.text = highScoreString;
     }
 

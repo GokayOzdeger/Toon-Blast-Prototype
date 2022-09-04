@@ -1,29 +1,39 @@
-using DG.Tweening;
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class LetterTile : ITile
 {
     private const float FLY_TO_WORDFORMER_DURATION = .3f;
     private const float FLY_TO_TILEAREA_DURATION = .15f;
+    private readonly TileController _tileController;
 
-    private WordController _wordController;
-    private TileController _tileController;
-    private LetterMonitor _monitor;
-    private TileData _tileData;
+    private readonly WordController _wordController;
     private Tween _activeTween;
     private ITile[] _childrenTiles;
-    private bool _removedFromPlay;
-    public bool UsingMonitor { get; set; } = true;
-    public LetterMonitor Monitor => _monitor;
-    public TileData TileData => _tileData;
-    public int Locks { get; set; } = 0;
-    public bool Clickable => Locks == 0 && InTileArea;
+
+    public LetterTile(TileController tileController, WordController wordController, LetterMonitor monitor,
+        TileData data)
+    {
+        _wordController = wordController;
+        _tileController = tileController;
+        Monitor = monitor;
+        TileData = data;
+        if (monitor == null) UsingMonitor = false;
+
+        UpdateMonitor();
+    }
+
     public bool InTileArea { get; private set; } = true;
-    public bool IsRemovedFromPlay => _removedFromPlay;
+    public bool UsingMonitor { get; set; } = true;
+    public LetterMonitor Monitor { get; }
+
+    public TileData TileData { get; }
+
+    public int Locks { get; set; }
+    public bool Clickable => Locks == 0 && InTileArea;
+    public bool IsRemovedFromPlay { get; private set; }
+
     public ITile[] ChildrenTiles
     {
         get
@@ -31,24 +41,12 @@ public class LetterTile : ITile
             if (_childrenTiles == null)
             {
                 _childrenTiles = new ITile[TileData.Children.Length];
-                for (int i = 0; i < TileData.Children.Length; i++)
-                {
+                for (var i = 0; i < TileData.Children.Length; i++)
                     _childrenTiles[i] = _tileController.GetTileWithId(TileData.Children[i]);
-                }
             }
+
             return _childrenTiles;
         }
-    }
-
-    public LetterTile(TileController tileController, WordController wordController, LetterMonitor monitor, TileData data)
-    {
-        _wordController = wordController;
-        _tileController = tileController;
-        _monitor = monitor;
-        _tileData = data;
-        if (monitor == null) UsingMonitor = false;
-
-        UpdateMonitor();
     }
 
     public void LockTile()
@@ -84,13 +82,7 @@ public class LetterTile : ITile
         if (_wordController.WordIsFull) return;
         if (!Clickable) return;
         if (Locks != 0) return;
-        else OnClickSuccess();
-    }
-
-    private void OnClickSuccess()
-    {
-        if(UsingMonitor) _wordController.AddTileToWord(this);
-        else _wordController.AddTileToWordAutoSolver(this);
+        OnClickSuccess();
     }
 
     public void UnlockChildren()
@@ -100,7 +92,7 @@ public class LetterTile : ITile
 
     public void LockChildren()
     {
-        foreach(ITile tile in ChildrenTiles) tile.LockTile();
+        foreach (ITile tile in ChildrenTiles) tile.LockTile();
     }
 
     public void ReturnToTileArea(Action onComplete)
@@ -117,11 +109,6 @@ public class LetterTile : ITile
         }
     }
 
-    private void CompleteLastTween()
-    {
-        if (_activeTween != null) _activeTween.Complete();
-    }
-
     public void LeaveTileArea(Vector3 moveTo, Action onComplete)
     {
         InTileArea = false;
@@ -135,7 +122,7 @@ public class LetterTile : ITile
 
     public void RemoveFromPlay()
     {
-        _removedFromPlay = true;
+        IsRemovedFromPlay = true;
     }
 
     public void RemoveVisiuals()
@@ -143,5 +130,16 @@ public class LetterTile : ITile
         if (!UsingMonitor) return;
         CompleteLastTween();
         Monitor.SendToPool(0);
+    }
+
+    private void OnClickSuccess()
+    {
+        if (UsingMonitor) _wordController.AddTileToWord(this);
+        else _wordController.AddTileToWordAutoSolver(this);
+    }
+
+    private void CompleteLastTween()
+    {
+        if (_activeTween != null) _activeTween.Complete();
     }
 }

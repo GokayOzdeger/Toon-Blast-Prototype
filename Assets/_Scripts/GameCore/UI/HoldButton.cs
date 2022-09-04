@@ -1,8 +1,4 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -10,29 +6,43 @@ using UnityEngine.UI;
 
 public class HoldButton : Button
 {
-    private UnityEvent _onHold = new UnityEvent();
+    private readonly UnityEvent _onHold = new();
+    private Tween _activeTween;
+
+    private bool _canBeHold;
+    private Graphic[] _graphicsInChildren;
+    private bool _registeredHold;
+    private float _timeSinceStartedHolding;
+
     public UnityEvent OnHold
     {
-        get 
+        get
         {
             _canBeHold = true;
             return _onHold;
         }
     }
+
     public float HoldRegisterDuration { get; set; } = .3f;
     private bool HoveringButton { get; set; }
     private bool HoldingButton { get; set; }
-
-    private bool _canBeHold = false;
-    private float _timeSinceStartedHolding;
-    private bool _registeredHold;
-    private Graphic[] _graphicsInChildren;
-    private Tween _activeTween;
 
     protected override void Awake()
     {
         _graphicsInChildren = GetComponentsInChildren<Graphic>(true);
         base.Awake();
+    }
+
+    public void Update()
+    {
+        if (!HoldingButton || !HoveringButton || _registeredHold || !interactable || !_canBeHold) return;
+        _timeSinceStartedHolding += Time.deltaTime;
+        if (_timeSinceStartedHolding > HoldRegisterDuration)
+        {
+            AnimateClick();
+            _registeredHold = true;
+            _onHold.Invoke();
+        }
     }
 
     protected override void DoStateTransition(SelectionState state, bool instant)
@@ -41,10 +51,7 @@ public class HoldButton : Button
 
         Color tintColor = GetStateTrasitionColor(state);
 
-        foreach (Graphic graphic in _graphicsInChildren)
-        {
-            StartColorTween(graphic, tintColor, true);
-        }
+        foreach (Graphic graphic in _graphicsInChildren) StartColorTween(graphic, tintColor, true);
     }
 
     private Color GetStateTrasitionColor(SelectionState state)
@@ -117,17 +124,4 @@ public class HoldButton : Button
     {
         HoveringButton = false;
     }
-
-    public void Update()
-    {
-        if (!HoldingButton || !HoveringButton || _registeredHold || !interactable || !_canBeHold) return;
-        _timeSinceStartedHolding += Time.deltaTime;
-        if(_timeSinceStartedHolding> HoldRegisterDuration)
-        {
-            AnimateClick();
-            _registeredHold = true;
-            _onHold.Invoke();
-        }
-    }
-
 }

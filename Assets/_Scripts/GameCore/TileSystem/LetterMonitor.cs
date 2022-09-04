@@ -1,21 +1,30 @@
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using Utilities;
 
 public class LetterMonitor : MonoBehaviour, IPoolable
 {
-    [BHeader("References")] 
-    [SerializeField] private PoolObject poolObject;
+    [BHeader("References")] [SerializeField]
+    private PoolObject poolObject;
+
     [SerializeField] private SpriteRenderer tileImageRenderer;
-    [SerializeField] private TMPro.TMP_Text characterText;
+    [SerializeField] private TMP_Text characterText;
 
     private ITile Tile { get; set; }
 
     public void OnMouseUpAsButton()
     {
         Tile.OnClick();
+    }
+
+    public void OnGoToPool()
+    {
+        Tile = null;
+    }
+
+    public void OnPoolSpawn()
+    {
+        //
     }
 
     public void UpdateMonitor(ITile tile)
@@ -30,22 +39,12 @@ public class LetterMonitor : MonoBehaviour, IPoolable
 
     public void SetPixelSize(float size)
     {
-        transform.localScale =  Vector3.one * size;
+        transform.localScale = Vector3.one * size;
     }
 
     public void SendToPool(float delay)
     {
         poolObject.GoToPool(delay);
-    }
-
-    public void OnGoToPool()
-    {
-        Tile = null;
-    }
-
-    public void OnPoolSpawn()
-    {
-        //
     }
 
     private void SetTileLocked()

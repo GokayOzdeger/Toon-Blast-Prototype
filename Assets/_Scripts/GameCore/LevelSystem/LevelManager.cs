@@ -1,43 +1,45 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
+using EasyButtons;
 using UnityEngine;
 
 public class LevelManager : SingletonGameStateListener<LevelManager>
 {
     [SerializeField] private LevelConfig[] levelList;
-    [Group][SerializeField] private LevelSettings levelSettings;
-    [Group][SerializeField] private LevelReferences levelSceneReferences;
+    [Group] [SerializeField] private LevelSettings levelSettings;
+    [Group] [SerializeField] private LevelReferences levelSceneReferences;
 
-    public LevelController CurrentLevelController { get; private set; }
+    private LevelController CurrentLevelController { get; set; }
     public LevelConfig[] LevelList => levelList;
-    public LevelConfig ChosenLevelConfig { get; private set; }
+    private LevelConfig ChosenLevelConfig { get; set; }
 
     private void Start()
     {
-        if (CurrentLevelSaveData.Data.HasSavedLevel) LoadLevel();   
+        if (CurrentLevelSaveData.Data.HasSavedLevel) LoadLevel();
     }
 
-    public override void OnEnterState()
+    protected override void OnEnterState()
     {
         CurrentLevelSaveData levelSaveData = CurrentLevelSaveData.Data;
-        CurrentLevelController = new LevelController(levelSceneReferences, levelSettings, ChosenLevelConfig, levelSaveData);
+        CurrentLevelController =
+            new LevelController(levelSceneReferences, levelSettings, ChosenLevelConfig, levelSaveData);
     }
 
-    public override void OnExitState()
+    protected override void OnExitState()
     {
         if (CurrentLevelController == null) return;
         CurrentLevelController.ClearLevelControllers();
         CurrentLevelSaveData.Data.ClearSavedLevelStateData();
         CurrentLevelController = null;
     }
+
     public void LevelCompleted()
     {
         GameState nextState;
         if (CurrentLevelController.ScoreController.IsNewHighScore) nextState = levelSceneReferences.HighScoreGameState;
         else nextState = levelSceneReferences.LevelSelectGameState;
 
-        LevelSaveData.SaveLevelData(CurrentLevelController.Config.LevelTitle, CurrentLevelController.ScoreController.CurrentTotalScore);
+        LevelSaveData.SaveLevelData(CurrentLevelController.Config.LevelTitle,
+            CurrentLevelController.ScoreController.CurrentTotalScore);
         EndLevelState(nextState);
     }
 
@@ -59,27 +61,27 @@ public class LevelManager : SingletonGameStateListener<LevelManager>
 
     private void LoadLevel()
     {
-        ChosenLevelConfig = LevelList.First((config) => config.LevelTitle == CurrentLevelSaveData.Data.LevelTitle);
+        ChosenLevelConfig = LevelList.First(config => config.LevelTitle == CurrentLevelSaveData.Data.LevelTitle);
         GameManager.Instance.ChangeGameState(state);
     }
 
     #region EDITOR
-#if UNITY_EDITOR
 
-    [EasyButtons.Button(Mode = EasyButtons.ButtonMode.EnabledInPlayMode)]
+#if UNITY_EDITOR
+    [Button(Mode = ButtonMode.EnabledInPlayMode)]
     private void FindWord()
     {
         bool wordFound = CurrentLevelController.WordController.CheckHasPossibleWord();
         Debug.Log("Word Exists: " + wordFound);
     }
 
-    [EasyButtons.Button(Mode = EasyButtons.ButtonMode.EnabledInPlayMode)]
+    [Button(Mode = ButtonMode.EnabledInPlayMode)]
     private void CompleteLevelNormal()
     {
         LevelCompleted();
     }
 
-    [EasyButtons.Button(Mode = EasyButtons.ButtonMode.EnabledInPlayMode)]
+    [Button(Mode = ButtonMode.EnabledInPlayMode)]
     private void CompleteLevelWithHighScore()
     {
         CurrentLevelController.ScoreController.SetCurrentScoreToHighScore();
@@ -87,5 +89,6 @@ public class LevelManager : SingletonGameStateListener<LevelManager>
     }
 
 #endif
+
     #endregion
 }

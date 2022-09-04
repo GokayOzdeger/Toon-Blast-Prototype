@@ -1,21 +1,18 @@
-using SaveSystem;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using SaveSystem;
 
 public class CurrentLevelSaveData : Saveable<CurrentLevelSaveData>
 {
+    // ScoreController Save Data
+    public int CurrentTotalScore;
     public bool HasSavedLevel;
     public string LevelTitle;
-
-    // TileController Save Data
-    public List<int> TilesLeft;
 
     // WordController Save Data
     public List<string> SubmittedWords;
 
-    // ScoreController Save Data
-    public int CurrentTotalScore;
+    // TileController Save Data
+    public List<int> TilesLeft;
 
     public void SaveLevelState(LevelController controller)
     {
@@ -30,7 +27,7 @@ public class CurrentLevelSaveData : Saveable<CurrentLevelSaveData>
     private void SaveTileController(TileController tileController)
     {
         TilesLeft = new List<int>();
-        foreach(ITile tile in tileController.AllTiles)
+        foreach (ITile tile in tileController.AllTiles)
         {
             if (tile.IsRemovedFromPlay) continue;
             TilesLeft.Add(tile.TileData.Id);
@@ -56,5 +53,4 @@ public class CurrentLevelSaveData : Saveable<CurrentLevelSaveData>
         CurrentTotalScore = 0;
         Save();
     }
-
 }

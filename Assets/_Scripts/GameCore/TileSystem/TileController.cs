@@ -1,37 +1,38 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Utilities;
 
-public class TileController 
+public class TileController
 {
-    public List<ITile> AllTiles { get; private set; } = new List<ITile>();
-    private TileControllerReferences References { get; set; }
-    private TileControllerSettings Settings { get; set; }
-    private TileControllerConfig Config { get; set; }
-    public float TileSize => TileDistanceMultiplier * Settings.tileSizeMultiplier;
-    public float TileDistanceMultiplier { get; private set; }
-    
+    private float _referencedDataRectLenght;
+
     private Rect _tileAreaRect;
     private Rect _tileDataRect;
     private WordController _wordController;
-    private float _referencedDataRectLeght;
 
-    public TileController(TileControllerReferences references, TileControllerSettings settings, TileControllerConfig config)
+    public TileController(TileControllerReferences references, TileControllerSettings settings,
+        TileControllerConfig config)
     {
         References = references;
         Settings = settings;
         Config = config;
     }
 
-    public void SetupTileController( WordController wordController)
+    public List<ITile> AllTiles { get; private set; } = new();
+    private TileControllerReferences References { get; }
+    private TileControllerSettings Settings { get; }
+    private TileControllerConfig Config { get; }
+    public float TileSize => TileDistanceMultiplier * Settings.tileSizeMultiplier;
+    private float TileDistanceMultiplier { get; set; }
+
+    public void SetupTileController(WordController wordController)
     {
         _wordController = wordController;
 
         CalculateTileArea();
         CalculateTileDistanceMultiplier();
-        
+
         SpawnTiles(Config.TileDatas);
         LockChildrenTiles();
     }
@@ -56,13 +57,15 @@ public class TileController
             Vector2 tilePositionAsOffset = (Vector2)copiedTileData.Position - _tileDataRect.center;
             tilePositionAsOffset *= TileDistanceMultiplier;
             tilePositionAsOffset += Settings.tileAreaOffset;
-            Vector3 tilePositionForCurrentScreen = (Vector3)_tileAreaRect.center + new Vector3(tilePositionAsOffset.x, tilePositionAsOffset.y, copiedTileData.Position.z);
+            Vector3 tilePositionForCurrentScreen = (Vector3)_tileAreaRect.center +
+                                                   new Vector3(tilePositionAsOffset.x, tilePositionAsOffset.y,
+                                                       copiedTileData.Position.z);
             copiedTileData.SetPosition(tilePositionForCurrentScreen);
 
             // create tile GO and assiign generated lettertile
-            GameObject tileGO = ObjectPooler.Instance.Spawn(References.tilePrefab.name, tilePositionForCurrentScreen);
-            LetterMonitor monitor = tileGO.GetComponent<LetterMonitor>();
-            LetterTile letter = new LetterTile(this, _wordController, monitor, copiedTileData);
+            GameObject tileGo = ObjectPooler.Instance.Spawn(References.tilePrefab.name, tilePositionForCurrentScreen);
+            var monitor = tileGo.GetComponent<LetterMonitor>();
+            var letter = new LetterTile(this, _wordController, monitor, copiedTileData);
             letter.SetPixelSize(TileSize);
             AllTiles.Add(letter);
         }
@@ -76,6 +79,7 @@ public class TileController
             if (tile.TileData.Id == id)
                 return tile;
         }
+
         return null;
     }
 
@@ -86,21 +90,21 @@ public class TileController
             if (tile.IsRemovedFromPlay) continue;
             tile.RemoveVisiuals();
         }
+
         AllTiles = null;
     }
 
     private TileData[] GetTileDatasFromId(List<int> tileIds)
     {
-        TileData[] tileDatas = new TileData[tileIds.Count];
-        int arrayIndexToAssign = 0;
-        for (int i = 0; i < Config.TileDatas.Length; i++)
-        {
+        var tileDatas = new TileData[tileIds.Count];
+        var arrayIndexToAssign = 0;
+        for (var i = 0; i < Config.TileDatas.Length; i++)
             if (tileIds.Contains(Config.TileDatas[i].Id))
             {
                 tileDatas[arrayIndexToAssign] = Config.TileDatas[i];
                 arrayIndexToAssign++;
             }
-        }
+
         return tileDatas;
     }
 
@@ -114,7 +118,9 @@ public class TileController
         Debug.Log(_tileAreaRect.width + "/" + _tileDataRect.width);
         Debug.Log("H: " + heightDistanceMultiplier + " / W:" + widthDistanceMultiplier);
         TileDistanceMultiplier = Mathf.Min(heightDistanceMultiplier, widthDistanceMultiplier);
-        float maxTileDistanceMultiplier = (Screen.width / (_wordController.MaxWordLength+1)) / Settings.tileSizeMultiplier; // Maximum tiledistance multiplier allowed to make wordformer fit to screen
+        float maxTileDistanceMultiplier =
+            Screen.width / (_wordController.MaxWordLength + 1) /
+            Settings.tileSizeMultiplier; // Maximum tiledistance multiplier allowed to make wordformer fit to screen
         if (TileDistanceMultiplier > maxTileDistanceMultiplier) TileDistanceMultiplier = maxTileDistanceMultiplier;
         Debug.Log("Distance Multiplier: " + TileDistanceMultiplier);
     }
@@ -122,33 +128,36 @@ public class TileController
     private void CalculateRectOfTileData()
     {
         _tileDataRect = new Rect();
-        
+
         float highestX = Mathf.NegativeInfinity;
         float highestY = Mathf.NegativeInfinity;
         float smallestX = Mathf.Infinity;
         float smallestY = Mathf.Infinity;
-        
-        foreach(TileData tile in Config.TileDatas)
+
+        foreach (TileData tile in Config.TileDatas)
         {
             if (tile.Position.x < smallestX) smallestX = tile.Position.x;
             else if (tile.Position.x > highestX) highestX = tile.Position.x;
             if (tile.Position.y < smallestY) smallestY = tile.Position.y;
             else if (tile.Position.y > highestY) highestY = tile.Position.y;
         }
+
         _tileDataRect.size = new Vector2(highestX - smallestX, highestY - smallestY);
-        _tileDataRect.center = new Vector2((highestX+smallestX)/2, (highestY + smallestY) / 2);
+        _tileDataRect.center = new Vector2((highestX + smallestX) / 2, (highestY + smallestY) / 2);
     }
 
     private void CalculateTileArea()
     {
-        _tileAreaRect = new Rect();
-        _tileAreaRect.size = ScreenHelper.GetScreenPercentage(Settings.percentageOfTileAreaOnScreen);
-        _tileAreaRect.center = References.tileAreaCenter.position;
+        _tileAreaRect = new Rect
+        {
+            size = ScreenHelper.GetScreenPercentage(Settings.percentageOfTileAreaOnScreen),
+            center = References.tileAreaCenter.position
+        };
     }
 
     private void LockChildrenTiles()
     {
-        foreach(ITile tile in AllTiles) tile.LockChildren();
+        foreach (ITile tile in AllTiles) tile.LockChildren();
     }
 
     #region AUTO SOLVER METHODS
@@ -164,7 +173,7 @@ public class TileController
     {
         foreach (TileData tileData in Config.TileDatas)
         {
-            LetterTile letter = new LetterTile(this, _wordController, null, tileData);
+            var letter = new LetterTile(this, _wordController, null, tileData);
             AllTiles.Add(letter);
         }
     }
@@ -172,29 +181,31 @@ public class TileController
     #endregion
 }
 
-[System.Serializable]
+[Serializable]
 public class TileControllerSettings
 {
-    [BHeader("Tile Area Settings")]
-    public Vector2 percentageOfTileAreaOnScreen;
+    [BHeader("Tile Area Settings")] public Vector2 percentageOfTileAreaOnScreen;
+
     public float tileSizeMultiplier;
     public Vector2 tileAreaOffset;
 }
 
-[System.Serializable]
+[Serializable]
 public class TileControllerReferences
 {
     public GameObject tilePrefab;
     public RectTransform tileAreaCenter;
 }
 
-[System.Serializable]
+[Serializable]
 public class TileControllerConfig
 {
     [SerializeField] private TileData[] tileDatas;
 
     public TileData[] TileDatas => tileDatas;
+
     #region EDITOR
+
 #if UNITY_EDITOR
     public void SaveTileDataEditor(TileData[] datas)
     {
@@ -204,36 +215,35 @@ public class TileControllerConfig
 
     private void FixTileZPositions()
     {
-        Debug.Log($"Fixing {tileDatas.Length} Z Positions...");
-        for (int i = 0; i < tileDatas.Length; i++)
+        Debug.Log("Fixing " + tileDatas.Length + " Z Positions...");
+        foreach (TileData t in tileDatas)
         {
-            int childLevel = ChildLevel(tileDatas[i].Id);
-            tileDatas[i].SetPosition(tileDatas[i].Position - new Vector3(0, 0, 10 * childLevel));
+            int childLevel = ChildLevel(t.Id);
+            t.SetPosition(t.Position - new Vector3(0, 0, 10 * childLevel));
         }
     }
 
     private int ChildLevel(int id)
     {
         TileData tile = GetTileWithId(id);
-        int[] childLevels = new int[tile.Children.Length];
-        for (int i = 0; i < tile.Children.Length; i++)
-        {
-            childLevels[i] = ChildLevel(tile.Children[i]) + 1;
-        }
+        var childLevels = new int[tile.Children.Length];
+        for (var i = 0; i < tile.Children.Length; i++) childLevels[i] = ChildLevel(tile.Children[i]) + 1;
 
-        int highestChildLevel = 0;
-        foreach(int childLevel in childLevels)
-        {
-            if(childLevel > highestChildLevel) highestChildLevel = childLevel;
-        }
+        var highestChildLevel = 0;
+        foreach (int childLevel in childLevels)
+            if (childLevel > highestChildLevel)
+                highestChildLevel = childLevel;
         return highestChildLevel;
     }
 
     private TileData GetTileWithId(int id)
     {
-        foreach (TileData tile in tileDatas) if (tile.Id == id) return tile;
+        foreach (TileData tile in tileDatas)
+            if (tile.Id == id)
+                return tile;
         return null;
     }
 #endif
+
     #endregion
 }
