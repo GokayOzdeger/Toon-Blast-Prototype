@@ -107,7 +107,8 @@ public class WordFinder
         for (int i = cursor; i < _allWords.Length; i++)
         {
             if (_allWords[i].Length > maxLetters) continue;
-            int compareResult = string.CompareOrdinal(word, _allWords[i]);
+            // ReSharper disable once StringCompareIsCultureSpecific.1
+            int compareResult = string.Compare(word, _allWords[i]);
             switch (compareResult)
             {
                 case 1:
