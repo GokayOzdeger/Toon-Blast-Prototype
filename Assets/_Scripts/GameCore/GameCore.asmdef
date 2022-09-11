@@ -1,24 +1,25 @@
 {
-  "name": "GameCore",
-  "rootNamespace": "",
-  "references": [
-    "GUID:96be28574e7d1894eadaed6b30e5fff0",
-    "GUID:6055be8ebefd69e48b49212b09b47b2f",
-    "GUID:6d5059b8bf7519d4cba739ab86814688",
-    "GUID:bcb80ebe5db56864b9bcd57e42fb04e5",
-    "GUID:43e345d7fb897e549a6f6cdb8b67feaa",
-    "GUID:fdad927a8bfdd2c439720e237d2884b4",
-    "GUID:f15849a20fa19024db7cac03554f20b5",
-    "GUID:581b430083019734891990901506867d",
-    "GUID:478a2357cc57436488a56e564b08d223"
-  ],
-  "includePlatforms": [],
-  "excludePlatforms": [],
-  "allowUnsafeCode": false,
-  "overrideReferences": false,
-  "precompiledReferences": [],
-  "autoReferenced": true,
-  "defineConstraints": [],
-  "versionDefines": [],
-  "noEngineReferences": false
+    "name": "GameCore",
+    "rootNamespace": "",
+    "references": [
+        "GUID:96be28574e7d1894eadaed6b30e5fff0",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:6d5059b8bf7519d4cba739ab86814688",
+        "GUID:bcb80ebe5db56864b9bcd57e42fb04e5",
+        "GUID:43e345d7fb897e549a6f6cdb8b67feaa",
+        "GUID:fdad927a8bfdd2c439720e237d2884b4",
+        "GUID:f15849a20fa19024db7cac03554f20b5",
+        "GUID:581b430083019734891990901506867d",
+        "GUID:478a2357cc57436488a56e564b08d223",
+        "GUID:dba31eb4e5081bf45b4916948a457415"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

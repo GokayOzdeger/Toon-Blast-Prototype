@@ -1,5 +1,3 @@
-using EasyButtons;
-using SaveSystem;
 using UnityEngine;
 using UnityEngine.Events;
 using Utilities;
@@ -20,14 +18,4 @@ public class GameManager : AutoSingleton<GameManager>
     {
         OnGameStateChanged.Invoke(newState);
     }
-
-
-#if UNITY_EDITOR
-    [Button(Mode = ButtonMode.DisabledInPlayMode)]
-    private void DeleteAllSaves()
-    {
-        SaveHandler.DeleteAll();
-    }
-
-#endif
 }
